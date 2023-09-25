@@ -1,0 +1,17 @@
+<launch>
+
+    <arg name="car_mode" default="wheeltec_mini_akm" 
+        doc="opt: wheeltec_mini_akm, yunle_800"> 
+    </arg>
+    
+    <arg name="repeat"  default="false"/>
+
+    <!-- 里程计 framd_id -->
+    <arg name="odom_frame_id" default="odom_combined"/>
+
+    <!-- 开启底层单片机控制节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch" if="$(eval car_mode == 'wheeltec_mini_akm')">
+        <arg name="odom_frame_id"  value="$(arg odom_frame_id)"/>
+    </include>
+
+</launch>

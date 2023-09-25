@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>turn_on_robot_htc</name>
+  <version>0.0.0</version>
+  <description>The turn_on_robot_htc package</description>
+
+  <maintainer email="fusheng@todo.todo">fusheng</maintainer>
+
+
+  <license>TODO</license>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>actionlib</depend>
+  <depend>actionlib_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>message_generation</depend>
+  <depend>nav_msgs</depend>
+  <depend>roscpp</depend>
+  <depend>serial</depend>
+  <depend>roslib</depend>
+  <depend>rospy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>tf</depend>
+
+  <export>
+  </export>
+  
+</package>

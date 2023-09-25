@@ -1,0 +1,30 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/noetic/include/**",
+        "/home/fusheng/catkin_ws/devel/include/**",
+        "/home/fusheng/catkin_ws/src/atr_pkg/include/**",
+        "/home/fusheng/catkin_ws/src/imu_pkg/include/**",
+        "/home/fusheng/catkin_ws/src/lidar_pkg/include/**",
+        "/home/fusheng/catkin_ws/src/qq_msgs/include/**",
+        "/home/fusheng/catkin_ws/src/slam_pkg/include/**",
+        "/home/fusheng/catkin_ws/src/ssr_pkg/include/**",
+        "/home/fusheng/htc-robot-ros_ws/src/turn_on_robot_htc/include/**",
+        "/home/fusheng/catkin_ws/src/vel_pkg/include/**",
+        "/home/fusheng/catkin_ws/src/wpr_simulation/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
