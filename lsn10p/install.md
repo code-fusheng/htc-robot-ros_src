@@ -1,3 +1,8 @@
+<!--
+ * @Author: code-fusheng 2561035977@qq.com
+ * @Date: 2023-09-21 17:28:23
+-->
+
 1. 安装相关库
    sudo apt-get install libpcap-dev
 
@@ -23,6 +28,7 @@ catkin_make -DCATKIN_HTC-ROBOT-ROS_WS_PACKAGES="lsn10p"
 6. 雷达 Topic
 
 ```shell
+# rostopic echo /sacn --noarr
 $ rostopic info scan
 Type: sensor_msgs/LaserScan
 
@@ -39,14 +45,14 @@ rosmsg show sensor_msgs/LaserScan
 std_msgs/Header header
   uint32 seq
   time stamp
-  string frame_id
-float32 angle_min
-float32 angle_max
-float32 angle_increment
-float32 time_increment
-float32 scan_time
-float32 range_min
-float32 range_max
-float32[] ranges
-float32[] intensities
+  string frame_id          # 激光雷达基准坐标系
+float32 angle_min          # 扫描的起始角度(单位:弧度)
+float32 angle_max          # 扫描的终止角度(单位:弧度)
+float32 angle_increment    # 相邻两次测距的旋转角度(单位:弧度)
+float32 time_increment     # 相邻两次测距的时间差(单位:秒)
+float32 scan_time          # 两次扫描的起始时间差(单位:秒)
+float32 range_min          # 有效测距范围的最小距离(单位:米)
+float32 range_max          # 有效测距范围的最大距离(单位:米)
+float32[] ranges           # 本次扫描的所有测距值(单位:米)
+float32[] intensities      # 所有测距的返回信号强度
 ```

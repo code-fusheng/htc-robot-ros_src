@@ -24,7 +24,5 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 include_directories(include/${PROJECT_NAME})
 
-# add_executable(hello_robot src/hello_robot.cpp)
-# target_link_libraries(hello_robot ${catkin_LIBRARIES})
 add_executable(htc_wheeltec_robot_node src/htc_wheeltec_robot.cpp src/Quaternion_Solution.cpp)
 target_link_libraries(htc_wheeltec_robot_node ${catkin_LIBRARIES})
