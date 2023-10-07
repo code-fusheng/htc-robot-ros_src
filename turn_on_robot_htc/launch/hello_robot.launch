@@ -1,7 +1,7 @@
 <launch>
 
     <!-- launch 中的参数 -->
-    <arg name="car_mode" default="wheeltec_mini_akm" 
+    <arg name="htc_car_mode" default="wheeltec_mini_akm" 
         doc="opt: wheeltec_mini_akm, yunle_800"> 
     </arg>
 

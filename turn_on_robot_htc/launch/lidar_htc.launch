@@ -1,4 +1,5 @@
 <launch>
+
     <arg name="htc_lidar_mode" default="ls_N10P" doc="opt: ls_N10P, ls_N10P_net"/>
 
     <!--所有雷达正前方（小车正前方）为0度角方向，扫描角度顺时针方向增加 -->

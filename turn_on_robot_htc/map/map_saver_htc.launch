@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="map_server" type="map_saver" name="map_saver_htc" args="-f /home/code/htc-robot-ros_ws/src/turn_on_robot_htc/map/MAP" output="screen"></node>
+</launch>

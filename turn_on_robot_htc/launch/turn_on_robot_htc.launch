@@ -1,8 +1,10 @@
 <launch>
 
-    <arg name="car_mode" default="wheeltec_mini_akm" 
-        doc="opt: wheeltec_mini_akm, yunle_800"> 
-    </arg>
+    <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
+    <!-- 建图类型 -->
+    <arg name="htc_mapping_mode" default="cartographer" doc="opt: gmapping,hector,cartographer,karto" />
+    <!-- 激光雷达类型 -->
+    <arg name="htc_lidar_mode" default="ls_N10P" />
     
     <arg name="repeat"  default="false"/>
 
@@ -10,8 +12,32 @@
     <arg name="odom_frame_id" default="odom_combined"/>
 
     <!-- 开启底层单片机控制节点 -->
-    <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch" if="$(eval car_mode == 'wheeltec_mini_akm')">
+    <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch" if="$(eval htc_car_mode == 'wheeltec_mini_akm')">
         <arg name="odom_frame_id"  value="$(arg odom_frame_id)"/>
     </include>
+
+    <!-- 激光雷达控制节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/lidar_htc.launch">
+        <arg name="htc_lidar_mode" value="$(arg htc_lidar_mode)"/>
+    </include>
+
+    <!-- 建图控制节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/mapping_htc.launch">
+        <arg name="htc_mapping_mode" value="$(arg htc_mapping_mode)"/>
+    </include>
+
+    <!-- TF & 小车模型 节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/robot_model_htc.launch">
+        <arg name="htc_car_mode" value="$(arg htc_car_mode)"/>
+    </include>
+
+    <!-- 扩张卡尔曼滤波 发布odom_combined到footprint的TF,即小车定位 使用cartographer算法时不使用该滤波算法-->
+    <include file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
+    </include>
+
+    <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" />
+
+    <node pkg="rqt_robot_steering" type="rqt_robot_steering" name="rqt_robot_steering" />
 
 </launch>

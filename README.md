@@ -34,6 +34,20 @@ $ catkin_make -j -l
 $ catkin_make clean
 ```
 
+> 工程开发
+
+```cpp
+// 节点句柄
+ros::NodeHandle nh;
+// 是否有对应参数服务器
+nh.hasParam("<PARAM_NAME>")
+// argv 默认会有程序名称参数 => 可以用来判断是否有参数
+
+// 坐标转换 x、y、z 转换 四元数
+tf2::Quaternion q;
+q.setRPY(0, 0, msg->theta);
+```
+
 #### 2. 设备管理
 
 > 固定外设串口号
@@ -53,6 +67,21 @@ killall gzserver
 - 姿态传感器 imu
 - 摄像头 image/camera
 - 激光雷达 scan
+
+#### 4. 建图&保存&编辑
+
+> 地图保存 map_server
+
+http://wiki.ros.org/map_server
+
+```shell
+# 保存地图
+rosrun map_server map_saver -f <MAP_NAME>
+ll
+# => test_map.pgm & test_map.yaml
+# 加载地图
+rosrun map_server map_server test_map.yaml
+```
 
 #### \*. 常用指令
 
@@ -94,6 +123,12 @@ $ rosmsg type|topic_name|rosmsg show
 # roscd <PACKAGE_NAME>
 $ roscd roscpp
 # - /opt/ros/noetic/share/roscpp
+```
+
+##### tf 树
+
+```shell
+$ rosrun rqt_tf_tree rqt_tf_tree
 ```
 
 ### 二、Ros 理论部分
@@ -239,6 +274,39 @@ $ rosparam dump			: 将参数服务器的参数写入文件
 <remap from="/old_topic" to="/new_topic">
 ```
 
+#### 2. 坐标 TF
+
+TF 树
+TF 的 broadcaster
+TF 的 frame_id
+TF 的基坐标
+TF 的消息数据类型
+
+查看 tf
+
+```shell
+rostopic type /tf
+# tf2_msgs/TFMessage
+```
+
+TF 广播器 与 TF 监听器
+
+```cpp
+// TF 广播器
+static tf2_ros::TransformBroadcaster br;
+geometry_msgs::TransformStampled transformStampled;
+...
+transformStamped.xxx = xxx;
+...
+br.sendTransform(transformStamped);
+
+// TF 监听器
+tf2_ros::Buffer tfBuffer;
+tf2_ros::TransformListenser tfListener(tfBuffer);
+geometry_msgs::TransormStamped transformStamped;
+transformStamped = tfBuffer.lookupTransform("target", "source", time);
+```
+
 ### \*、机器人理论部分
 
 **感知 决策 控制**
@@ -247,6 +315,15 @@ $ rosparam dump			: 将参数服务器的参数写入文件
 控制部分有：轮子驱动
 
 **建图**
+
+**SLAM**
+经典 SLAM 框架
+
+1. 传感器信息读取
+2. 里程计
+3. 数据接收优化 => 全局一致的轨迹与地图
+4. 回环检测
+5. 建图
 
 ### 工程化备忘
 
@@ -263,4 +340,6 @@ $ rosparam dump			: 将参数服务器的参数写入文件
 # 里程计 : /odom
 $ rosrun turn_on_robot_htc htc_wheeltec_robot_node
 $ roslaunch turn_on_robot_htc turn_on_robot_htc.launch
+# 行驶控制 topic: cmd_vel
+$ rosrun rqt_robot_steering rqt_robot_steering
 ```

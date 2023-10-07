@@ -30,3 +30,6 @@ LSD-SLAM：
 RTAB-Map：
 优点：基于图优化的 SLAM 算法，支持激光雷达、RGB-D 相机和双目相机等多种传感器。能够在室内和室外环境中进行建图和定位。
 缺点：对计算资源和存储需求较高，对于大规模环境需要更多的计算时间。
+
+LIO-SLAM:
+https://github.com/TixiaoShan/LIO-SAM

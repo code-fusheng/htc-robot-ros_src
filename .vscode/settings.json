@@ -9,7 +9,13 @@
     ],
     "files.associations": {
         "*.txt": "plaintext",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "array": "cpp",
+        "span": "cpp",
+        "vector": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "ranges": "cpp"
     },
     // "fileheader.Author": "robot_Fu.Sheng",
     // "fileheader.LastModifiedBy": "robot_Fu.Sheng"

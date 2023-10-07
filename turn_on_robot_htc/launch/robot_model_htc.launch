@@ -1,0 +1,34 @@
+<launch>
+
+    <!-- Arguments参数 -->
+    <arg name="htc_car_mode" default="wheeltec_mini_akm" />   
+
+    <!-- 用于robot_state_publisher节点-->
+    <node pkg="tf" type="static_transform_publisher" name="base_to_link" args="0 0 0 0 0 0 base_footprint base_link 100" />
+  
+    <!--轮趣mini阿克曼系列 wheeltec_mini_akm -->
+    <group if="$(eval htc_car_mode == 'wheeltec_mini_akm')">
+        <!-- 用于lidar_ros节点，后面同理不再赘述-->
+        <!-- Desc: 
+            欧拉角写法: x y z yaw pitch roll link1_parent link1 period_in_ms 
+            四元素写法: x y z qx qy qz qw link1_parent link1 period_in_ms
+        -->
+        <node pkg="tf" type="static_transform_publisher" name="base_to_laser" args="0.125 0.00 0.15 3.14 0 0  base_footprint laser 100" />
+        <!-- 用于摄像头相关节点，如3d建图导航，后面同理不再赘述-->
+        <node pkg="tf" type="static_transform_publisher" name="base_to_camera" args="0.185 0.00 0.1 0 0 0   base_footprint camera_link 100" />
+        <!-- 用于robot_pose_ekf节点，后面同理不再赘述-->
+        <node pkg="tf" type="static_transform_publisher" name="base_to_gyro" args="0 0 0 0 0 0 base_footprint gyro_link 100" />  
+    </group>
+
+    <!-- URDF 标准化机器人描述格式 -->
+    <!--阿克曼系列 -->
+    <group if="$(eval htc_car_mode == 'wheeltec_mini_akm')">
+        <param name = "robot_description" textfile = "$(find turn_on_robot_htc)/urdf/wheeltec/mini_akm_robot.urdf"/> 
+    </group>
+
+    <!-- 读取urdf信息(robot_description) 发布话题：/joint_states-->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <!-- 订阅话题：/joint_states，发布小车TF信息-->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    
+</launch>

@@ -1,0 +1,28 @@
+<launch>
+
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto" />
+
+    <arg name="odom_frame_id"  default="odom_combined"/>
+
+    <!-- 开启 gmapping 建图算法  -->
+    <group if="$(eval htc_mapping_mode == 'gmapping')">
+        <include file="$(find turn_on_robot_htc)/launch/include/slam_gmapping.launch" />
+    </group>
+
+    <!-- 开启 hector 建图算法  -->
+    <group if="$(eval htc_mapping_mode == 'hector')">
+        <include file="$(find turn_on_robot_htc)/launch/include/slam_hector.launch" />
+    </group>
+
+    <!-- 开启 karto 建图算法  -->
+    <group if="$(eval htc_mapping_mode == 'karto')">
+        <include file="$(find turn_on_robot_htc)/launch/include/slam_karto.launch" />
+    </group>
+
+    <!-- 开启 cartographer 建图算法  -->
+    <group if="$(eval htc_mapping_mode == 'cartographer')">
+        <!--这个功能包的路径是：/opt/ros/melodic/share/cartographer_ros-->
+        <include file="$(find cartographer_ros)/launch/demo_revo_lds.launch" />
+    </group>
+
+</launch>

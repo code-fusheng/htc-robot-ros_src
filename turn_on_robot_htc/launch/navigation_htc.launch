@@ -1,0 +1,13 @@
+<launch>
+
+    <!-- 设置用于导航的地图 -->
+    <arg name="map_file" default="$(find turn_on_robot_htc)/map/MAP.yaml" />
+    <node pkg="map_server" type="map_server" name="map_server_htc" args="$(arg map_file)">
+
+    <!-- 开启用于导航的自适应蒙特卡洛定位amcl-->
+    <include file="$(find turn_on_robot_htc)/launch/include/amcl.launch" />
+
+    <!-- MarkerArray功能节点> -->
+    <node name='send_mark' pkg="turn_on_robot_htc" type="send_mark.py"></node>
+
+</launch>
