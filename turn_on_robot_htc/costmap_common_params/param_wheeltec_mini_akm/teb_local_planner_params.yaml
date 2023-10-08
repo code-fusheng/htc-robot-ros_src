@@ -9,20 +9,21 @@ TebLocalPlannerROS:
   max_vel_x: 0.5 #最大x前向速度，单位：m/s
   max_vel_y: 0.0 #最大y前向速度，单位：m/s，非全向移动小车需要设置为0
   max_vel_x_backwards: 0.5 #最大后退速度，单位：m/s
-  max_vel_theta: 1.5  #最大转向角速度，单位：rad/s
-  acc_lim_x: 0.2  #最大x向加速度，单位：m/s^2
-  acc_lim_y: 0.0  #最大y向加速度，，单位：m/s^2,非全向移动小车需要设置为0
-  acc_lim_theta: 0.3  #最大角加速度，单位：rad/s^2
+  max_vel_theta: 1.5 #最大转向角速度，单位：rad/s
+  acc_lim_x: 0.2 #最大x向加速度，单位：m/s^2
+  acc_lim_y: 0.0 #最大y向加速度，，单位：m/s^2,非全向移动小车需要设置为0
+  acc_lim_theta: 0.3 #最大角加速度，单位：rad/s^2
 
   #阿克曼小车参数，非阿克曼小车设置为0
   min_turning_radius: 0.350 #机器人最小转弯半径
   wheelbase: 0.144 #机器人轴距，前轮与后轮的距离
-  cmd_angle_instead_rotvel: False #true则cmd_vel/angular/z内的数据是舵机角度
-                                  #无论是不是阿克曼小车都设置为false，因为我们的阿克曼机器人内部进行了速度转换
+  cmd_angle_instead_rotvel:
+    False #true则cmd_vel/angular/z内的数据是舵机角度
+    #无论是不是阿克曼小车都设置为false，因为我们的阿克曼机器人内部进行了速度转换
 
   #用于局部路径规划的机器人外形
   #机器人外形的类型可以为：point、circular、two_circles、line、polygon，默认为point类型
-  footprint_model:    
+  footprint_model:
     #type: point #point类型不需要设置其它参数
 
     #type: circular #圆形类型，需要设置圆的半径
@@ -37,28 +38,33 @@ TebLocalPlannerROS:
     #type: line #两条线类型，需要设置两条线的位置
     #line_start: [0.00, 0.0]
     #line_end: [0.7, 0.0]
-    
+
     #type: polygon #多边形类型，需要设置各顶点的坐标值
     #vertices: [[-0.133, -0.125],[-0.133, 0.125],[0.133,0.125],[0.133, -0.125]]
 
     type: polygon
-    vertices: [[-0.031, -0.093], [-0.031, 0.093],[0.209,0.093],[0.209, -0.093]] #机器人形状 for mini_akm
+    vertices: [
+        [-0.031, -0.093],
+        [-0.031, 0.093],
+        [0.209, 0.093],
+        [0.209, -0.093],
+      ] #机器人形状 for mini_akm
 
   #障碍物参数
   min_obstacle_dist: 0.1 #和障碍物最小距离，直接影响机器人避障效果
   include_costmap_obstacles: True #是否将动态障碍物预测为速度模型，
   costmap_obstacles_behind_robot_dist: 1.5 #限制机器人后方规划时考虑的局部成本地图障碍物
-  obstacle_poses_affected: 15  #障碍物姿态受影响0~30
+  obstacle_poses_affected: 15 #障碍物姿态受影响0~30
   costmap_converter_plugin: ""
   costmap_converter_spin_thread: True
   costmap_converter_rate: 5
-  include_dynamic_obstacles: True 
+  include_dynamic_obstacles: True
   dynamic_obstacle_inflation_dist: 0.6
 
   #目标点误差允许值
-  xy_goal_tolerance: 0.2  #机器人到达目标点时附近时的弧度偏差允许量，在该偏差内认为已经到达目标点，单位为：m
+  xy_goal_tolerance: 0.2 #机器人到达目标点时附近时的弧度偏差允许量，在该偏差内认为已经到达目标点，单位为：m
   yaw_goal_tolerance: 0.1 #机器人到达目标点时附近时的弧度偏差允许量，在该偏差内认为已经到达目标点单位为：rad
-  free_goal_vel: False    #允许机器人以最大速度驶向目的地
+  free_goal_vel: False #允许机器人以最大速度驶向目的地
 
   #轨道配置参数
   teb_autosize: True #优化期间允许改变轨迹的时域长度
@@ -86,7 +92,7 @@ TebLocalPlannerROS:
   weight_shortest_path: 0
   weight_obstacle: 100
   weight_inflation: 0.2
-  weight_dynamic_obstacle: 10 
+  weight_dynamic_obstacle: 10
   weight_dynamic_obstacle_inflation: 0.2
   weight_viapoint: 1
   weight_adapt_factor: 2

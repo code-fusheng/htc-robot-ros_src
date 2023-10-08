@@ -523,13 +523,9 @@ tf: map、base_footprint
 - costmap_common_params.yaml
   公共代价地图配置文件: 小车外形、地图层详细配置
 
-
-
 #### 5. 仿真
 
 [CARLA simulator](https://github.com/carla-simulator/carla)
-
-
 
 #### \*. 算法理论
 
