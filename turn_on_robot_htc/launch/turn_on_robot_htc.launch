@@ -1,10 +1,18 @@
 <launch>
 
+    <!-- 是否开启建图 -->
+    <arg name="is_mapping" default="true" />
+    <!-- 是否开启导航 -->
+    <arg name="is_navigation" default="false" />
+
     <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
     <!-- 建图类型 -->
-    <arg name="htc_mapping_mode" default="cartographer" doc="opt: gmapping,hector,cartographer,karto" />
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto" />
     <!-- 激光雷达类型 -->
     <arg name="htc_lidar_mode" default="ls_N10P" />
+
+    <!-- 导航算法 -->
+    <arg name="htc_nav_mode" default="teb_local_planner" />
     
     <arg name="repeat"  default="false"/>
 
@@ -21,11 +29,6 @@
         <arg name="htc_lidar_mode" value="$(arg htc_lidar_mode)"/>
     </include>
 
-    <!-- 建图控制节点 -->
-    <include file="$(find turn_on_robot_htc)/launch/mapping_htc.launch">
-        <arg name="htc_mapping_mode" value="$(arg htc_mapping_mode)"/>
-    </include>
-
     <!-- TF & 小车模型 节点 -->
     <include file="$(find turn_on_robot_htc)/launch/robot_model_htc.launch">
         <arg name="htc_car_mode" value="$(arg htc_car_mode)"/>
@@ -35,8 +38,16 @@
     <include file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
     </include>
 
-    <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" />
+    <!-- 建图控制节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/mapping_htc.launch" if="$(arg is_mapping)">
+        <arg name="htc_mapping_mode" value="$(arg htc_mapping_mode)"/>
+    </include>
+
+    <!-- 导航控制节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/navigation_htc.launch" if="$(arg is_navigation)">
+        <arg name="htc_car_mode" value="$(arg htc_car_mode)"/>
+        <arg name="htc_nav_mode" value="$(arg htc_nav_mode)"/>
+    </include>
 
     <node pkg="rqt_robot_steering" type="rqt_robot_steering" name="rqt_robot_steering" />
 

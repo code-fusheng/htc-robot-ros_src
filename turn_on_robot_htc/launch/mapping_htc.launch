@@ -25,4 +25,7 @@
         <include file="$(find cartographer_ros)/launch/demo_revo_lds.launch" />
     </group>
 
+    <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" />
+
 </launch>
