@@ -456,8 +456,6 @@ Static
 
 https://github.com/TixiaoShan/LIO-SAM
 
-
-
 > Rtabmap_ros
 
 http://wiki.ros.org/rtabmap_ros
@@ -467,10 +465,6 @@ http://wiki.ros.org/rtabmap_ros
 $ roslaunch rtabmap_demos demo_robot_mapping.launch rviz:=true rtabmapviz:=false
 $ rosbag play --clock demo_mapping.bag
 ```
-
-
-
-
 
 #### 4. 导航
 
@@ -528,6 +522,12 @@ tf: map、base_footprint
   全局代价地图配置文件: tf 树、地图大小、地图层插件配置
 - costmap_common_params.yaml
   公共代价地图配置文件: 小车外形、地图层详细配置
+
+
+
+#### 5. 仿真
+
+[CARLA simulator](https://github.com/carla-simulator/carla)
 
 
 
@@ -593,4 +593,5 @@ $ rosrun turn_on_robot_htc htc_wheeltec_robot_node
 $ roslaunch turn_on_robot_htc turn_on_robot_htc.launch
 # 行驶控制 topic: cmd_vel
 $ rosrun rqt_robot_steering rqt_robot_steering
+$ rosrun turtlebot3_teleop turtlebot3_teleop_key
 ```
