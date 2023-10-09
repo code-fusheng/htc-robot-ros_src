@@ -124,7 +124,6 @@ private:
     double degree_compensation = 0.0;
     bool use_gps_ts;
     bool high_reflection;
-    bool n10p_double_echo;
     bool compensation;
     bool first_compensation = true;
     bool pubScan;

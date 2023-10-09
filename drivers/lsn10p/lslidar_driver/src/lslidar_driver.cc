@@ -61,7 +61,6 @@ namespace lslidar_driver
 		pnh.param<bool>("compensation", compensation, false);
 		pnh.param<bool>("pubPointCloud2", pubPointCloud2, false);
 		pnh.param<bool>("high_reflection", high_reflection, false);
-		pnh.param<bool>("n10p_double_echo", n10p_double_echo, false);
 		pnh.param<double>("min_range", min_range, 0.3);
 		pnh.param<double>("max_range", max_range, 100.0);
 		pnh.param<double>("angle_disable_min", angle_disable_min, 0.0);
@@ -890,15 +889,7 @@ namespace lslidar_driver
 					ros::Time start_time;
 					float scan_time;
 					this->getScan(points, start_time, scan_time);
-					int scan_num;
-					if(n10p_double_echo == false)
-					{
-						scan_num = count_num ;
-					}
-					else
-					{
-						scan_num = count_num * 2;
-					}
+					int scan_num = count_num ;
 					//scan_num=points_size_;
 					sensor_msgs::LaserScan msg;
 					msg.header.frame_id = frame_id;
@@ -913,7 +904,7 @@ namespace lslidar_driver
 
 					msg.angle_min = - M_PI;
 					msg.angle_max =  M_PI;
-					msg.angle_increment = 2 * M_PI / (double)(scan_num);
+					msg.angle_increment = 2 * M_PI / (double)(count_num);
 					msg.range_min = min_range;
 					msg.range_max = max_range;
 					msg.ranges.resize(scan_num);
@@ -929,51 +920,29 @@ namespace lslidar_driver
 
 					for (int i = 0; i < count_num; i++)
 					{
-						int point_idx;
-						double dist;
-						if(n10p_double_echo == false)
+						int point_idx = round((360 - points[i].degree) * count_num / 360);
+						if (points[i].range == 0.0)
 						{
-							point_idx = round((360 - points[i].degree) * count_num / 360);
-							if (points[i].range == 0.0)
-							{
-								msg.ranges[point_idx] = std::numeric_limits<float>::infinity();
-								msg.intensities[point_idx] = 0;
-							}
-							else
-							{
-								dist = points[i].range;
-								msg.ranges[point_idx] = (float)dist;
-								msg.intensities[point_idx] = points[i].intensity;
-							}	
+							msg.ranges[point_idx] = std::numeric_limits<float>::infinity();
+							msg.intensities[point_idx] = 0;
 						}
 						else
 						{
-							point_idx = round((360 - points[i].degree) * count_num / 360);
-							if (points[i].range == 0.0)
-							{
-								msg.ranges[point_idx*2] = std::numeric_limits<float>::infinity();
-								msg.intensities[point_idx*2] = 0;
-							}
-							else
-							{
-								dist = points[i].range;
-								msg.ranges[point_idx*2] = (float)dist;
-								msg.intensities[point_idx*2] = points[i].intensity;
-							}	
-							if (points[i + 3000].range == 0.0)
-							{
-								msg.ranges[point_idx*2+1] = std::numeric_limits<float>::infinity();
-								msg.intensities[point_idx*2+1] = 0;
-							}
-							else
-							{
-								double dist = points[i + 3000].range;
-								msg.ranges[point_idx*2+1] = (float)dist;
-								msg.intensities[point_idx*2+1] = points[i + 3000].intensity;
-							}	
+							double dist = points[i].range;
+							msg.ranges[point_idx] = (float)dist;
+							msg.intensities[point_idx] = points[i].intensity;
 						}
-
-
+						// if (points[i + 3000].range == 0.0)
+						// {
+						// 	msg.ranges[point_idx + count_num] = std::numeric_limits<float>::infinity();
+						// 	msg.intensities[point_idx + count_num] = 0;
+						// }
+						// else
+						// {
+						// 	double dist = points[i + 3000].range;
+						// 	msg.ranges[point_idx + count_num] = (float)dist;
+						// 	msg.intensities[point_idx + count_num] = points[i + 3000].intensity;
+						// }
 						if(truncated_mode_==1)
 				        {
 				            for (int j = 0; j < disable_angle_max_range.size(); ++j) {
@@ -983,15 +952,11 @@ namespace lslidar_driver
 				              }
 				            }
 				        }
-				        if(n10p_double_echo == false)
+				        if(msg.intensities[point_idx] <=5 && msg.intensities[point_idx] >0)
 				        {
-				        	if(msg.intensities[point_idx] <=5 && msg.intensities[point_idx] >0)
-				        	{
-				            	msg.ranges[point_idx] = std::numeric_limits<float>::infinity();
-				            	msg.intensities[point_idx] = 0;
-				        	}
+				            msg.ranges[point_idx] = std::numeric_limits<float>::infinity();
+				            msg.intensities[point_idx] = 0;
 				        }
-				        
 					}
 					pub_.publish(msg);
 				}
@@ -1066,7 +1031,7 @@ namespace lslidar_driver
 					ros::Time start_time;
 					float scan_time;
 					this->getScan(points, start_time, scan_time);
-					int scan_num =  count_num + 1;
+					int scan_num = ceil((angle_able_max - angle_able_min) / 360 * count_num) + 1;
 
 					sensor_msgs::LaserScan msg;
 					msg.header.frame_id = frame_id;
@@ -1078,18 +1043,16 @@ namespace lslidar_driver
 					{
 						msg.header.stamp = start_time;
 					}
-					msg.angle_min = - M_PI;
-					msg.angle_max =  M_PI;
-					// if (angle_able_max > 360)
-					// {
-					// 	msg.angle_min = 2 * M_PI * (angle_able_min - 360) / 360;
-					// 	msg.angle_max = 2 * M_PI * (angle_able_max - 360) / 360;
-					// }
-					// else
-					// {
-					// 	msg.angle_min = 2 * M_PI * angle_able_min / 360;
-					// 	msg.angle_max = 2 * M_PI * angle_able_max / 360;
-					// }
+					if (angle_able_max > 360)
+					{
+						msg.angle_min = 2 * M_PI * (angle_able_min - 360) / 360;
+						msg.angle_max = 2 * M_PI * (angle_able_max - 360) / 360;
+					}
+					else
+					{
+						msg.angle_min = 2 * M_PI * angle_able_min / 360;
+						msg.angle_max = 2 * M_PI * angle_able_max / 360;
+					}
 					msg.angle_increment = 2 * M_PI / (double)(count_num);
 					msg.range_min = min_range;
 					msg.range_max = max_range;
@@ -1104,8 +1067,8 @@ namespace lslidar_driver
 						msg.intensities[k] = 0;
 					}
 
-					int start_num = floor(0 * count_num / 360);
-					int end_num = floor(360 * count_num / 360);
+					int start_num = floor(angle_able_min * count_num / 360);
+					int end_num = floor(angle_able_max * count_num / 360);
 					for (int i = 0; i < count_num; i++)
 					{
 						int point_idx = round((360 - points[i].degree) * count_num / 360);
@@ -1124,29 +1087,6 @@ namespace lslidar_driver
 							msg.ranges[point_idx] = (float)dist;
 						}
 						msg.intensities[point_idx] = points[i].intensity;
-						if(truncated_mode_==1)
-							{
-								for (int j = 0; j < disable_angle_max_range.size(); ++j) {
-									if ((points[i].degree >= (disable_angle_min_range[j]) ) && (points[i].degree <= (disable_angle_max_range[j]))) {
-										msg.ranges[point_idx] = std::numeric_limits<float>::infinity();
-										msg.intensities[point_idx] = 0;
-									}
-								}
-							}
-						msg.intensities[point_idx] = points[i].intensity;
-						if(msg.intensities[point_idx] <=5 && msg.intensities[point_idx] >0)
-							{
-								msg.ranges[point_idx] = std::numeric_limits<float>::infinity();
-								msg.intensities[point_idx] = 0;
-							}
-						if(lidar_name == "M10" || lidar_name == "M10_P" || lidar_name == "M10_PLUS")
-							{
-								if(msg.intensities[point_idx] != 0)
-									{
-										msg.ranges[point_idx] = std::numeric_limits<float>::infinity();
-										msg.intensities[point_idx] = 0;
-									}
-							}
 					}
 					pub_.publish(msg);
 				}
