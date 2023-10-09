@@ -1,9 +1,9 @@
 <launch>
 
     <!-- 是否开启建图 -->
-    <arg name="is_mapping" default="false" />
+    <arg name="is_mapping" default="true" />
     <!-- 是否开启导航 -->
-    <arg name="is_navigation" default="true" />
+    <arg name="is_navigation" default="false" />
 
     <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
     <!-- 建图类型 -->

@@ -176,6 +176,8 @@ $ rosmsg type|topic_name|rosmsg show
 # roscd <PACKAGE_NAME>
 $ roscd roscpp
 # - /opt/ros/noetic/share/roscpp
+# 查找
+rospack find <PACKAGE_NAME>
 ```
 
 ##### tf 树
