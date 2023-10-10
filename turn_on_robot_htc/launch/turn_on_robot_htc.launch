@@ -1,9 +1,9 @@
 <launch>
 
     <!-- 是否开启建图 -->
-    <arg name="is_mapping" default="false" />
+    <arg name="is_mapping" default="true" />
     <!-- 是否开启导航 -->
-    <arg name="is_navigation" default="true" />
+    <arg name="is_navigation" default="false" />
 
     <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
     <!-- 建图类型 -->
@@ -18,6 +18,9 @@
 
     <!-- 里程计 framd_id -->
     <arg name="odom_frame_id" default="odom_combined"/>
+
+    <!-- cmd topic -->
+    <arg name="htc_cmd_topic" default="/cmd_vel"/>
 
     <!-- 开启底层单片机控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch" if="$(eval htc_car_mode == 'wheeltec_mini_akm')">
@@ -50,5 +53,8 @@
     </include>
 
     <node pkg="rqt_robot_steering" type="rqt_robot_steering" name="rqt_robot_steering" />
+    <include package="turn_on_robot_htc" type="keyboard_teleop" name="keyboard_teleop">
+        <arg name="htc_cmd_topic" default="/cmd_vel"></arg>
+    </include>
 
 </launch>

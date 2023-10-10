@@ -1,6 +1,6 @@
 <launch>
 
-    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto" />
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,cartographer_3d" />
 
     <arg name="odom_frame_id"  default="odom_combined"/>
 
@@ -23,6 +23,11 @@
     <group if="$(eval htc_mapping_mode == 'cartographer')">
         <!--这个功能包的路径是：/opt/ros/melodic/share/cartographer_ros-->
         <include file="$(find cartographer_ros)/launch/demo_revo_lds.launch" />
+    </group>
+
+    <!-- cartographer 3d  -->
+    <group if="$(eval htc_mapping_mode == 'cartographer_3d')">
+        <include file="$(find cartographer_ros)/launch/3d_online.launch" />
     </group>
 
     <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
