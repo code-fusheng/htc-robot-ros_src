@@ -1,0 +1,12 @@
+<launch>
+
+    <arg name="htc_camera_mode" default="Astra_S" doc="opt: Astra_S, Astra_Pro, Astra_Dabai, Astra_Gemimi" />
+
+    <arg name="if_usb_cam" default="false"/>
+
+    <!-- 启动奥比中光 Astra_S 相机 -->
+    <group if="$(eval htc_camera_mode == 'Astra_S')">
+        <include if="$(htc_camera_mode == 'Astra_S')" file="$(find astra_camera)/launch/astra.launch" ></include>
+    </group>
+
+</launch>
