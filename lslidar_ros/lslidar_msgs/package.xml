@@ -4,7 +4,9 @@
   <version>1.2.0</version>
   <description>
     ROS message definitions for Leishen M10 LIDARs.
+    ROS message definitions for Leishen C16 LIDARs.
   </description>
+  <url>http://www.ros.org/wiki/lslidar_c16</url>
   <maintainer email="honghangli@lslidar.com">Nick Li</maintainer>
   <author>Nick Li</author>
   <license>GNU General Public License V3.0</license>
@@ -12,9 +14,11 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>message_generation</build_depend>
+  <build_depend>sensor_msgs</build_depend>
   <build_depend>std_msgs</build_depend>
 
   <run_depend>message_runtime</run_depend>
+  <run_depend>sensor_msgs</run_depend>
   <run_depend>std_msgs</run_depend>
 
 </package>
