@@ -19,6 +19,9 @@
     <!-- 里程计 framd_id -->
     <arg name="odom_frame_id" default="odom_combined"/>
 
+    <!-- cmd topic -->
+    <arg name="htc_cmd_topic" default="/cmd_vel"/>
+
     <!-- 开启底层单片机控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch" if="$(eval htc_car_mode == 'wheeltec_mini_akm')">
         <arg name="odom_frame_id"  value="$(arg odom_frame_id)"/>
@@ -50,5 +53,8 @@
     </include>
 
     <node pkg="rqt_robot_steering" type="rqt_robot_steering" name="rqt_robot_steering" />
+    <include package="turn_on_robot_htc" type="keyboard_teleop" name="keyboard_teleop">
+        <arg name="htc_cmd_topic" default="/cmd_vel"></arg>
+    </include>
 
 </launch>
