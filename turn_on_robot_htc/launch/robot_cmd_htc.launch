@@ -1,0 +1,18 @@
+<launch>
+
+    <arg name="htc_cmd_topic" default="/cmd_vel" />
+    <arg name="htc_cmd_mode" default="keyboard" />
+
+    <!-- 开启 steering 控制  -->
+    <group if="$(eval htc_cmd_mode == 'steering')">
+        <node pkg="rqt_robot_steering" type="rqt_robot_steering" name="rqt_robot_steering" />
+    </group>
+
+    <!-- 开启 keyboard 控制  -->
+    <group if="$(eval htc_cmd_mode == 'keyboard')">
+        <include file="$(find turn_on_robot_htc)/launch/include/keyboard_teleop.launch" output="screen">
+            <arg name="htc_cmd_topic" value="$(arg htc_cmd_topic)"></arg>
+        </include>
+    </group>  
+
+</launch>

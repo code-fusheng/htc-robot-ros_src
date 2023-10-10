@@ -16,7 +16,7 @@
  */
 
 #include <ros/ros.h>
-#include <lslidar_driver/lslidar_driver.h>
+#include <lslidar_driver/lslidar_single_driver.h>
 
 volatile sig_atomic_t flag = 1;
 
@@ -28,7 +28,7 @@ static void my_handler(int sig)
 
 int main(int argc, char** argv)
 {
-		ros::init(argc, argv, "lslidar_driver_node");
+		ros::init(argc, argv, "lslidar_single_driver_node");
 		ros::NodeHandle node;
 		ros::NodeHandle private_nh("~");
 

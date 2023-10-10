@@ -15,7 +15,7 @@
  * along with the driver.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "lslidar_driver/input.h"
+#include "lslidar_driver/single_input.h"
 
 extern volatile sig_atomic_t flag;
 namespace lslidar_driver
@@ -36,7 +36,7 @@ namespace lslidar_driver
 		cur_rpm_ = 0;
 		return_mode_ = 1;
 		private_nh.param("device_ip", devip_str_, std::string(""));
-		private_nh.param("lidar_name", lidar_name, std::string("M10"));
+		private_nh.param("lidar_name", lidar_name, std::string("N10P"));
 		private_nh.param("device_ip_difop", devip_str_difop, std::string("192.168.1.102"));
 		private_nh.param<bool>("add_multicast", add_multicast, false);
 		private_nh.param<std::string>("group_ip", group_ip, "224.1.1.2");

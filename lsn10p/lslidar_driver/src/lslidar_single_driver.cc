@@ -29,7 +29,7 @@
 #include <fstream>
 #include <iostream>
 
-#include <lslidar_driver/lslidar_driver.h>
+#include <lslidar_driver/lslidar_single_driver.h>
 
 namespace lslidar_driver
 {

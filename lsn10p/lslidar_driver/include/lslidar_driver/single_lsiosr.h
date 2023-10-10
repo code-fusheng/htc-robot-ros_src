@@ -6,8 +6,8 @@
 @version:       date:       author:     comments:
 @v1.0           22-10-24      li          new
 *******************************************************/
-#ifndef LSIOSR_H
-#define LSIOSR_H
+#ifndef SINGLE_LSIOSR_H
+#define SINGLE_LSIOSR_H
 
 #include <sys/types.h>
 #include <sys/stat.h>

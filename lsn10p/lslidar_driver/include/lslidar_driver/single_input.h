@@ -24,8 +24,8 @@
  *              PCAP dump
  */
 
-#ifndef __LSLIDAR_INPUT_H_
-#define __LSLIDAR_INPUT_H_
+#ifndef __LSLIDAR_SINGLE_INPUT_H_
+#define __LSLIDAR_SINGLE_INPUT_H_
 
 #include <unistd.h>
 #include <stdio.h>
@@ -134,4 +134,4 @@ private:
 
 }
 
-#endif  // __LSLIDAR_INPUT_H
+#endif  // __LSLIDAR_SINGLE_INPUT_H

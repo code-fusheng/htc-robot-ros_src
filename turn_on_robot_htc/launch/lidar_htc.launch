@@ -16,7 +16,7 @@
 
     <!-- 启动 镭神 N10P 雷达 -->
     <group if="$(eval htc_lidar_mode == 'ls_N10P')">
-        <include file="$(find lslidar_driver)/launch/lslidar_serial.launch"/>
+        <include file="$(find lslidar_driver)/launch/lslidar_single_serial.launch"/>
     </group>
 
 </launch>

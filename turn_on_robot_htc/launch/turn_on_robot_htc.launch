@@ -13,6 +13,9 @@
 
     <!-- 导航算法 -->
     <arg name="htc_nav_mode" default="teb_local_planner" />
+
+    <!-- 控制类型 -->
+    <arg name="htc_cmd_mode" default="steering" doc="opt: steering" />
     
     <arg name="repeat"  default="false"/>
 
@@ -52,9 +55,11 @@
         <arg name="htc_nav_mode" value="$(arg htc_nav_mode)"/>
     </include>
 
-    <node pkg="rqt_robot_steering" type="rqt_robot_steering" name="rqt_robot_steering" />
-    <include package="turn_on_robot_htc" type="keyboard_teleop" name="keyboard_teleop">
-        <arg name="htc_cmd_topic" default="/cmd_vel"></arg>
+    <!-- 车辆控制节点 -->
+    <!-- TODO keyboard 需要打开新窗口 不会 -->
+    <include file="$(find turn_on_robot_htc)/launch/robot_cmd_htc.launch">
+        <arg name="htc_cmd_topic" value="$(arg htc_cmd_topic)" />
+        <arg name="htc_cmd_mode" value="$(arg htc_cmd_mode)" />
     </include>
 
 </launch>

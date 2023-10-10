@@ -40,61 +40,61 @@ link_directories(
   ${catkin_LIBRARY_DIRS}
 )
 
-add_library(lslidar_input
-  src/input.cc
+add_library(lslidar_single_input
+  src/single_input.cc
 )
 
-add_library(lslidar_serial
-  src/lsiosr.cpp
+add_library(lslidar_single_serial
+  src/single_lsiosr.cpp
 )
 
 
 # Leishen lidar driver
-add_library(lslidar_driver
-  src/lslidar_driver.cc
+add_library(lslidar_single_driver
+  src/lslidar_single_driver.cc
 )
 
-target_link_libraries(lslidar_input
+target_link_libraries(lslidar_single_input
   ${catkin_LIBRARIES}
   ${libpcap_LIBRARIES}
 )
 
-target_link_libraries(lslidar_serial
+target_link_libraries(lslidar_single_serial
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(lslidar_driver
-  lslidar_input
-  lslidar_serial
+target_link_libraries(lslidar_single_driver
+  lslidar_single_input
+  lslidar_single_serial
   ${catkin_LIBRARIES}
 )
 
-add_dependencies(lslidar_driver
-  lslidar_input
-  lslidar_serial
+add_dependencies(lslidar_single_driver
+  lslidar_single_input
+  lslidar_single_serial
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
 
 # Leishen lidar nodelet
-add_executable(lslidar_driver_node
-  src/lslidar_driver_node.cc
+add_executable(lslidar_single_driver_node
+  src/lslidar_single_driver_node.cc
 )
-target_link_libraries(lslidar_driver_node
-  lslidar_driver
-  lslidar_input
-  lslidar_serial
+target_link_libraries(lslidar_single_driver_node
+  lslidar_single_driver
+  lslidar_single_input
+  lslidar_single_serial
   ${catkin_LIBRARIES}
 )
-add_dependencies(lslidar_driver_node
-  lslidar_input
-  lslidar_serial
+add_dependencies(lslidar_single_driver_node
+  lslidar_single_input
+  lslidar_single_serial
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
 
 # install options
-install(TARGETS lslidar_input lslidar_driver_node lslidar_serial
+install(TARGETS lslidar_single_input lslidar_single_driver_node lslidar_single_serial
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

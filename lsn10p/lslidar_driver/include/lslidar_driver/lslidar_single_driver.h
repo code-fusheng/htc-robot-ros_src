@@ -15,14 +15,14 @@
  * along with the driver.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LSLIDAR_DRIVER_H
-#define LSLIDAR_DRIVER_H
+#ifndef LSLIDAR_SINGLE_DRIVER_H
+#define LSLIDAR_SINGLE_DRIVER_H
 
 #include <unistd.h>
 #include <stdio.h>
 #include <netinet/in.h>
 #include <string>
-#include "input.h"
+#include "single_input.h"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -30,7 +30,7 @@
 #include <ros/ros.h>
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <diagnostic_updater/publisher.h>
-#include "lsiosr.h"
+#include "single_lsiosr.h"
 #include <sensor_msgs/LaserScan.h>
 
 #include <pcl_conversions/pcl_conversions.h>
@@ -162,4 +162,4 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(lslidar_driver::PointXYZIT,
                                   (float, x, x)(float, y, y)(float, z, z)(
                                           std::uint8_t, intensity,
                                           intensity)(double, timestamp, timestamp))
-#endif // _LSLIDAR__DRIVER_H_
+#endif // _LSLIDAR_SINGLE_DRIVER_H_

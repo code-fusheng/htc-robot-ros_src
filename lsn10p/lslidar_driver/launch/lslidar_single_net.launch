@@ -6,7 +6,7 @@
     <param name="device_port" value="2368"/>                        #雷达目的端口号
     <param name="device_ip_difop" value="192.168.1.102"/>           #雷达目的ip
     <param name="difop_port" value="2369"/>                         #雷达源端口号
-    <param name="lidar_name" value="M10"/>                          #雷达选择:M10 M10_P M10_PLUS M10_GPS N10 L10 N10_P
+    <param name="lidar_name" value="N10_P"/>                          #雷达选择:M10 M10_P M10_PLUS M10_GPS N10 L10 N10_P
     <param name="interface_selection" value="net"/>                 #接口选择:net 为网口,serial 为串口。
     <param name="add_multicast" value="false"/>                     #是否启动组播。
     <param name="group_ip" value="224.1.1.2"/>                      #组播ip。
