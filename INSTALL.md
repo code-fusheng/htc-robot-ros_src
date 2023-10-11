@@ -17,8 +17,11 @@ ros-$ROS_DISTRO-libuvc-camera \
 ros-$ROS_DISTRO-libuvc-ros
 ```
 
-```
+###
 
+```shell
+# 编辑 librealsense
+git clone https://github.com/IntelRealSense/librealsense.git
 ```
 
 ### 安装 rtabmap

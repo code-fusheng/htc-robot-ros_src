@@ -9,6 +9,13 @@
 ##### 1. 工程初始化
 
 ```shell
+# 安装 ssh
+sudo apt install -y openssh-server
+# 安装ros环境
+wget http://fishros.com/install -O fishros && . fishros
+```
+
+```shell
 # 创建工作空间
 $ mkdir -p ~/htc-robot-ros_ws/src
 $ cd ~/htc-robot-ros_ws/src
