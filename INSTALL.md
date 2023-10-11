@@ -6,6 +6,7 @@
 sudo apt install -y vim \
 terminator \
 libmetis-dev \
+ros-$ROS_DISTRO-bfl \
 ```
 
 ### 安装相机依赖
