@@ -1,12 +1,16 @@
 <launch>
 
-    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,cartographer_3d" />
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,cartographer_3d,rtabmap" />
 
     <arg name="odom_frame_id"  default="odom_combined"/>
 
+    <!-- 2d 建图算法 -->
+
     <!-- 开启 gmapping 建图算法  -->
     <group if="$(eval htc_mapping_mode == 'gmapping')">
-        <include file="$(find turn_on_robot_htc)/launch/include/slam_gmapping.launch" />
+        <include file="$(find turn_on_robot_htc)/launch/include/slam_gmapping.launch">
+            <arg name="odom_frame"  value="$(arg odom_frame_id)"/>
+        </include>
     </group>
 
     <!-- 开启 hector 建图算法  -->
@@ -25,12 +29,26 @@
         <include file="$(find cartographer_ros)/launch/demo_revo_lds.launch" />
     </group>
 
+    <!-- 3d 建图算法 -->
+
+    <!-- rtabmap 3d 建图算法 -->
+    <!-- TODO 当前环境暂时存在缺失 rgb 图的情况 -->
+    <group if="$(eval htc_mapping_mode == 'rtabmap')">
+        <include file="$(find turn_on_robot_htc)/launch/include/slam_gmapping.launch">
+            <arg name="odom_frame"  value="$(arg odom_frame_id)"/>
+        </include>
+        <!-- 开启3d 建图 -->
+        <include file="$(find turn_on_robot_htc)/launch/include/rtabmap_mapping.launch" />
+    </group>
+
     <!-- cartographer 3d  -->
+    <!-- 待完善 -->
     <group if="$(eval htc_mapping_mode == 'cartographer_3d')">
         <include file="$(find cartographer_ros)/launch/3d_online.launch" />
     </group>
 
     <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" />
+    <node if="$(eval htc_mapping_mode != 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" />
+    <node if="$(eval htc_mapping_mode == 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/3d_mapping.rviz" />
 
 </launch>

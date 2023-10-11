@@ -39,7 +39,8 @@ $ catkin_make clean
 ```shell
 # 安装依赖
 $ rosdep install --from-paths src --ignore-src -r -y
-catkin_make -DCATKIN_HTC-ROBOT-ROS_WS_PACKAGES="lslidar_msgs"
+# 单独编译包
+catkin_make --pkg lslidar_msgs
 # https://github.com/rst-tu-dortmund/teb_local_planner.git
 # apt remove
 sudo apt install ros-noetic-teb-local-planner
@@ -378,19 +379,15 @@ geometry_msgs::TransormStamped transformStamped;
 transformStamped = tfBuffer.lookupTransform("target", "source", time);
 ```
 
-
-
 #### 5. CMake
 
 > REQUIRED`和`QUIET`是与`find_package
 
-1. `REQUIRED`：这个选项用于指示指定的包对项目来说是必需的。如果找不到该包，CMake将生成一个错误并停止配置过程。它确保该包必须可用以成功进行配置。
-2. `QUIET`：这个选项用于抑制`find_package`命令在找不到包时可能生成的任何错误或警告消息。如果找不到该包，CMake将只是将变量`<package>_FOUND`设置为`FALSE`，而不生成错误。
+1. `REQUIRED`：这个选项用于指示指定的包对项目来说是必需的。如果找不到该包，CMake 将生成一个错误并停止配置过程。它确保该包必须可用以成功进行配置。
+2. `QUIET`：这个选项用于抑制`find_package`命令在找不到包时可能生成的任何错误或警告消息。如果找不到该包，CMake 将只是将变量`<package>_FOUND`设置为`FALSE`，而不生成错误。
 
-- 使用`REQUIRED`使包成为强制性的，如果找不到该包，CMake将生成错误。
+- 使用`REQUIRED`使包成为强制性的，如果找不到该包，CMake 将生成错误。
 - 使用`QUIET`可以抑制找不到包时生成的任何错误或警告消息，让你自己处理这种情况。
-
-
 
 ---
 

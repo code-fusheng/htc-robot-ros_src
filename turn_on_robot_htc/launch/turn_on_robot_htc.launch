@@ -7,9 +7,12 @@
 
     <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
     <!-- 建图类型 -->
-    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto" />
+    <!-- rtabmap: 修改 odom_frame_id = odom -->
+    <arg name="htc_mapping_mode" default="rtabmap" doc="opt: gmapping,hector,cartographer,karto,rtabmap" />
     <!-- 激光雷达类型 -->
     <arg name="htc_lidar_mode" default="ls_N10P" />
+    <!-- 双目深度相机类型 -->
+    <arg name="htc_camera_mode" default="Astra_S" />
 
     <!-- 导航算法 -->
     <arg name="htc_nav_mode" default="teb_local_planner" />
@@ -20,6 +23,7 @@
     <arg name="repeat"  default="false"/>
 
     <!-- 里程计 framd_id -->
+    <!-- odom_combined -->
     <arg name="odom_frame_id" default="odom_combined"/>
 
     <!-- cmd topic -->
@@ -27,12 +31,17 @@
 
     <!-- 开启底层单片机控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch" if="$(eval htc_car_mode == 'wheeltec_mini_akm')">
-        <arg name="odom_frame_id"  value="$(arg odom_frame_id)"/>
+        <arg name="odom_frame_id"  value="$(arg odom_frame_id)" />
     </include>
 
     <!-- 激光雷达控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/lidar_htc.launch">
-        <arg name="htc_lidar_mode" value="$(arg htc_lidar_mode)"/>
+        <arg name="htc_lidar_mode" value="$(arg htc_lidar_mode)" />
+    </include>
+
+    <!-- 双目深度相机控制节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/camera_htc.launch">
+        <arg name="htc_camera_mode" value="$(arg htc_camera_mode)" />
     </include>
 
     <!-- TF & 小车模型 节点 -->
@@ -46,6 +55,7 @@
 
     <!-- 建图控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/mapping_htc.launch" if="$(arg is_mapping)">
+        <arg name="odom_frame_id" value="$(arg odom_frame_id)"/>
         <arg name="htc_mapping_mode" value="$(arg htc_mapping_mode)"/>
     </include>
 
