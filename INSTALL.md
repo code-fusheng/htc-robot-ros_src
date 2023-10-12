@@ -6,6 +6,9 @@
 sudo apt install -y vim \
 terminator \
 libmetis-dev \
+libpcap-dev \
+ros-$ROS_DISTRO-bfl \
+ros-$ROS_DISTRO-serial \
 ```
 
 ### 安装相机依赖
