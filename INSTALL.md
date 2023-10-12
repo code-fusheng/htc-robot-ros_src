@@ -9,6 +9,9 @@ libmetis-dev \
 libpcap-dev \
 ros-$ROS_DISTRO-bfl \
 ros-$ROS_DISTRO-serial \
+ros-$ROS_DISTRO-tf2-sensor-msgs \
+ros-$ROS_DISTRO-costmap-converter \
+ros-$ROS_DISTRO-mbf_costmap_core
 ```
 
 ### 安装相机依赖
@@ -24,7 +27,7 @@ ros-$ROS_DISTRO-libuvc-ros
 
 ```shell
 # 安装依赖
-sudo apt-get install -y libudev-dev \
+sudo apt install -y libudev-dev \
 pkg-config \
 libgtk-3-dev \
 libusb-1.0-0-dev \
@@ -63,4 +66,8 @@ sudo apt install -y ros-$ROS_DISTRO-rtabmap*
 git clone https://github.com/introlab/rtabmap_ros.git
 # 切换分支
 git checkout noetic-devel
+```
+
+```
+git submodule add https://github.com/pal-robotics/ddynamic_reconfigure.git drivers/ddynamic_reconfigure
 ```
