@@ -83,4 +83,5 @@ git checkout noetic-devel
 
 ```
 git submodule add https://github.com/pal-robotics/ddynamic_reconfigure.git drivers/ddynamic_reconfigure
+git submodule add https://github.com/code-fusheng/realsense-ros.git drivers/realsense-ros
 ```
