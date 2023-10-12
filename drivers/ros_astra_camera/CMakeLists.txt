@@ -5,7 +5,11 @@ find_package(catkin REQUIRED camera_info_manager dynamic_reconfigure image_trans
 
 find_package(Boost REQUIRED COMPONENTS system thread)
 
-find_package(libuvc REQUIRED)
+find_package(libuvc QUIET)
+if(EXISTS "/usr/local/include/libuvc")
+  set(libuvc_INCLUDE_DIRS "/usr/local/include/libuvc")
+  set(libuvc_LIBRARIES "/usr/local/lib/libuvc.so")
+endif()
 
 #MACHINE = $(shell uname -m)
 execute_process(COMMAND uname -m  OUTPUT_VARIABLE  MACHINES )
