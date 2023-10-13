@@ -1,5 +1,5 @@
 # Raw Leishen LIDAR packet.
 
 time stamp              # packet timestamp
-uint8[2000] data        # packet contents
+uint8[1206] data        # packet contents
 

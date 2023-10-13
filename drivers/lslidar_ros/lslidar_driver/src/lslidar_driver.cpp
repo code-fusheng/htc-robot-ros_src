@@ -14,7 +14,7 @@ namespace lslidar_driver {
                                                                                        return_mode(1),
                                                                                        config_vert(true),
                                                                                        sweep_data(
-                                                                                               new lslidar_msgs::LslidarC16Scan()) {
+                                                                                               new lslidar_msgs::LslidarScan()) {
         return;
     }
 
@@ -185,7 +185,7 @@ namespace lslidar_driver {
     }
 
 
-    void lslidarDriver::publishC16Scan() {
+    void lslidarDriver::publishScan() {
         sensor_msgs::LaserScanPtr scan_msg(new sensor_msgs::LaserScan());
         scan_msg->header.frame_id = frame_id;
         int layer_num_local = scan_num;
@@ -655,8 +655,8 @@ namespace lslidar_driver {
             }
             int remapped_scan_idx = (fir_idx % 16) % 2 == 0 ? (fir_idx % 16) / 2 : (fir_idx % 16) / 2 + 8;
 
-            sweep_data->points.push_back(lslidar_msgs::LslidarC16Point());
-            lslidar_msgs::LslidarC16Point &new_point = sweep_data->points[
+            sweep_data->points.push_back(lslidar_msgs::LslidarPoint());
+            lslidar_msgs::LslidarPoint &new_point = sweep_data->points[
                     sweep_data->points.size() - 1];
             //pack the data into point msg
             new_point.time = time;
@@ -684,9 +684,9 @@ namespace lslidar_driver {
 
             sweep_end_time = sweep_end_time > 0 ? sweep_end_time : 0;
             publishPointcloud();
-            if (publish_scan) publishC16Scan();
+            if (publish_scan) publishScan();
 
-            sweep_data = lslidar_msgs::LslidarC16ScanPtr(new lslidar_msgs::LslidarC16Scan());
+            sweep_data = lslidar_msgs::LslidarScanPtr(new lslidar_msgs::LslidarScan());
             //prepare the next frame scan
             //sweep_start_time = packet->stamp.toSec() - (end_fir_idx - start_fir_idx) * 3.125 * 1e-6;
             last_azimuth = firings.azimuth[SCANS_PER_PACKET - 1];
@@ -726,8 +726,8 @@ namespace lslidar_driver {
                            (SCANS_PER_PACKET * 0.5 - (fir_idx - round((fir_idx / 32) * 0.5) * 32) - 1) * 3.125 * 1e-6;
                 }
                 int remapped_scan_idx = (fir_idx % 16) % 2 == 0 ? (fir_idx % 16) / 2 : (fir_idx % 16) / 2 + 8;
-                sweep_data->points.push_back(lslidar_msgs::LslidarC16Point());
-                lslidar_msgs::LslidarC16Point &new_point = sweep_data->points[
+                sweep_data->points.push_back(lslidar_msgs::LslidarPoint());
+                lslidar_msgs::LslidarPoint &new_point = sweep_data->points[
                         sweep_data->points.size() - 1];
                 //pack the data into point msg
                 new_point.time = time;
@@ -1312,8 +1312,8 @@ namespace lslidar_driver {
             } else {
                 remapped_scan_idx = (fir_idx % 32) % 2 == 0 ? (fir_idx % 32) / 2 : (fir_idx % 32) / 2 + 16;
             }
-            sweep_data->points.push_back(lslidar_msgs::LslidarC16Point());
-            lslidar_msgs::LslidarC16Point &new_point = sweep_data->points[
+            sweep_data->points.push_back(lslidar_msgs::LslidarPoint());
+            lslidar_msgs::LslidarPoint &new_point = sweep_data->points[
                     sweep_data->points.size() - 1];
             //pack the data into point msg
             new_point.time = time;
@@ -1333,9 +1333,9 @@ namespace lslidar_driver {
             sweep_end_time = packet->stamp.toSec() - static_cast<double>(SCANS_PER_PACKET - end_fir_idx) * 3.125 * 1e-6;
             sweep_end_time = sweep_end_time > 0 ? sweep_end_time : 0;
             publishPointcloud();
-            if (publish_scan) publishC16Scan();
+            if (publish_scan) publishScan();
 
-            sweep_data = lslidar_msgs::LslidarC16ScanPtr(new lslidar_msgs::LslidarC16Scan());
+            sweep_data = lslidar_msgs::LslidarScanPtr(new lslidar_msgs::LslidarScan());
             //prepare the next frame scan
             //sweep_start_time = packet->stamp.toSec() - (end_fir_idx - start_fir_idx) * 3.125 * 1e-6;
             last_azimuth = last_azimuth_tmp;
@@ -1374,8 +1374,8 @@ namespace lslidar_driver {
                 } else {
                     remapped_scan_idx = (fir_idx % 32) % 2 == 0 ? (fir_idx % 32) / 2 : (fir_idx % 32 ) / 2 + 16;
                 }
-                sweep_data->points.push_back(lslidar_msgs::LslidarC16Point());
-                lslidar_msgs::LslidarC16Point &new_point = sweep_data->points[
+                sweep_data->points.push_back(lslidar_msgs::LslidarPoint());
+                lslidar_msgs::LslidarPoint &new_point = sweep_data->points[
                         sweep_data->points.size() - 1];
                 //pack the data into point msg
                 new_point.time = time;

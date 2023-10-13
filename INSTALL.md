@@ -68,6 +68,16 @@ roslaunch realsense2_camera rs_camera.launch
 <arg name="enable_sync"               default="true"/>
 ```
 
+### 安装激光雷达
+
+```shell
+
+```
+
+```shell
+# Wireshark 抓包调试雷达
+```
+
 ### 安装 rtabmap
 
 ```shell

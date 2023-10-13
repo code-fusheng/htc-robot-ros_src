@@ -13,20 +13,17 @@ add_message_files(
   LslidarPacket.msg
   LslidarPoint.msg
   LslidarScan.msg
-  LslidarSweep.msg
-  LslidarDifop.msg
-  # 多线
-  LslidarC16Scan.msg
-  LslidarC16Point.msg
   LslidarC16Sweep.msg
   LslidarC32Sweep.msg
   LslidarScanUnified.msg
 )
 
+
 add_service_files(
   FILES
   lslidar_control.srv
 )
+
 
 generate_messages(DEPENDENCIES std_msgs sensor_msgs)
 

@@ -6,6 +6,15 @@
 
 #### 1. 工程管理
 
+##### 0. 系统初始化
+
+```shell
+# 安装中文输入法 ibus
+sudo apt-get install ibus-pinyin
+# 重启
+ibus-setup
+```
+
 ##### 1. 工程初始化
 
 ```shell
@@ -33,7 +42,7 @@ $ source ~/.bashrc
 # 查看环境变量
 $ echo $ROS_PACKAGE_PATH
 # 编译单独功能包
-$ catkin_make -DCATKIN_HTC-ROBOT-ROS_WS_PACKAGES="package_name"
+$ catkin_make -DCATKIN_WHITELIST_PACKAGES="package_name"
 # --source src/simulation/
 # 自定义编译线程
 $ catkin_make -j -l
@@ -45,6 +54,7 @@ $ catkin_make clean
 
 ```shell
 # 安装依赖
+
 $ rosdep install --from-paths src --ignore-src -r -y
 # 单独编译包
 catkin_make --pkg lslidar_msgs

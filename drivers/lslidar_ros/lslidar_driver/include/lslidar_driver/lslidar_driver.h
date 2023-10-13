@@ -34,8 +34,8 @@
 #include <sensor_msgs/LaserScan.h>
 #include <pcl_ros/point_cloud.h>
 #include <lslidar_msgs/LslidarPacket.h>
-#include <lslidar_msgs/LslidarC16Point.h>
-#include <lslidar_msgs/LslidarC16Scan.h>
+#include <lslidar_msgs/LslidarPoint.h>
+#include <lslidar_msgs/LslidarScan.h>
 #include <lslidar_msgs/LslidarC16Sweep.h>
 #include <lslidar_msgs/LslidarC32Sweep.h>
 #include <lslidar_msgs/LslidarScanUnified.h>
@@ -155,7 +155,7 @@ namespace lslidar_driver {
 
         void publishPointcloud();
 
-        void publishC16Scan();
+        void publishScan();
 
 
         bool lslidarC16Control(lslidar_msgs::lslidar_control::Request &req,
@@ -222,7 +222,7 @@ namespace lslidar_driver {
         boost::shared_ptr<Input> difop_input_;
         boost::shared_ptr<boost::thread> difop_thread_;
 
-        lslidar_msgs::LslidarC16ScanPtr sweep_data;
+        lslidar_msgs::LslidarScanPtr sweep_data;
         ros::NodeHandle nh;
         ros::NodeHandle pnh;
         //ros::Publisher packet_pub;
