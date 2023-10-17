@@ -1,0 +1,38 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/hrysj2022/lidar_driver_ws/devel/include/**",
+        "/home/hrysj2022/yesense_ros-v1.2/yesense_ros/devel/include/**",
+        "/home/hrysj2022/catkin_fist/devel/include/**",
+        "/home/hrysj2022/catkin_fl/devel/include/**",
+        "/home/hrysj2022/carla-ros-bridge/catkin_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/hrysj2022/lidar_driver_ws/src/can/can_module_usb2can/include/**",
+        "/home/hrysj2022/catkin_fl/src/1_FAST_LIO-main/include/**",
+        "/home/hrysj2022/catkin_fist/src/FAST_LIO_LOCALIZATION/include/**",
+        "/home/hrysj2022/catkin_fl/src/FAST_LIO_SAM/FAST_LIO_SAM/include/**",
+        "/home/hrysj2022/lidar_driver_ws/src/fdilink_ahrs/include/**",
+        "/home/hrysj2022/catkin_fl/src/LIO-SAM/include/**",
+        "/home/hrysj2022/catkin_fist/src/2_ndt_localizer-master/include/**",
+        "/home/hrysj2022/lidar_driver_ws/src/ndt_omp/include/**",
+        "/home/hrysj2022/carla-ros-bridge/catkin_ws/src/ros-bridge/pcl_recorder/include/**",
+        "/home/hrysj2022/lidar_driver_ws/src/robot_localization/include/**",
+        "/home/hrysj2022/yesense_ros-v1.2/yesense_ros/src/rosserial/include/**",
+        "/home/hrysj2022/catkin_fist/src/track/include/**",
+        "/home/hrysj2022/lidar_driver_ws/src/tracking_pure/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

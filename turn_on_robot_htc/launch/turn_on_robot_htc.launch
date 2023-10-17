@@ -8,7 +8,7 @@
     <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
     <!-- 建图类型 -->
     <!-- rtabmap: 修改 odom_frame_id = odom -->
-    <arg name="htc_mapping_mode" default="rtabmap" doc="opt: gmapping,hector,cartographer,karto,rtabmap" />
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,rtabmap" />
     <!-- 激光雷达类型 -->
     <arg name="htc_lidar_mode" default="ls_N10P" />
     <!-- 双目深度相机类型 -->
