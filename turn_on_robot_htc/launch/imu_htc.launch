@@ -1,0 +1,12 @@
+<launch>
+
+    <!-- IMU 惯导类型 -->
+    <arg name="htc_imu_mode" default="N100" />
+    <!-- imu topic -->
+    <arg name="htc_imu_topic" default="imu"/>
+
+    <include if="$(eval htc_imu_mode == 'N100')" file="$(find fdilink_ahrs)/launch/ahrs_data.launch">
+        <param name="imu_topic"  value="$(arg htc_imu_topic)"/>
+    </include>
+
+</launch>

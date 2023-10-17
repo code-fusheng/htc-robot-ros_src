@@ -1,5 +1,7 @@
 <launch>
     <arg name="odom_frame_id"  default="odom_combined"/>
+    <!-- IMU 惯导类型 -->
+    <arg name="htc_imu_mode" default="N100" />
 
     <node pkg="turn_on_robot_htc" type="htc_wheeltec_robot_node" name="htc_wheeltec_robot" output="screen" respawn="false">
         <param name="usart_port_name"    type="string" value="/dev/wheeltec_controller"/>  
@@ -7,6 +9,8 @@
         <param name="odom_frame_id"      type="string" value="$(arg odom_frame_id)"/> 
         <param name="robot_frame_id"     type="string" value="base_footprint"/> 
         <param name="gyro_frame_id"      type="string" value="gyro_link"/> 
+        <!-- 区分板载 IMU -->
+        <remap if="$(eval htc_imu_mode == 'N100')" from="imu/data" to="imu/data/board"/>
     </node>
 
 </launch>
