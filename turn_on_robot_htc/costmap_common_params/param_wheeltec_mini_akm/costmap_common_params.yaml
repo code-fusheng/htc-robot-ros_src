@@ -44,7 +44,7 @@ obstacle_layer:
   #设置对应观测源参数
   scan:
     #观测源数据话题名称
-    topic: scan
+    topic: scan_raw
     #观测源的TF坐标名称，如果设置为空，会自动从话题数据寻找TF坐标名称
     #以下三种数据格式支持自动寻找TF坐标名称
     #sensor_msgs/LaserScan, sensor_msgs/PointCloud, and sensor_msgs/PointCloud2

@@ -1,6 +1,6 @@
 <launch>
 
-    <arg name="htc_lidar_mode" default="ls_N10P" doc="opt: ls_N10P, ls_N10P_net"/>
+    <arg name="htc_lidar_mode" default="ls_N10P" doc="opt: ls_N10P, ls_N10P_net, ls_C16"/>
 
     <!--所有雷达正前方（小车正前方）为0度角方向，扫描角度顺时针方向增加 -->
     <!--
@@ -16,7 +16,14 @@
 
     <!-- 启动 镭神 N10P 雷达 -->
     <group if="$(eval htc_lidar_mode == 'ls_N10P')">
-        <include file="$(find lslidar_driver)/launch/lslidar_single_serial.launch"/>
+        <include file="$(find lslidar_driver)/launch/lslidar_serial.launch"/>
+    </group>
+
+    <!-- 启动 镭神 C16 雷达 -->
+    <group if="$(eval htc_lidar_mode == 'ls_C16')">
+        <include file="$(find lslidar_driver)/launch/lslidar_c16.launch">
+        </include>
+        <!-- <include file="$(find pointcloud_to_laserscan/launch/pointcloud_scan.launch)" /> -->
     </group>
 
 </launch>

@@ -11,7 +11,7 @@
     <node name='send_mark' pkg="turn_on_robot_htc" type="send_mark.py" />
 
     <!-- 导航算法 -->
-    <group if="$(eval htc_nav_mode != rtabmap)">
+    <group if="$(eval htc_nav_mode != 'rtabmap')">
         <!-- 开启用于导航的自适应蒙特卡洛定位amcl-->
         <include file="$(find turn_on_robot_htc)/launch/include/amcl.launch" />
         <include file="$(find turn_on_robot_htc)/launch/include/teb_local_planner.launch" if="$(eval htc_nav_mode == 'teb_local_planner')">
@@ -25,7 +25,7 @@
     </group>
 
     <!-- 3d 导航算法 -->
-    <group if="$(eval htc_nav_mode == rtabmap)">
+    <group if="$(eval htc_nav_mode == 'rtabmap')">
         <include file="$(find turn_on_wheeltec_robot)/launch/include/amcl.launch" >
             <arg name="use_map_topic" value="true"/>
             <arg name="map_topic" value="/rtabmap/grid_map"/>

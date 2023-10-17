@@ -1,16 +1,16 @@
 <launch>
 
     <!-- 是否开启建图 -->
-    <arg name="is_mapping" default="true" />
+    <arg name="is_mapping" default="false" />
     <!-- 是否开启导航 -->
-    <arg name="is_navigation" default="false" />
+    <arg name="is_navigation" default="true" />
 
     <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
     <!-- 建图类型 -->
     <!-- rtabmap: 修改 odom_frame_id = odom -->
-    <arg name="htc_mapping_mode" default="rtabmap" doc="opt: gmapping,hector,cartographer,karto,rtabmap" />
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,rtabmap" />
     <!-- 激光雷达类型 -->
-    <arg name="htc_lidar_mode" default="ls_N10P" />
+    <arg name="htc_lidar_mode" default="ls_C16" />
     <!-- 双目深度相机类型 -->
     <arg name="htc_camera_mode" default="Astra_S" />
 

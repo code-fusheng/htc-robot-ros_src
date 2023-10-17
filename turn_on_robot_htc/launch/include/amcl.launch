@@ -2,7 +2,7 @@
     <!-- 使用map的topic而不是map文件-->
     <arg name="use_map_topic" default="false"/>
     <!-- 不可以使用PointCloud，只能使用LaserScan -->
-    <arg name="scan_topic" default="scan"/>
+    <arg name="scan_topic" default="scan_raw"/>
     <arg name="map_topic"  default="/map"/>
 
     <node pkg="amcl" type="amcl" name="amcl" clear_params="true">
