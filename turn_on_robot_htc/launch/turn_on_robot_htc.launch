@@ -36,6 +36,8 @@
     <!-- imu topic -->
     <arg name="htc_imu_topic" default="/imu"/>
 
+    <!-- 底盘控制节点? -->
+
     <!-- 开启底层单片机控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch" if="$(eval htc_car_mode == 'wheeltec_mini_akm')">
         <arg name="htc_imu_mode" value="$(arg htc_imu_mode)" />
@@ -79,7 +81,7 @@
         <arg name="htc_nav_mode" value="$(arg htc_nav_mode)"/>
     </include>
 
-    <!-- 车辆控制节点 -->
+    <!-- 车辆终端控制节点 -->
     <!-- TODO keyboard 需要打开新窗口 不会 -->
     <include file="$(find turn_on_robot_htc)/launch/robot_cmd_htc.launch">
         <arg name="htc_cmd_topic" value="$(arg htc_cmd_topic)" />

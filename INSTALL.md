@@ -12,7 +12,9 @@ ros-$ROS_DISTRO-serial \
 ros-$ROS_DISTRO-tf2-sensor-msgs \
 ros-$ROS_DISTRO-costmap-converter \
 ros-$ROS_DISTRO-mbf_costmap_core \
-ros-$ROS_DISTRO-rgbd-launch
+ros-$ROS_DISTRO-rgbd-launch \
+ros-$ROS_DISTRO-nmea-msgs \
+ros-$ROS_DISTRO-gps-common
 ```
 
 ### 安装相机依赖

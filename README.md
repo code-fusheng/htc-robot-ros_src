@@ -87,6 +87,17 @@ q.setRPY(0, 0, msg->theta);
 
 #### 2. 设备管理
 
+> 设备适配清单
+
+- IMU
+  N100、MPU6050
+- Lidar
+  Ls_N10P、Ls_C16
+- Camera
+  Realsense_D435i、Astra_S
+- Car
+  wheeltec、
+
 > 固定外设串口号
 
 ```shell

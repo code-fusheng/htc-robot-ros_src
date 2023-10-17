@@ -1,0 +1,11 @@
+<launch>
+
+    <!-- GNSS 类型 -->
+    <arg name="htc_gnss_mode" default="G60" />
+    <!-- imu topic -->
+    <arg name="htc_gnss_topic" default=""/>
+
+    <include if="$(eval htc_gnss_mode == 'G60')" file="$(find fdilink_ahrs)/launch/ahrs_data.launch">
+    </include>
+
+</launch>

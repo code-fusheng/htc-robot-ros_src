@@ -1,0 +1,18 @@
+<launch>
+	
+	<arg name="port" default="/dev/htc_gnss" />
+	<arg name="baud" default="9600" />
+	<arg name="frame_id" default="gps" />
+	<arg name="time_ref_source" default="gps" />
+	<arg name="useRMC" default="False" />
+	<node name="nmea_serial_driver_node" pkg="wheeltec_gps_driver" type="nmea_serial_driver" output="screen">
+    	<param name="port" value="$(arg port)"/>
+    	<param name="baud" value="$(arg baud)" />
+    	<param name="frame_id" value="$(arg frame_id)" />
+    	<param name="time_ref_source" value="$(arg time_ref_source)" />
+    	<param name="useRMC" value="$(arg useRMC)" />
+	</node>
+
+	<node name="gps_path_node" pkg="wheeltec_gps_driver" type="gps_path" output="screen"/>	
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find wheeltec_gps_driver)/rviz/gps_path.rviz"/>
+</launch>
