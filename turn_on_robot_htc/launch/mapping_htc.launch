@@ -47,6 +47,10 @@
         <include file="$(find cartographer_ros)/launch/3d_online.launch" />
     </group>
 
+    <!-- lio-sam 3d 建图 -->
+
+    <!-- lego-loam 3d 建图 -->
+
     <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
     <node if="$(eval htc_mapping_mode != 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" />
     <node if="$(eval htc_mapping_mode == 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/3d_mapping.rviz" />
