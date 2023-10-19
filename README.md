@@ -20,6 +20,7 @@ ibus-setup
 ```shell
 # 安装 ssh
 sudo apt install -y openssh-server
+
 # 安装ros环境
 wget http://fishros.com/install -O fishros && . fishros
 ```
@@ -447,6 +448,11 @@ Inflation
 Obstacles
 ^
 Static
+
+> 占据栅格地图
+> 占据点云地图
+> 路标特征地图
+> 语义地图 => 点云聚类分割
 
 #### 2. SLAM
 

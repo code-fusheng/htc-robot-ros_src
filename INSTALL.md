@@ -1,9 +1,21 @@
 ## 系统环境安装手册
 
+### 初始化系统环境
+
+> 网络优化
+
+```
+# Github 仓库代理
+https://ghproxy.com/
+# 科学订阅地址
+https://sub.wl-sub1.com/api/v1/client/subscribe?token=1ddb6feb800a114b7bdb3afc43373ddf
+```
+
 ### 安装基础依赖
 
 ```shell
 sudo apt install -y vim \
+git \
 terminator \
 libmetis-dev \
 libpcap-dev \
@@ -26,7 +38,24 @@ ros-$ROS_DISTRO-libuvc-camera \
 ros-$ROS_DISTRO-libuvc-ros
 ```
 
-###
+> 编译 libuvc（noetic 环境）
+
+PS: noetic 环境下 libuvc 需要拉源码进行编译 [https://github.com/libuvc/libuvc](https://github.com/libuvc/libuvc)
+
+```shell
+git clone https://ghproxy.com/https://github.com/libuvc/libuvc
+cd libuvc
+mkdir build
+cd build
+cmake ..
+make && sudo make install
+# ros_astra_camera 功能包设置 libuvc 环境
+find_package(libuvc QUIET)
+if(EXISTS "/usr/local/include/libuvc")
+  set(libuvc_INCLUDE_DIRS "/usr/local/include/libuvc")
+  set(libuvc_LIBRARIES "/usr/local/lib/libuvc.so")
+endif()
+```
 
 ```shell
 # 安装依赖
@@ -35,7 +64,7 @@ pkg-config \
 libgtk-3-dev \
 libusb-1.0-0-dev \
 libglfw3-dev \
-libssl-dev \
+libssl-dev
 # 下载 librealsense 源码
 git clone https://github.com/IntelRealSense/librealsense.git
 # git clone https://ghproxy.com/https://github.com/IntelRealSense/librealsense.git
@@ -48,10 +77,11 @@ mkdir build
 cd build
 cmake ../ -DBUILD_EXAMPLES=ture
 make
-#
+sudo make install
+# 建议上科学
 git clone https://gitcode.net/mirrors/curl/curl.git
 cd build/third-party
-sudo make install
+
 #
 git clone https://github.com/IntelRealSense/realsense-ros.git
 git checkout 2.3.2
@@ -119,35 +149,23 @@ ros-$ROS_DISTRO-robot-state-publisher \
 ros-$ROS_DISTRO-fake-localization \
 libmetis-dev \
 libtbb-dev
-# gtsam method:1 (需要科学)
+# gtsam method:1 (需要科学) # noetic 见下方问题处理
 sudo add-apt-repository ppa:borglab/gtsam-release-4.0
 sudo apt install libgtsam-dev libgtsam-unstable-dev
-# gtsam method:2
-
-cd htc-robot-ros_ws
-git clone https://github.com/borglab/gtsam.git
-# 版本分支切换 4.0.2 & 4.0.3
-cd gtsam
-mkdir build
-cd build
-cmake -DGTSAM_BUILD_WITH_MARCH_NATIVE=OFF ..
-make check
-sudo make install -j4
-# noetic 版本需要处理 gtsam 与 eigen 兼容问题
-vim gtsam/cmake/HandleEigen.cmake
-# + set(GTSAM_USE_SYSTEM_EIGEN ON)
-# if(GTSAM_USE_SYSTEM_EIGEN)
-# gtsam method:3
-sudo cp -r /usr/include/eigen3 /usr/local/include
 
 # 拉取 lio-sam & 编译
 git clone https://github.com/TixiaoShan/LIO-SAM.git
 catkin_make -j1 -DCATKIN_WHITELIST_PACKAGES=lio_sam
 ```
 
-### 调试 IMU
+> lio-sam 编译问题(noetic)
+
+[https://github.com/TixiaoShan/LIO-SAM/issues/206](https://github.com/TixiaoShan/LIO-SAM/issues/206)
 
 ```shell
+sudo add-apt-repository ppa:borglab/gtsam-release-4.0
+sudo apt update
+sudo apt install libgtsam-dev libgtsam-unstable-dev
 # 修改
 #include <opencv/cv.h> => <opencv2/opencv.hpp>
 #                      => <opencv2/imgproc.hpp>
@@ -155,4 +173,24 @@ catkin_make -j1 -DCATKIN_WHITELIST_PACKAGES=lio_sam
 # 修改 set(CMAKE_CXX_FLAGS "-std=c++11")
 set(CMAKE_CXX_FLAGS "-std=c++14")
 set(CMAKE_CXX_STANDARD 14)
+# 移位置
+#include <pcl/kdtree/kdtree_flann.h>
 ```
+
+### 调试 IMU
+
+```shell
+
+```
+
+### 编译工程
+
+```
+
+```
+
+### 问题处理
+
+#### 1. noetic 缺少 bfl
+
+sudo apt -y install liborocos-bfl-dev
