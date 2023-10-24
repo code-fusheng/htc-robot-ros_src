@@ -4,8 +4,11 @@
     <arg name="htc_imu_mode" default="N100" />
     <!-- imu topic -->
     <arg name="htc_imu_topic" default="imu"/>
+    <!-- imu port 串口名称 -->
+    <arg name="htc_imu_port" default="/dev/imu_n100" />
 
     <include if="$(eval htc_imu_mode == 'N100')" file="$(find fdilink_ahrs)/launch/ahrs_data.launch">
+        <param name="port"  value="$(arg htc_imu_port)"/>
         <param name="imu_topic"  value="$(arg htc_imu_topic)"/>
     </include>
 

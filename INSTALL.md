@@ -11,6 +11,14 @@ https://ghproxy.com/
 https://sub.wl-sub1.com/api/v1/client/subscribe?token=1ddb6feb800a114b7bdb3afc43373ddf
 ```
 
+> 安装 ssh
+
+```shell
+# 安装 ssh
+sudo apt install -y openssh-server
+sudo service ssh restart
+```
+
 ### 安装基础依赖
 
 ```shell
@@ -19,23 +27,26 @@ git \
 terminator \
 libmetis-dev \
 libpcap-dev \
-ros-$ROS_DISTRO-bfl \
 ros-$ROS_DISTRO-serial \
 ros-$ROS_DISTRO-tf2-sensor-msgs \
 ros-$ROS_DISTRO-costmap-converter \
 ros-$ROS_DISTRO-mbf-costmap-core \
 ros-$ROS_DISTRO-rgbd-launch \
 ros-$ROS_DISTRO-nmea-msgs \
-ros-$ROS_DISTRO-gps-common
+ros-$ROS_DISTRO-gps-common \
+ros-$ROS_DISTRO-mbf-msgs
+
+ros-$ROS_DISTRO-bfl \
 ```
 
 ### 安装相机依赖
 
 ```shell
 sudo apt install -y ros-$ROS_DISTRO-rgbd-launch \
-ros-$ROS_DISTRO-libuvc \
 ros-$ROS_DISTRO-libuvc-camera \
 ros-$ROS_DISTRO-libuvc-ros
+
+ros-$ROS_DISTRO-libuvc \
 ```
 
 > 编译 libuvc（noetic 环境）
@@ -131,14 +142,6 @@ git submodule add https://github.com/pal-robotics/ddynamic_reconfigure.git drive
 git submodule add https://github.com/code-fusheng/realsense-ros.git drivers/realsense-ros
 ```
 
-### 安装 LeGo-Loam
-
-```shell
-sudo apt-get install -y libmetis-dev
-catkin_make -DCATKIN_WHITELIST_PACKAGES=cloud_msgs
-#include <opencv2/opencv.hpp>
-```
-
 ### 安装 Lio-Sam
 
 ```shell
@@ -151,6 +154,7 @@ libmetis-dev \
 libtbb-dev
 # gtsam method:1 (需要科学) # noetic 见下方问题处理
 sudo add-apt-repository ppa:borglab/gtsam-release-4.0
+sudo apt update
 sudo apt install libgtsam-dev libgtsam-unstable-dev
 
 # 拉取 lio-sam & 编译
@@ -177,19 +181,26 @@ set(CMAKE_CXX_STANDARD 14)
 #include <pcl/kdtree/kdtree_flann.h>
 ```
 
-### 调试 IMU
+### 安装 LeGo-Loam
 
 ```shell
-
-```
-
-### 编译工程
-
-```
-
+sudo apt-get install -y libmetis-dev
+catkin_make -DCATKIN_WHITELIST_PACKAGES=cloud_msgs
+catkin_make -j1 -DCATKIN_WHITELIST_PACKAGES=lego_loam
+#include <opencv2/opencv.hpp>
 ```
 
 ### 问题处理
+
+#### 1. 20.04 缺少 wifi 适配器
+
+sudo apt install git
+sudo apt install build-essential
+sudo apt install dkms
+git clone https://ghproxy.com/https://github.com/tomaspinho/rtl8821ce.git
+cd rtl8821ce
+
+#### 18.04 缺少 wifi 适配器
 
 #### 1. noetic 缺少 bfl
 

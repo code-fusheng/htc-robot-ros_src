@@ -1,14 +1,14 @@
 <launch>
 
     <!-- 是否开启建图 -->
-    <arg name="is_mapping" default="false" />
+    <arg name="is_mapping" default="true" />
     <!-- 是否开启导航 -->
-    <arg name="is_navigation" default="true" />
+    <arg name="is_navigation" default="false" />
 
     <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
     <!-- 建图类型 -->
     <!-- rtabmap: 修改 odom_frame_id = odom -->
-    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,rtabmap" />
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,rtabmap,liosam" />
     <!-- 激光雷达类型 -->
     <arg name="htc_lidar_mode" default="ls_C16" />
     <!-- 双目深度相机类型 -->
@@ -40,6 +40,7 @@
 
     <!-- 开启底层单片机控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch" if="$(eval htc_car_mode == 'wheeltec_mini_akm')">
+        <arg name="htc_car_mode" value="$(arg htc_car_mode)" /> 
         <arg name="htc_imu_mode" value="$(arg htc_imu_mode)" />
         <arg name="odom_frame_id"  value="$(arg odom_frame_id)" />
     </include>
@@ -66,7 +67,7 @@
     </include>
 
     <!-- 扩张卡尔曼滤波 发布odom_combined到footprint的TF,即小车定位 使用cartographer算法时不使用该滤波算法-->
-    <include file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
+    <include if="$(eval htc_mapping_mode != 'legoloam')" file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
     </include>
 
     <!-- 建图控制节点 -->

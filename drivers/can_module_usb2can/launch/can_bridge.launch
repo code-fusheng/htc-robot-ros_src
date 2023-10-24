@@ -1,0 +1,30 @@
+<launch>
+
+    <arg name="car_type"  default="JD03" 
+        doc="opt: NWD, JD01, JD02, JD03"/>
+
+    <node pkg="can_module_usb2can" name="can_module_CANalyst_node" type="can_module_CANalyst_node" output="screen">
+        <!--  0:usb2can; 1:eth_can_udp -->
+        <param name="can_type" type="int" value="1"/> 
+
+        <!-- USB2CAN -->
+        <param name="main_can_id"      type="int"    value="2" />         <!--1:CAN1 2:CAN2  -->
+        <param name="debug_can_id"     type="int"    value="1" />
+
+        <!-- EthCan_UDP -->
+        <param name="can_eth_card"     type="string" value="enp0s31f6" />
+        <param name="can1_remote_ip"   type="string" value="192.168.100.110" />
+        <param name="can1_remote_port" type="int"    value="4001" />
+        <param name="can2_remote_ip"   type="string" value="192.168.100.110" />
+        <param name="can2_remote_port" type="int"    value="4002" />
+        <param name="local_ip"         type="string" value="192.168.100.10" />
+        <param name="local_port"       type="int"    value="8001" />
+
+        <!-- Common -->
+        <param name="debug_mode"       type="bool"   value="false" />
+        <param name="show_sending_msg" type="bool"   value="false" />
+        <param name="car_type"         type="string" value="$(arg car_type)" />
+        <param name="vehicle_weight"   type="double" value="30" />
+    </node>
+
+</launch>
