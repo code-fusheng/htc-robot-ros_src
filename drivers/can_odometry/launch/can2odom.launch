@@ -1,0 +1,17 @@
+<launch>
+
+  <!-- wheel_base轮距 -->
+  <arg name="wheel_base"         default="0.4"/>
+  <arg name="minimum_turning_radius"           default="2.54"/>
+  <arg name="maximum_steering_wheel_angle_deg" default="30.0"/>
+  <!-- is_akm 是否为阿克曼车型 -->
+  <arg name="is_akm"                           default="false"/>
+
+  <node pkg="can_odometry" type="can_odometry_node" name="can_odometry_node" output="screen" >
+    <param name="wheel_base"         value="$(arg wheel_base)"         type="double" />
+    <param name="minimum_turning_radius"           value="$(arg minimum_turning_radius)"           type="double" />
+    <param name="maximum_steering_wheel_angle_deg" value="$(arg maximum_steering_wheel_angle_deg)" type="double" />
+    <param name="is_akm"                           value="$(arg is_akm)"                           type="bool" />
+  </node>
+
+</launch>

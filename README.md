@@ -21,6 +21,7 @@ ibus-setup
 # 安装 ssh
 sudo apt install -y openssh-server
 
+
 # 安装ros环境
 wget http://fishros.com/install -O fishros && . fishros
 ```
@@ -426,6 +427,12 @@ transformStamped = tfBuffer.lookupTransform("target", "source", time);
 感知部分有：激光雷达、深度相机、IMU、里程计、碰撞感知、建图
 决策部分有：路径规划（navigation）算法、定位算法
 控制部分有：轮子驱动
+
+#### 0. 底盘
+
+目前机器人底盘一般都有 VCU(微控制器) 进行控制
+一般用 stm32 的主板进行相关的控制
+云乐的底盘应该是德州仪器的一款车规级板子
 
 #### 1. 地图
 

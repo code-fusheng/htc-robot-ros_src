@@ -1,8 +1,10 @@
 <launch>
 
-    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,cartographer_3d,rtabmap" />
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,cartographer_3d,rtabmap,liosam" />
 
     <arg name="odom_frame_id"  default="odom_combined"/>
+    <arg name="htc_pcd_topic" default="point_cloud_raw"/>
+    <arg name="htc_imu_topic" default="imu"/>
 
     <!-- 2d 建图算法 -->
 
@@ -48,8 +50,14 @@
     </group>
 
     <!-- lio-sam 3d 建图 -->
+    <group if="$(eval htc_mapping_mode == 'liosam')">
+        <include file="$(find turn_on_robot_htc)/launch/include/liosam_mapping.launch" />
+    </group>
 
     <!-- lego-loam 3d 建图 -->
+    <group if="$(eval htc_mapping_mode == 'legoloam')">
+        <include file="$(find lego_loam)/launch/run.launch" />
+    </group>
 
     <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
     <node if="$(eval htc_mapping_mode != 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" />

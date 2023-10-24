@@ -1,0 +1,9 @@
+<launch>
+
+    <arg name="steer_type"  default="akm"/>
+
+    <node pkg="cmdvel_to_ecu" type="main.py" name="cmdvel_to_ecu" output="screen" >
+        <param name="steer_type" value="$(arg steer_type)" type="string" />
+    </node>
+
+</launch>

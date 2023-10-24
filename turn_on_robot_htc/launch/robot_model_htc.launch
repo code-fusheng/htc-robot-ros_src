@@ -13,7 +13,7 @@
             欧拉角写法: x y z yaw pitch roll link1_parent link1 period_in_ms 
             四元素写法: x y z qx qy qz qw link1_parent link1 period_in_ms
         -->
-        <node pkg="tf" type="static_transform_publisher" name="base_to_laser" args="0.125 0.00 0.15 3.14 0 0  base_footprint laser 100" />
+        <node pkg="tf" type="static_transform_publisher" name="base_to_laser" args="0.125 0.00 0.15 3.14 3.14 0  base_footprint laser 100" />
         <!-- 用于摄像头相关节点，如3d建图导航，后面同理不再赘述-->
         <node pkg="tf" type="static_transform_publisher" name="base_to_camera" args="0.185 0.00 0.1 0 0 0   base_footprint camera_link 100" />
         <!-- 用于robot_pose_ekf节点，后面同理不再赘述-->
