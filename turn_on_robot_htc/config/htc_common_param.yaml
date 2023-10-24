@@ -1,0 +1,13 @@
+htc:
+  robot:
+    uuid: "ZH000001-T"
+  topic:
+    imu: /imu
+    laser: /scan
+    point_cloud: /points_cloud_raw
+  frame:
+    world: word
+    map: map
+    robot: base_link
+    base: base_footprint
+    laser: laser

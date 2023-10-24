@@ -1,5 +1,8 @@
 <launch>
 
+    <!-- <param name="robot_uuid" value="ZH100001" type="string"/> -->
+    <rosparam file="$(find turn_on_robot_htc)/config/htc_common_param.yaml" command="load" />
+
     <!-- 是否开启建图 -->
     <arg name="is_mapping" default="true" />
     <!-- 是否开启导航 -->
