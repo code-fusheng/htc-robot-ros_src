@@ -205,3 +205,9 @@ cd rtl8821ce
 #### 1. noetic 缺少 bfl
 
 sudo apt -y install liborocos-bfl-dev
+
+### 编译运行
+
+```shell
+catkin_make -DCATKIN_WHITELIST_PACKAGES="lslidar_msgs;cloud_msgs;automotive_msgs"
+```

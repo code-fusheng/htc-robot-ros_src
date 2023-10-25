@@ -1,0 +1,29 @@
+<launch>
+
+    <!-- 全局参数定义 -->
+    <!-- 模式 -->
+    <param name="htc_nav_mode" value="ndt" type="string" doc="opt: ndt|gps" />
+    <param name="lidar_frame" value="rslidar"/>
+    <param name="imu_frame" value="imu"/>
+
+    <param name="vehicle_odom_topic" value="odom" />
+    <param name="vehicle_twist_topic" value="/vehicle/twist" />
+
+    <!-- 发布 tf 坐标树 -->
+
+    <node pkg="tf" type="static_transform_publisher" name="base_2_laser" args="0 0 0 0 0 0 base_link rslidar 50" />
+    <node pkg="tf" type="static_transform_publisher" name="base_2_imu" args="0 0 0 0 0 0 base_link imu_link 100" />
+
+    <!-- 激光雷达节点 -->
+    <include file="$(find lslidar_driver)/launch/lslidar_c16_autox.launch"></include>
+
+    <!-- can 驱动 -->
+    <include file="$(find can_module_usb2can)/launch/can_bridge_nwd.launch"></include>
+
+    <!-- pcb map manager -->
+    <node pkg="pcd_map_manager" type="pcd_map_manager" name="pcd_map_manager" output="screen">
+        <param name="margin" value="130.0" type="double" /> <!-- 需要加载的距离范围 m -->
+        <param name="update_interval" value="1000" type="double" /> <!-- 时间更新间隔 ms -->
+    </node>
+
+</launch>
