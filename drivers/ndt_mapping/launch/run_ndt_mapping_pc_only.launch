@@ -1,0 +1,7 @@
+<launch>
+  <param name="use_sim_time" value="true" type="bool"/>
+  <node pkg="tf" type="static_transform_publisher" name="velodyne_transform_publisher" args="0.15 0 0.34 0 0 0 base_link rslidar 100" />
+  <node pkg="ndt_mapping" type="ndt_mapping_pc_only" name="ndt_mapping_pc_only" output="screen" />
+  <node pkg="rviz" type="rviz" name="Rviz_for_ndt_mapping" args="-d $(find ndt_mapping)/rviz/ndt_mapping.rviz" />
+
+</launch>

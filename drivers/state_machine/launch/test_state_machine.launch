@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="state_machine" type="main.py" name="state_machine" output="screen">
+        <rosparam command="load"  file="$(find state_machine)/params/smartcar.yaml"/>
+    </node>
+</launch>

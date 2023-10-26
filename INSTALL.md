@@ -16,7 +16,14 @@ https://sub.wl-sub1.com/api/v1/client/subscribe?token=1ddb6feb800a114b7bdb3afc43
 ```shell
 # 安装 ssh
 sudo apt install -y openssh-server
+sudo vim /etc/ssh/sshd_config
 sudo service ssh restart
+```
+
+### 安装 ROS
+
+```shell
+wget http://fishros.com/install -O fishros && . fishros
 ```
 
 ### 安装基础依赖
@@ -34,9 +41,20 @@ ros-$ROS_DISTRO-mbf-costmap-core \
 ros-$ROS_DISTRO-rgbd-launch \
 ros-$ROS_DISTRO-nmea-msgs \
 ros-$ROS_DISTRO-gps-common \
-ros-$ROS_DISTRO-mbf-msgs
+ros-$ROS_DISTRO-mbf-msgs \
+ros-$ROS_DISTRO-gmapping
 
 ros-$ROS_DISTRO-bfl \
+
+```
+
+### 安装 autoware 移植基础依赖
+
+```shell
+sudo apt install -y ros-$ROS_DISTRO-autoware-msgs \
+ros-$ROS_DISTRO-autoware-config-msgs
+ros-$ROS_DISTRO-rqt-runtime-monitor
+
 ```
 
 ### 安装相机依赖
@@ -192,7 +210,9 @@ catkin_make -j1 -DCATKIN_WHITELIST_PACKAGES=lego_loam
 
 ### 问题处理
 
-#### 1. 20.04 缺少 wifi 适配器
+#### 1. 20.04 缺少 wifi 适配器 & 18.04 缺少 wifi 适配器
+
+lspci -v
 
 sudo apt install git
 sudo apt install build-essential
@@ -200,14 +220,23 @@ sudo apt install dkms
 git clone https://ghproxy.com/https://github.com/tomaspinho/rtl8821ce.git
 cd rtl8821ce
 
-#### 18.04 缺少 wifi 适配器
+> Intel AX201 => iwlwifi
+
+sudo apt install git linux-headers-generic build-essential
+git clone https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
 
 #### 1. noetic 缺少 bfl
 
 sudo apt -y install liborocos-bfl-dev
 
+#### melodic 缺少 sdl
+
+sudo apt-get install libsdl-image1.2-dev libsdl-dev
+
 ### 编译运行
 
 ```shell
-catkin_make -DCATKIN_WHITELIST_PACKAGES="lslidar_msgs;cloud_msgs;automotive_msgs"
+catkin_make -DCATKIN_WHITELIST_PACKAGES="lslidar_msgs;cloud_msgs;automotive_msgs;path_msgs;smartcar_msgs;lb_cloud_msgs;rtk_cloud_msgs"
+catkin_make -DCATKIN_WHITELIST_PACKAGES=""
+catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release
 ```

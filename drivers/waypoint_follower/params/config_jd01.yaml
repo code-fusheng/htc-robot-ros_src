@@ -1,0 +1,22 @@
+is_linear_interpolation: False
+
+# 车辆前后轴距
+wheel_base: 0.67
+
+# 速度控制 # km/h  --deprecated
+const_velocity: 4.68
+cross_speed_limit: 4
+lane_speed_limit: 4
+
+is_const_speed_command: false
+
+# 预瞄距离
+is_const_lookahead_dis: true
+const_lookahead_distance: 2.5
+lookahead_distance_ratio: 2.5
+
+cross_lookahead_dis: 1.5
+lane_lookahead_dis: 2.5
+minimum_lookahead_distance: 1
+
+stop_distance: 0.2

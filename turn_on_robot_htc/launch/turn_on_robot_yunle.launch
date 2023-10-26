@@ -2,7 +2,7 @@
 
     <!-- 全局参数定义 -->
     <!-- 模式 -->
-    <param name="htc_nav_mode" value="ndt" type="string" doc="opt: ndt|gps" />
+    <param name="htc_nav_mode" value="ndt" type="string" />
     <param name="lidar_frame" value="rslidar"/>
     <param name="imu_frame" value="imu"/>
 
@@ -10,9 +10,14 @@
     <param name="vehicle_twist_topic" value="/vehicle/twist" />
 
     <!-- 发布 tf 坐标树 -->
-
     <node pkg="tf" type="static_transform_publisher" name="base_2_laser" args="0 0 0 0 0 0 base_link rslidar 50" />
     <node pkg="tf" type="static_transform_publisher" name="base_2_imu" args="0 0 0 0 0 0 base_link imu_link 100" />
+    <param name="tf_x"     value="0.58" />
+    <param name="tf_y"     value="0" />
+    <param name="tf_z"     value="0.57" />
+    <param name="tf_roll"  value="0" />
+    <param name="tf_pitch" value="0" />
+    <param name="tf_yaw"   value="0" />
 
     <!-- 激光雷达节点 -->
     <include file="$(find lslidar_driver)/launch/lslidar_c16_autox.launch"></include>
@@ -20,10 +25,130 @@
     <!-- can 驱动 -->
     <include file="$(find can_module_usb2can)/launch/can_bridge_nwd.launch"></include>
 
+    <!-- PCB 地图的加载路径待确认 -->
     <!-- pcb map manager -->
     <node pkg="pcd_map_manager" type="pcd_map_manager" name="pcd_map_manager" output="screen">
         <param name="margin" value="130.0" type="double" /> <!-- 需要加载的距离范围 m -->
         <param name="update_interval" value="1000" type="double" /> <!-- 时间更新间隔 ms -->
+    </node>
+
+    <!-- ndt_localization -->
+    <arg name="method_type" default="1" /> <!-- pcl_generic=0, ndt_cpu=1, ndt_gpu=2, pcl_openmp=3 -->
+    <arg name="use_gnss" default="0" />
+    <arg name="use_odom" default="false" />
+    <arg name="use_imu" default="false" />
+    <arg name="imu_upside_down" default="false" />
+    <arg name="imu_topic" default="/imu_raw" />
+    <arg name="queue_size" default="1" />
+    <arg name="offset" default="linear" />
+    <arg name="get_height" default="false" />
+    <arg name="use_local_transform" default="false" />
+    <arg name="sync" default="false" />
+    <arg name="output_log_data" default="false" />
+    <arg name="output_tf_frame_id" default="base_link"/>
+    <arg name="gnss_reinit_fitness" default="500.0" />
+    <arg name="voxel_leaf_size" default="1.5" />
+
+    <node pkg="ndt_localization" type="ndt_localization_node" name="ndt_localization" output="screen" required="true">
+        <param name="method_type" value="$(arg method_type)" />
+        <param name="use_gnss" value="$(arg use_gnss)" />
+        <param name="use_odom" value="$(arg use_odom)" />
+        <param name="use_imu" value="$(arg use_imu)" />
+        <param name="imu_upside_down" value="$(arg imu_upside_down)" />
+        <param name="imu_topic" value="$(arg imu_topic)" />
+        <param name="queue_size" value="$(arg queue_size)" />
+        <param name="offset" value="$(arg offset)" />
+        <param name="get_height" value="$(arg get_height)" />
+        <param name="use_local_transform" value="$(arg use_local_transform)" />
+        <param name="output_log_data" value="$(arg output_log_data)" />
+        <param name="output_tf_frame_id" value="$(arg output_tf_frame_id)" />
+        <param name="gnss_reinit_fitness" value="$(arg gnss_reinit_fitness)" />
+        <param name="voxel_leaf_size" value="$(arg voxel_leaf_size)" />
+        <remap from="/points_raw" to="/sync_drivers/points_raw" if="$(arg sync)" />
+    </node>
+
+    <!-- ndt_mapping -->
+    <node pkg="ndt_mapping" type="ndt_mapping" name="fast_ndt_mapping_node" output="screen">
+        <!-- <param name="lidar_frame" value="$(arg lidar_frame)" />
+        <param name="lidar_topic" value="$(arg lidar_topic)" /> -->
+
+        <param name="method_type" value="$(arg method_type)" /> <!-- pcl_generic=0, pcl_cpu=1, pcl_gpu=2, pcl_openmp=3 -->
+        <param name="use_imu" value="false" />
+        <param name="use_odom" value="false" />
+        <param name="imu_upside_down" value="false" />
+        <param name="imu_topic" value="$(arg imu_topic)" />
+        <param name="incremental_voxel_update" value="false" />
+
+        <param name="ndt_res" value="0.5" />
+        <param name="step_size" value="0.1" />
+        <param name="trans_eps" value="0.01" />
+        <param name="max_iter" value="30" />
+        <param name="voxel_leaf_size" value="$(arg voxel_leaf_size)" />
+        <param name="min_scan_range" value="0.4" />
+        <param name="max_scan_range" value="80" />
+        <param name="min_add_scan_shift" value="1.0" />
+        <param name="is_filter_before_add_to_map" value="true" />
+        <param name="voxel_size_filter_before_add_to_map" value="0.5" />
+    </node>
+
+    <node pkg="grid_map_generator" type="pcd_grid_divider" name="pcd_grid_divider" output="screen">
+    </node>
+
+    <!-- 全局路径规划 -->
+    <node pkg="global_planning" type="traj_plan_dij.py" name="global_planning_dynamic" output="screen">
+    </node>
+
+    <!-- waypoint follower : 航迹点跟随 -->
+    <node pkg="waypoint_follower" type="pure_persuit_node" name="pure_pursuit" output="screen" >
+        <rosparam command="load"  file="$(find waypoint_follower)/params/config_htc.yaml"/>
+    </node>
+
+    <!-- state machine : 车辆状态 -->
+    <!-- 
+        0x01: Wait（default）：待定 
+        0x02: Start：开始 
+        0x03: End：结束 
+        0x04: Pause：暂停 
+        0x05: Continue：继续 
+    -->
+    <node pkg="state_machine" type="main.py" name="state_machine" output="screen">
+        <rosparam command="load"  file="$(find state_machine)/params/difei_nwd01.yaml"/>
+    </node>
+
+    <!-- can adapter : can 通讯适配器 -->
+    <node pkg="can_adapter" type="can_adapter_node" name="can_adapter_node" output="screen">
+        <param name="sub_topic" value="/pure_pursuit/ecu" />
+        <param name="pub_topic" value="/ecu" />
+        <param name="sub_status_topic" value="/SmartcarState" />
+        <param name="sub_laser_urgent_obs" value="/detection/laser_combined_detect/simple" />
+
+        <rosparam command="load"  file="$(find can_adapter)/params/bee_nwd02.yaml"/>
+
+        <!-- dist to start fixing speed (m/s) = limit speed * ratio (TODO::Use current_speed when vehicle status can publish)-->
+        <param name="ratio_fix_speed" value="4" type="double" /> 
+        <!-- <param name="dist_front_fix_speed" value="4" /> -->
+        <param name="dist_front_stop" value="1.0" type="double"/>
+        <!-- <param name="dist_back_fix_speed" value="/SmartcarState" /> -->
+        <param name="dist_back_stop" value="1.0" type="double"/>
+
+        <!-- Distance to enter ending process -->
+        <param name="distance_ending_process" value="6.0" type="double"/>
+
+        <!-- 最小和最大速度限制 -->
+        <param name="min_speed_limit" value="2.0" type="double"/>
+        <param name="max_speed_limit" value="4.0" type="double"/>
+    </node>
+
+    <!-- other -->
+    <node pkg="rviz" type="rviz" name="Rviz" args="-d $(find turn_on_robot_htc)/rviz/yunle.rviz" required="true"/>
+    
+    <node pkg="visualization" type="visualization" name="visualization_node" output="screen">
+        <param name="show_model_car" value="true" type="bool" />
+        <param name="show_history_path" value="true" type="bool" />
+        <param name="show_followed_path" value="true" type="bool" />
+        <param name="show_default_pathes" value="true" type="bool" />
+        <param name="path_dir" value="/home/data/yy/1" type="string" />
+        <param name="dist_interval" value="0.2" type="double" />
     </node>
 
 </launch>

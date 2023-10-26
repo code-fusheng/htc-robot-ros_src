@@ -1,0 +1,21 @@
+<launch>
+    <param name="data_base_folder" value="/home/honden01/Documents/data_yuquan" type="string"/>
+    
+    <node pkg="rviz" type="rviz" name="Rviz_for_extract_path" args="-d $(find global_planning)/rviz/global_plan_lanecross.rviz" />
+    
+    <node pkg="global_planning" type="global_plan_dynamic" name="global_planning_dynamic" output="screen">
+        <param name="debug" value="true" />
+        <param name="weight_data" value="0.47" />
+        <param name="weight_smooth" value="0.14" />
+        <param name="tolerance" value="0.17" />
+
+        <param name="lane_speed_limit" value="3.0"/>
+        <param name="cross_speed_limit" value="1.0"/>
+        <param name="start_length" value="5.0"/>
+        <param name="end_length" value="5.0"/>
+
+        <param name="Visualize_Simulation" value="false" />
+    </node>
+    
+    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="global_planning_reconfigure"/>
+</launch>

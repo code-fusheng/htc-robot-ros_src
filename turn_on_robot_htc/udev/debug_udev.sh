@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Intel RealSense D435i
 echo 'SUBSYSTEM=="video4linux",ATTR{name}=="Intel(R) RealSense(TM) Depth Ca",ATTR{index}=="0",MODE:="0777",SYMLINK+="intel_d435i"' >>/etc/udev/rules.d/htc_camera.rules
 # astra_s

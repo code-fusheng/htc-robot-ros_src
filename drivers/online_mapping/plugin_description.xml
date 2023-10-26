@@ -1,0 +1,9 @@
+<library path="lib/libonline_mapping">
+  <class name="online_mapping/OnlineMapping"
+         type="online_mapping::OnlineMapping"
+         base_class_type="rviz::Panel">
+    <description>
+      A panel widget for online mapping.
+    </description>
+  </class>
+</library>

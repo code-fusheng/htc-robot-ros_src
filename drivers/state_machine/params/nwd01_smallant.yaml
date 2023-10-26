@@ -1,0 +1,18 @@
+# lidar params
+lidar_range_left: 1.5
+lidar_range_right: 1.5
+lidar_range_front: 3
+
+# UltroSonic params
+ultrosonic_detect_distance_1: 1
+ultrosonic_detect_distance_2: 2
+ultrosonic_detect_distance_3: 2
+ultrosonic_detect_distance_4: 1
+ultrosonic_detect_distance_5: 1
+ultrosonic_detect_distance_6: 1
+ultrosonic_detect_distance_7: 1
+ultrosonic_detect_distance_8: 1
+ultrosonic_detect_distance_9: 1
+ultrosonic_detect_distance_10: 1
+ultrosonic_detect_distance_11: 1
+ultrosonic_detect_distance_12: 1

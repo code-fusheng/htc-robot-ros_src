@@ -105,6 +105,7 @@ q.setRPY(0, 0, msg->theta);
 ```shell
 # 终端查看设备串口
 $ ll /dev
+sudo usermod -aG dialout code
 ```
 
 1. 确保设备已经连接到计算机上，并且确定设备文件路径，例如 /dev/ttyUSB0

@@ -1,0 +1,5 @@
+bias: 0
+steer_left_param: 1 # [-30, +30] -> [-60, +60]
+steer_right_param: 1
+lane_speed_limit: 4 #km/h
+cross_speed_limit: 2.5

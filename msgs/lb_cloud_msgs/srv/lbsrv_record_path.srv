@@ -1,0 +1,14 @@
+bool record  # true开始录制
+float32 filter  # step size
+int16 path_id
+int16 pre_node
+int16 next_node
+bool reverse
+---
+bool result
+uint8 current_status
+uint16 error_code
+string error_msg
+
+uint8 RECORD_ON  = 1
+uint8 RECORD_OFF = 2
