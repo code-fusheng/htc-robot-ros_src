@@ -27,12 +27,12 @@ Panels:
     Name: Time
     SyncMode: 0
     SyncSource: ""
-  - Class: runtime_control/RuntimeControl
-    Name: RuntimeControl
-  - Class: status_dashboard/StatusDashboard
-    Name: StatusDashboard
-  # - Class: online_mapping/OnlineMapping
-  #   Name: OnlineMapping
+  # - Class: runtime_control/RuntimeControl
+  #   Name: RuntimeControl
+  # - Class: status_dashboard/StatusDashboard
+  #   Name: StatusDashboard
+  - Class: online_mapping/OnlineMapping
+    Name: OnlineMapping
 Preferences:
   PromptSaveOnExit: true
 Toolbars:

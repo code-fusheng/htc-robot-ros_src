@@ -240,3 +240,13 @@ catkin_make -DCATKIN_WHITELIST_PACKAGES="lslidar_msgs;cloud_msgs;automotive_msgs
 catkin_make -DCATKIN_WHITELIST_PACKAGES=""
 catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release
 ```
+
+### QT 问题
+
+```
+add_library(runtime_control SHARED IMPORTED)
+set_target_properties(runtime_control PROPERTIES IMPORTED_LOCATION ${CATKIN_DEVEL_PREFIX}/lib/libruntime_control.so)
+
+add_library(status_dashboard SHARED IMPORTED)
+set_target_properties(status_dashboard PROPERTIES IMPORTED_LOCATION ${CATKIN_DEVEL_PREFIX}/lib/libstatus_dashboard.so)
+```

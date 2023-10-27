@@ -139,6 +139,18 @@
         <param name="max_speed_limit" value="4.0" type="double"/>
     </node>
 
+    <!-- 点云聚类检测 -->
+    <node pkg="euclidean_cluster" type="euclidean_cluster_node" name="euclidean_cluster_node" output="screen">
+        <param name="lidar_height" value="0.7" type="double"/>
+        <param name="down_height" value="-0.5" type="double"/>
+        <param name="up_height" value="0.8" type="double"/>
+        <param name="low_x" value="0.3" type="double"/>
+        <param name="high_x" value="20" type="double"/>
+        <param name="low_y" value="-8" type="double"/>
+        <param name="high_y" value="8" type="double"/>
+        <param name="in_cloud_topic" value="/rslidar_points" type="string" />
+    </node>
+
     <!-- other -->
     <node pkg="rviz" type="rviz" name="Rviz" args="-d $(find turn_on_robot_htc)/rviz/yunle.rviz" required="true"/>
     
