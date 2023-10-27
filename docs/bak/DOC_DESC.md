@@ -13,7 +13,10 @@
 │   ├── sensor
 │   └── tf
 ├── drivers
+│   ├── amathutils_lib  # 数学运算函数整合 (autoware - yunle)
+│   ├── astar_search    # (autoware - yunle)
 │   ├── can_bridge  # 底盘 CAN 控制功能包
+│   ├── can_*  # CAN 相关适配
 │   ├── ddynamic_reconfigure  # 激光雷达点云相关
 │   ├── fdilink_ahrs    # FDI 惯导单元功能包
 │   ├── lio_sam_master  # lio_sam 三维重建算法
@@ -27,9 +30,7 @@
 │   ├── simulation  # 仿真
 │   ├── grid_map_generator  # (yunle)
 │   ├── waypoint_planner    # 航迹点跟随(autoware - yunle) astar_search
-│   ├── astar_search    # (autoware - yunle)
 │   ├── libwaypoint_follower    #  (yunle)
-│   ├── amathutils_lib    #  (autoware - yunle) 数学运算函数整合
 │   ├── ultrasonic_driver    #  超声波驱动
 │   └── wheeltec_gps_driver # GNSS - GPS 驱动 ultrasonic_driver
 ├── INSTALL.md
