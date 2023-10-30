@@ -250,3 +250,9 @@ set_target_properties(runtime_control PROPERTIES IMPORTED_LOCATION ${CATKIN_DEVE
 add_library(status_dashboard SHARED IMPORTED)
 set_target_properties(status_dashboard PROPERTIES IMPORTED_LOCATION ${CATKIN_DEVEL_PREFIX}/lib/libstatus_dashboard.so)
 ```
+
+### wxPython
+
+```
+https://pypi.org/project/wxPython/4.0.7.post2/#files
+```

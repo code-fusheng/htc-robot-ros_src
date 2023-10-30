@@ -101,6 +101,7 @@
         "stop_token": "cpp",
         "thread": "cpp"
     },
+    "commentTranslate.source": "Google",
     // "fileheader.Author": "robot_Fu.Sheng",
     // "fileheader.LastModifiedBy": "robot_Fu.Sheng"
 }
