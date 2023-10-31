@@ -56,6 +56,7 @@ $ catkin_make clean
 # 子仓库管理
 git submodule add https://github.com/IntelRealSense/realsense-ros.git drivers/realsense_ros
 git submodule add https://github.com/ros-planning/navigation.git drivers/navigation
+git submodule add https://github.com/6-robot/wpr_simulation.git drivers/wpr_simulation
 
 # 索引已经存在问题处理
 git rm -r --cached drivers/realsense_ros

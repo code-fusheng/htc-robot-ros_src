@@ -4,3 +4,6 @@
 [submodule "drivers/navigation"]
 	path = drivers/navigation
 	url = https://github.com/ros-planning/navigation.git
+[submodule "simulation/wpr_simulation"]
+	path = simulation/wpr_simulation
+	url = https://github.com/6-robot/wpr_simulation.git
