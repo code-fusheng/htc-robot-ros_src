@@ -1,10 +1,3 @@
-<!-- 
-    云乐小蜜蜂阿克曼系列机器人
-    urdf 默认单位(m)
-    参数 
-    车体 长: 1.150m 宽: 0.638m 高: 0.4m 最小离地间距: 0.091m
-    轮胎 半径: 0.18m 宽度: 0.079m 
--->
 <robot name="htc_yunle_robot">
 
     <material name="blue">
@@ -14,10 +7,9 @@
         <color rgba="0.0 0.0 0.0 0.5" />
     </material>
     <material name="white">
-        <color rgba="255.0 255.0 255.0 0.5" />
+        <color rgba="255 255 255 1" />
     </material>
 
-    <!-- 配置 base_footprint -->
     <link name="base_footprint">
         <visual>
             <geometry>
@@ -26,25 +18,21 @@
         </visual>
     </link> 
 
-    <!-- 配置 base_link -->
     <link name="base_link">
         <visual>
             <geometry>
-                <box size="1.15 0.638 0.4" />
+                <box size="1.15 0.638 0.319" />
             </geometry>
             <material name="white" />
         </visual>  
     </link> 
 
-    <!-- 配置 join 关联两者 -->
-    <!-- Z轴上的偏移量 0.109 ?= 车体高度 / 2 - 最小间距 -->
     <joint name="base_2_footpinrt" type="fixed">
         <parent link="base_footprint" />
         <child link="base_link" />
-        <origin xyz="0.0 0.0 0.109" />
+        <origin xyz="0.0 0.0 0.249" />
     </joint>
 
-    <!-- 配置左前轮 -->
     <link name="left_front_wheel_link">
         <visual>
             <geometry>
@@ -54,9 +42,55 @@
         </visual>
     </link>
     <joint name="left_front_wheel_joint" type="continuous">
-        <origin xyz="0.485 0.319 0" rpy="1.57 0 0" />
+        <origin xyz="0.29 0.319 -0.2" rpy="1.57 0 0" />
         <parent link="base_link" />
         <child link="left_front_wheel_link" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="right_front_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.18" length="0.079" />
+            </geometry>
+            <material name="black" />
+        </visual>
+    </link>
+    <joint name="right_front_wheel_joint" type="continuous">
+        <origin xyz="0.29 -0.319 -0.2" rpy="1.57 0 0" />
+        <parent link="base_link" />
+        <child link="right_front_wheel_link" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="left_rear_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.18" length="0.079" />
+            </geometry>
+            <material name="black" />
+        </visual>
+    </link>
+    <joint name="left_rear_wheel_joint" type="continuous">
+        <origin xyz="-0.29 0.319 -0.2" rpy="1.57 0 0" />
+        <parent link="base_link" />
+        <child link="left_rear_wheel_link" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="right_rear_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.18" length="0.079" />
+            </geometry>
+            <material name="black" />
+        </visual>
+    </link>
+    <joint name="right_rear_wheel_joint" type="continuous">
+        <origin xyz="-0.29 -0.319 -0.2" rpy="1.57 0 0" />
+        <parent link="base_link" />
+        <child link="right_rear_wheel_link" />
+        <axis xyz="0 1 0"/>
     </joint>
 
 </robot>

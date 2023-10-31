@@ -8,14 +8,15 @@
     <!-- 是否开启导航 -->
     <arg name="is_navigation" default="false" />
 
-    <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
+    <!-- 底盘类型｜车辆类型 -->
+    <arg name="htc_car_mode" default="yunle_small_bee_akm" doc="opt:wheeltec_mini_akm yunle_small_bee_akm" /> 
     <!-- 建图类型 -->
     <!-- rtabmap: 修改 odom_frame_id = odom -->
     <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,rtabmap,liosam" />
     <!-- 激光雷达类型 -->
     <arg name="htc_lidar_mode" default="ls_C16" />
     <!-- 双目深度相机类型 -->
-    <arg name="htc_camera_mode" default="Astra_S" />
+    <arg name="htc_camera_mode" default="null" />
     <!-- IMU 惯导类型 -->
     <arg name="htc_imu_mode" default="N100" />
 
@@ -48,6 +49,11 @@
         <arg name="odom_frame_id"  value="$(arg odom_frame_id)" />
     </include>
 
+    <!-- TF & 小车模型 节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/robot_model_htc.launch">
+        <arg name="htc_car_mode" value="$(arg htc_car_mode)"/>
+    </include>
+
     <!-- IMU惯导控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/imu_htc.launch">
         <arg name="htc_imu_mode" value="$(arg htc_imu_mode)" />
@@ -60,13 +66,8 @@
     </include>
 
     <!-- 双目深度相机控制节点 -->
-    <include file="$(find turn_on_robot_htc)/launch/camera_htc.launch">
+    <include if="$(eval htc_camera_mode != 'null')" file="$(find turn_on_robot_htc)/launch/camera_htc.launch">
         <arg name="htc_camera_mode" value="$(arg htc_camera_mode)" />
-    </include>
-
-    <!-- TF & 小车模型 节点 -->
-    <include file="$(find turn_on_robot_htc)/launch/robot_model_htc.launch">
-        <arg name="htc_car_mode" value="$(arg htc_car_mode)"/>
     </include>
 
     <!-- 扩张卡尔曼滤波 发布odom_combined到footprint的TF,即小车定位 使用cartographer算法时不使用该滤波算法-->
