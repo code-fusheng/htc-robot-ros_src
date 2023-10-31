@@ -1,6 +1,0 @@
-<launch>
-    <node pkg="waypoint_follower" type="pure_persuit_node" name="pure_pursuit" output="screen" >
-        <rosparam command="load"  file="$(find waypoint_follower)/params/config.yaml"/> 
-        <param name="input_current_pose_topic"  type="string" value="/current_pose"/>
-    </node>
-</launch>

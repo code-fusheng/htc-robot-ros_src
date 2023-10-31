@@ -1,4 +1,0 @@
-# lidar params
-lidar_range_left: 1.5
-lidar_range_right: 1.5
-lidar_range_front: 3

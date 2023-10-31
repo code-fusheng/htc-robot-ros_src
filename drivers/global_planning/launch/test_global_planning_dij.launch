@@ -1,9 +1,0 @@
-<launch>
-    <param name="data_base_folder" value="/home/yunle/Documents/data_yuquan" type="string"/>
-    
-    <!-- <node pkg="rviz" type="rviz" name="Rviz_for_extract_path" args="-d $(find global_planning)/rviz/global_plan_lanecross.rviz" /> -->
-    
-    <node pkg="global_planning" type="traj_plan_dij.py" name="global_planning_dynamic" output="screen">
-        <param name="file_path" value="$(find global_planning)/path_file_Yunlecar/" />
-    </node>
-</launch>

@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-
-    <node pkg="ultrasonic_driver" type="main.py" name="ultrasonic_driver" output="screen">
-        <param name="serial_port" value="/dev/ttyS0" />
-        <param name="frame_id" value="ultrasonic_link" />
-    </node>
-
-</launch>
