@@ -26,6 +26,13 @@ sudo service ssh restart
 wget http://fishros.com/install -O fishros && . fishros
 ```
 
+### 工程部署
+
+```shell
+git clone -b master https://github.com/code-fusheng/htc-robot-ros_src.git
+git submodule update --init --recursive
+```
+
 ### 安装基础依赖
 
 ```shell
