@@ -88,7 +88,8 @@ endif()
 
 ```shell
 # 安装依赖
-sudo apt install -y libudev-dev \
+sudo apt install -y ros-$ROS_DISTRO-ddynamic-reconfigure \
+libudev-dev \
 pkg-config \
 libgtk-3-dev \
 libusb-1.0-0-dev \
