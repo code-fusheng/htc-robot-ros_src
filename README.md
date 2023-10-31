@@ -52,6 +52,14 @@ $ catkin_make -j -l
 $ catkin_make clean
 ```
 
+```shell
+# 子仓库管理
+git submodule add https://github.com/IntelRealSense/realsense-ros.git drivers/realsense_ros
+
+# 索引已经存在问题处理
+git rm -r --cached drivers/realsense_ros
+```
+
 ##### 2. 工程调试
 
 ```shell
