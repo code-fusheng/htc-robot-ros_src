@@ -1,6 +1,6 @@
-[submodule "drivers/realsense-ros"]
-	path = drivers/realsense-ros
-	url = https://github.com/IntelRealSense/realsense-ros.git
 [submodule "drivers/realsense_ros"]
 	path = drivers/realsense_ros
 	url = https://github.com/IntelRealSense/realsense-ros.git
+[submodule "drivers/navigation"]
+	path = drivers/navigation
+	url = https://github.com/ros-planning/navigation.git

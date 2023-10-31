@@ -55,9 +55,15 @@ $ catkin_make clean
 ```shell
 # 子仓库管理
 git submodule add https://github.com/IntelRealSense/realsense-ros.git drivers/realsense_ros
+git submodule add https://github.com/ros-planning/navigation.git drivers/navigation
 
 # 索引已经存在问题处理
 git rm -r --cached drivers/realsense_ros
+
+# 子仓库
+git submodule init
+git submodule sync
+git submodule update
 ```
 
 ##### 2. 工程调试

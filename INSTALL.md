@@ -114,7 +114,7 @@ cd build/third-party
 #
 git clone https://github.com/IntelRealSense/realsense-ros.git
 git checkout 2.3.2
-git checkout -b melodic_2.3.2 2.3.2
+git checkout -b 2.3.2 2.3.2
 #
 roslaunch realsense2_camera rs_camera.launch
 ```
