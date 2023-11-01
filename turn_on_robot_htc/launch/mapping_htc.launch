@@ -2,9 +2,10 @@
 
     <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,cartographer_3d,rtabmap,liosam" />
 
-    <arg name="odom_frame_id"  default="odom_combined"/>
+    <arg name="odom_frame_id"  default="odom"/>
     <arg name="htc_pcd_topic" default="point_cloud_raw"/>
     <arg name="htc_imu_topic" default="imu"/>
+    <arg name="htc_laser_scan_topic" default="scan_raw" />
 
     <!-- 2d 建图算法 -->
 
@@ -12,12 +13,16 @@
     <group if="$(eval htc_mapping_mode == 'gmapping')">
         <include file="$(find turn_on_robot_htc)/launch/include/slam_gmapping.launch">
             <arg name="odom_frame"  value="$(arg odom_frame_id)"/>
+            <arg name="scan_topic"  value="$(arg htc_laser_scan_topic)" />
         </include>
     </group>
 
     <!-- 开启 hector 建图算法  -->
     <group if="$(eval htc_mapping_mode == 'hector')">
-        <include file="$(find turn_on_robot_htc)/launch/include/slam_hector.launch" />
+        <include file="$(find turn_on_robot_htc)/launch/include/slam_hector.launch">
+            <arg name="odom_frame"  value="$(arg odom_frame_id)"/>
+            <arg name="scan_topic"  value="$(arg htc_laser_scan_topic)" />
+        </include>
     </group>
 
     <!-- 开启 karto 建图算法  -->

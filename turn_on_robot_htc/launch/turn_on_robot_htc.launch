@@ -9,10 +9,10 @@
     <arg name="is_navigation" default="false" />
 
     <!-- 底盘类型｜车辆类型 -->
-    <arg name="htc_car_mode" default="yunle_small_bee_akm" doc="opt:wheeltec_mini_akm yunle_small_bee_akm" /> 
+    <arg name="htc_car_mode" default="wheeltec_mini_akm" doc="opt:wheeltec_mini_akm yunle_small_bee_akm" /> 
     <!-- 建图类型 -->
     <!-- rtabmap: 修改 odom_frame_id = odom -->
-    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,rtabmap,liosam" />
+    <arg name="htc_mapping_mode" default="hector" doc="opt: gmapping,hector,cartographer,karto,rtabmap,liosam" />
     <!-- 激光雷达类型 -->
     <arg name="htc_lidar_mode" default="ls_C16" />
     <!-- 双目深度相机类型 -->
@@ -43,7 +43,7 @@
     <!-- 底盘控制节点? -->
 
     <!-- 开启底层单片机控制节点 -->
-    <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch" if="$(eval htc_car_mode == 'wheeltec_mini_akm')">
+    <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch">
         <arg name="htc_car_mode" value="$(arg htc_car_mode)" /> 
         <arg name="htc_imu_mode" value="$(arg htc_imu_mode)" />
         <arg name="odom_frame_id"  value="$(arg odom_frame_id)" />
@@ -77,6 +77,7 @@
     <!-- 建图控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/mapping_htc.launch" if="$(arg is_mapping)">
         <arg name="odom_frame_id" value="$(arg odom_frame_id)"/>
+        <arg name="htc_laser_scan_topic" value="$(arg htc_laser_scan_topic)" />
         <arg name="htc_mapping_mode" value="$(arg htc_mapping_mode)"/>
     </include>
 

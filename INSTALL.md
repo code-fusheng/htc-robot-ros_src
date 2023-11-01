@@ -49,7 +49,8 @@ ros-$ROS_DISTRO-rgbd-launch \
 ros-$ROS_DISTRO-nmea-msgs \
 ros-$ROS_DISTRO-gps-common \
 ros-$ROS_DISTRO-mbf-msgs \
-ros-$ROS_DISTRO-gmapping
+ros-$ROS_DISTRO-gmapping \
+ros-$ROS_DISTRO-hector-mapping
 
 ros-$ROS_DISTRO-bfl \
 
