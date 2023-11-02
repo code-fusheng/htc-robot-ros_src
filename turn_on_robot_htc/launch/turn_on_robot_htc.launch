@@ -94,4 +94,7 @@
         <arg name="htc_cmd_mode" value="$(arg htc_cmd_mode)" />
     </include>
 
+    <!-- 可视化节点 -->
+    
+
 </launch>
