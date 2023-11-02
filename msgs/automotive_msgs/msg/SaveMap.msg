@@ -1,0 +1,2 @@
+float32 file_res
+string filename

@@ -1,6 +1,6 @@
 <launch>
 
-    <arg name="htc_car_mode" default="wheeltec_mini_akm" /> 
+    <arg name="htc_car_mode" default="yunle_small_bee_akm" doc="opt: yunle_small_bee_akm wheeltec_mini_akm" /> 
     <!-- IMU 惯导类型 -->
     <arg name="htc_imu_mode" default="N100" />
 
@@ -16,6 +16,14 @@
             <!-- 区分板载 IMU -->
             <remap if="$(eval htc_imu_mode == 'N100')" from="imu/data" to="imu/data/board"/>
         </node>
+    </group>
+
+    <group if="$(eval htc_car_mode == 'yunle_small_bee_akm')">
+    
+        <include file="$(find can_module_usb2can)/launch/can_bridge_nwd.launch" />
+
+        <include file="$(find can_odometry)/launch/can2odom.launch"></include>
+
     </group>
 
 </launch>
