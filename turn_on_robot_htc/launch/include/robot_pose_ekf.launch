@@ -3,6 +3,7 @@
     <arg name="htc_imu_topic" default="imu"/>
 
     <!-- Robot pose ekf 拓展卡尔曼滤波-->
+    <!-- efk 默认订阅 topic: imu_data、odom、vo  -->
     <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" output="screen">
       <param name="output_frame" value="odom_combined"/>
       <param name="base_footprint_frame" value="base_footprint"/>

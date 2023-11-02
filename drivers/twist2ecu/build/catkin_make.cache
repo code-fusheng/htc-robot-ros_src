@@ -1,2 +1,0 @@
-trans
--DCATKIN_DEVEL_PREFIX=/home/mhy/twist2ecu/devel -DCMAKE_INSTALL_PREFIX=/home/mhy/twist2ecu/install -G Unix Makefiles

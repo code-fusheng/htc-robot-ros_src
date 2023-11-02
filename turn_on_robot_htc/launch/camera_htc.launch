@@ -9,4 +9,6 @@
         <include file="$(find astra_camera)/launch/astra.launch"></include>
     </group>
 
+    <!-- 启动 Realsense D435i 相机 -->
+
 </launch>
