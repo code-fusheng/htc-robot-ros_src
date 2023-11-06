@@ -50,10 +50,20 @@ ros-$ROS_DISTRO-nmea-msgs \
 ros-$ROS_DISTRO-gps-common \
 ros-$ROS_DISTRO-mbf-msgs \
 ros-$ROS_DISTRO-gmapping \
-ros-$ROS_DISTRO-hector-mapping
+ros-$ROS_DISTRO-hector-mapping \
+ros-$ROS_DISTRO-xacro
 
 ros-$ROS_DISTRO-bfl \
 
+```
+
+### Gazebo
+
+```
+sudo apt install -y ros-$ROS_DISTRO-gazebo-ros-pkgs \
+ros-$ROS_DISTRO-gazebo-msgs \
+ros-$ROS_DISTRO-gazebo-plugins \
+ros-$ROS_DISTRO-gazebo-ros-control
 ```
 
 ### 安装 autoware 移植基础依赖
@@ -139,6 +149,9 @@ roslaunch realsense2_camera rs_camera.launch
 ```
 
 ### 安装激光雷达
+
+sudo apt install -y ros-$ROS_DISTRO-velodyne-description \
+ros-$ROS_DISTRO-joint-state-publisher-gui
 
 ```shell
 
@@ -264,4 +277,16 @@ set_target_properties(status_dashboard PROPERTIES IMPORTED_LOCATION ${CATKIN_DEV
 
 ```
 https://pypi.org/project/wxPython/4.0.7.post2/#files
+```
+
+### VM gazebo 启动参数问题
+
+```
+https://blog.csdn.net/coolwaterld/article/details/72467942
+```
+
+### LCM
+
+```
+sudo apt-get install build-essential autoconf automake autopoint libglib2.0-dev libtool openjdk-8-jdk python-dev
 ```

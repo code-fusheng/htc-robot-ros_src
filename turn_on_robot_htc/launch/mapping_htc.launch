@@ -11,7 +11,7 @@
 
     <!-- 开启 gmapping 建图算法  -->
     <group if="$(eval htc_mapping_mode == 'gmapping')">
-        <include file="$(find turn_on_robot_htc)/launch/include/slam_gmapping.launch">
+        <include file="$(find turn_on_robot_htc)/launch/include/2d_slam_gmapping.launch">
             <arg name="odom_frame"  value="$(arg odom_frame_id)"/>
             <arg name="scan_topic"  value="$(arg htc_laser_scan_topic)" />
         </include>
@@ -19,7 +19,7 @@
 
     <!-- 开启 hector 建图算法  -->
     <group if="$(eval htc_mapping_mode == 'hector')">
-        <include file="$(find turn_on_robot_htc)/launch/include/slam_hector.launch">
+        <include file="$(find turn_on_robot_htc)/launch/include/2d_slam_hector.launch">
             <arg name="odom_frame"  value="$(arg odom_frame_id)"/>
             <arg name="scan_topic"  value="$(arg htc_laser_scan_topic)" />
         </include>
@@ -27,7 +27,7 @@
 
     <!-- 开启 karto 建图算法  -->
     <group if="$(eval htc_mapping_mode == 'karto')">
-        <include file="$(find turn_on_robot_htc)/launch/include/slam_karto.launch" />
+        <include file="$(find turn_on_robot_htc)/launch/include/2d_slam_karto.launch" />
     </group>
 
     <!-- 开启 cartographer 建图算法  -->

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<robot name="htcbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find htcbot_description)/urdf/htcbot_base_gazebo.xacro" />
+
+    <xacro:htcbot_base_gazebo/>
+
+</robot>

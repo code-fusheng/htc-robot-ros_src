@@ -4,10 +4,19 @@
     <arg name="scan_topic"  default="scan_raw" />
 
     <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping">
+
+        <!-- 参数配置 https://wiki.ros.org/hector_mapping 3.1.4 -->
+        
         <param name="pub_map_odom_transform" value="true"/>
         <param name="map_frame" value="map" />
         <param name="base_frame" value="base_footprint" />
         <param name="odom_frame" value="$(arg odom_frame)" />
         <remap from="scan" to="$(arg scan_topic)"/>
+
+        <!-- 地图更新参数 -->
+        <!-- 地图更新的移动距离阈值(单位:米) map_update_distance_thresh -->
+        <!-- 地图更新的旋转角度阈值(单位:弧度) map_update_angle_thresh -->
+        <!-- 地图发布周期(单位:秒) map_pub_period -->
+
     </node>
 </launch>
