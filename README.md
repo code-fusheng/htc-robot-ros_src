@@ -59,6 +59,10 @@ git submodule add https://github.com/code-fusheng/navigation.git drivers/navigat
 git submodule add https://github.com/6-robot/wpr_simulation.git simulation/wpr_simulation
 git submodule add https://github.com/TixiaoShan/LIO-SAM.git drivers/lio_sam
 # git submodule add https://github.com/code-fusheng/cartographer_ros.git drivers/cartorgrapher_ros
+git submodule add https://github.com/code-fusheng/rtabmap_ros.git drivers/rtabmap_ros
+
+# 配置上游仓库
+git remote add upstream https://github.com/introlab/rtabmap_ros.git
 
 # 索引已经存在问题处理
 git rm -r --cached drivers/realsense_ros
@@ -70,6 +74,11 @@ git submodule update --init --recursive
 git submodule init
 git submodule sync
 git submodule update
+
+# 原仓库分支
+git pull --all
+# 提交
+git push origin
 
 # 删除
 rm -rf 子模块目录

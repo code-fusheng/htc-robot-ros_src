@@ -10,3 +10,6 @@
 [submodule "drivers/navigation"]
 	path = drivers/navigation
 	url = https://github.com/code-fusheng/navigation.git
+[submodule "drivers/rtabmap_ros"]
+	path = drivers/rtabmap_ros
+	url = https://github.com/code-fusheng/rtabmap_ros.git
