@@ -4,6 +4,7 @@
     <!-- 不可以使用PointCloud，只能使用LaserScan -->
     <arg name="scan_topic" default="scan_raw"/>
     <arg name="map_topic"  default="/map"/>
+    <arg name="odom_frame_id"  default="odom"/>
 
     <node pkg="amcl" type="amcl" name="amcl" clear_params="true">
       <param name="use_map_topic" value="$(arg use_map_topic)"/>
@@ -38,7 +39,7 @@
       <param name="laser_likelihood_max_dist" value="2.0"/>
       <param name="update_min_d" value="0.25"/>
       <param name="update_min_a" value="0.2"/>
-      <param name="odom_frame_id" value="odom_combined"/>
+      <param name="odom_frame_id" value="$(arg odom_frame_id)"/>
       <param name="resample_interval" value="1"/>
       <!-- Increase tolerance because the computer can get quite busy -->
       <param name="transform_tolerance" value="1.0"/>
