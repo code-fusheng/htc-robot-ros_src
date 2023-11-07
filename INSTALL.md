@@ -51,7 +51,8 @@ ros-$ROS_DISTRO-gps-common \
 ros-$ROS_DISTRO-mbf-msgs \
 ros-$ROS_DISTRO-gmapping \
 ros-$ROS_DISTRO-hector-mapping \
-ros-$ROS_DISTRO-xacro
+ros-$ROS_DISTRO-xacro \
+ros-$ROS_DISTRO-cartographer-ros
 
 ros-$ROS_DISTRO-bfl \
 
@@ -228,6 +229,30 @@ sudo apt-get install -y libmetis-dev
 catkin_make -DCATKIN_WHITELIST_PACKAGES=cloud_msgs
 catkin_make -j1 -DCATKIN_WHITELIST_PACKAGES=lego_loam
 #include <opencv2/opencv.hpp>
+```
+
+### 安装 Cartographer-Ros
+
+cartographer_ros
+
+https://google-cartographer-ros.readthedocs.io/en/latest/
+
+```shell
+$ sudo apt-get update
+# >= noetic
+$ sudo apt-get install -y python3-wstool python3-rosdep ninja-build stow
+# melodic
+$ sudo apt-get install -y python-wstool python-rosdep ninja-build stow
+# abseil 冲突问题
+$ sudo apt-get remove ros-${ROS_DISTRO}-abseil-cpp
+$ git clone https://ghproxy.com/https://github.com/abseil/abseil-cpp.git
+$ cd abseil-cpp
+$ mkdir build & cd build
+$ cmake -G Ninja \
+-DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+-DCMAKE_INSTALL_PREFIX=/usr/local/stow/absl
+
 ```
 
 ### 问题处理

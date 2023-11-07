@@ -12,10 +12,10 @@
     <arg name="is_navigation" default="false" />
 
     <!-- 底盘类型｜车辆类型 -->
-    <arg name="htc_car_mode" default="wheeltec_mini_akm" doc="opt:wheeltec_mini_akm yunle_small_bee_akm" /> 
+    <arg name="htc_car_mode" default="htcbot" doc="opt:htcbot wheeltec_mini_akm yunle_small_bee_akm" /> 
     <!-- 建图类型 -->
     <!-- rtabmap: 修改 odom_frame_id = odom -->
-    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,rtabmap,liosam" />
+    <arg name="htc_mapping_mode" default="rtabmap" doc="opt: gmapping | hector | cartographer | karto | rtabmap | liosam" />
     <!-- 激光雷达类型 -->
     <arg name="htc_lidar_mode" default="ls_C16" />
     <!-- 双目深度相机类型 -->
@@ -24,7 +24,7 @@
     <arg name="htc_imu_mode" default="N100" />
 
     <!-- 导航算法 -->
-    <arg name="htc_nav_mode" default="teb_local_planner" />
+    <arg name="htc_nav_mode" default="navigation" doc="opt: navigation | rtabmap" />
 
     <!-- 控制类型 -->
     <arg name="htc_cmd_mode" default="steering" doc="opt: steering" />
@@ -39,7 +39,7 @@
     <arg name="htc_cmd_topic" default="/cmd_vel"/>
     <!-- laser_scan topic -->
     <!-- C16 线的是 scan_raw 单线的是 scan -->
-    <arg name="htc_laser_scan_topic" default="/scan"></arg>
+    <arg name="htc_laser_scan_topic" default="/scan" />
     <!-- imu topic -->
     <arg name="htc_imu_topic" default="/imu"/>
 
@@ -95,6 +95,7 @@
     <include file="$(find turn_on_robot_htc)/launch/navigation_htc.launch" if="$(arg is_navigation)">
         <arg name="htc_car_mode" value="$(arg htc_car_mode)"/>
         <arg name="htc_nav_mode" value="$(arg htc_nav_mode)"/>
+        <arg name="htc_laser_scan_topic" value="$(arg htc_laser_scan_topic)" />
     </include>
 
     <!-- 车辆终端控制节点 -->

@@ -1,3 +1,13 @@
 <launch>
-	<node pkg="map_server" type="map_saver" name="map_saver_htc" args="-f $(find turn_on_robot_htc)/map/MAP" output="screen"></node>
+
+  	<!-- roslaunch turn_on_robot_htc map_saver_htc.launch map_name:=test1 -->
+
+	<!-- 定义参数 'map_name'，并给出默认值 -->
+	<arg name="map_name" default="MAP" />
+
+	<!-- 使用定义的参数作为map_saver节点的参数 -->
+	<node pkg="map_server" type="map_saver" name="map_saver_htc" 
+			args="-f $(find turn_on_robot_htc)/map/$(arg map_name)" output="screen">
+	</node>
+
 </launch>

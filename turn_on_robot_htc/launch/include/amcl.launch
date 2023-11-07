@@ -2,11 +2,18 @@
     <!-- 使用map的topic而不是map文件-->
     <arg name="use_map_topic" default="false"/>
     <!-- 不可以使用PointCloud，只能使用LaserScan -->
-    <arg name="scan_topic" default="scan_raw"/>
+    <arg name="scan_topic" default="scan"/>
     <arg name="map_topic"  default="/map"/>
     <arg name="odom_frame_id"  default="odom"/>
+    
+    <arg name="initial_pose_x" default="0.0"/>
+    <arg name="initial_pose_y" default="0.0"/>
+    <arg name="initial_pose_a" default="0.0"/>
 
     <node pkg="amcl" type="amcl" name="amcl" clear_params="true">
+      <!-- <param name="initial_pose_x"            value="$(arg initial_pose_x)"/> -->
+      <!-- <param name="initial_pose_y"            value="$(arg initial_pose_y)"/> -->
+      <!-- <param name="initial_pose_a"            value="$(arg initial_pose_a)"/> -->
       <param name="use_map_topic" value="$(arg use_map_topic)"/>
       <!-- 使用rtabmap分布的Map，连接TF树 -->
       <remap from="/map" to="/$(arg map_topic)"/>

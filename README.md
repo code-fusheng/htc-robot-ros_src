@@ -58,7 +58,7 @@ git submodule add https://github.com/IntelRealSense/realsense-ros.git drivers/re
 git submodule add https://github.com/code-fusheng/navigation.git drivers/navigation
 git submodule add https://github.com/6-robot/wpr_simulation.git simulation/wpr_simulation
 git submodule add https://github.com/TixiaoShan/LIO-SAM.git drivers/lio_sam
-git submodule add https://github.com/code-fusheng/cartographer_ros.git drivers/cartorgrapher_ros
+# git submodule add https://github.com/code-fusheng/cartographer_ros.git drivers/cartorgrapher_ros
 
 # 索引已经存在问题处理
 git rm -r --cached drivers/realsense_ros
