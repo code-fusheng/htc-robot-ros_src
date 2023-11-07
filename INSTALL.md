@@ -64,7 +64,8 @@ ros-$ROS_DISTRO-bfl \
 sudo apt install -y ros-$ROS_DISTRO-gazebo-ros-pkgs \
 ros-$ROS_DISTRO-gazebo-msgs \
 ros-$ROS_DISTRO-gazebo-plugins \
-ros-$ROS_DISTRO-gazebo-ros-control
+ros-$ROS_DISTRO-gazebo-ros-control \
+ros-$ROS_DISTRO-velodyne-simulator
 ```
 
 ### 安装 autoware 移植基础依赖
