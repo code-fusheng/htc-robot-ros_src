@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot name="htcbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
+    <xacro:property name="front_wheel_position_x" value="0.0725" /> 
+    <xacro:property name="left_wheel_position_y" value="0.08939" />
+    <xacro:property name="right_wheel_position_y" value="-0.08661" /> 
+    <xacro:property name="wheel_position_z" value="-0.026385" />
+    <xacro:property name="rear_wheel_position_x" value="-0.1005" />
+    <xacro:property name="wheel_mass"   value="0.053774" />
+    <xacro:property name="box_position_x" value="0" />
+    <xacro:property name="box_position_y" value="0" /> 
+    <xacro:property name="box_position_z" value="0.07" />  
+    <xacro:property name="box_length" value="0.18" /> 
+    <xacro:property name="box_height" value="0.04" />
+    <xacro:property name="box_width" value="0.1" /> 
+    <xacro:property name="box_mass"   value="0.6" />
+
+</robot>

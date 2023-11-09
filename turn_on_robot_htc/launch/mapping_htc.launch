@@ -47,7 +47,8 @@
     <!-- cartographer 3d  -->
     <!-- 待完善 -->
     <group if="$(eval htc_mapping_mode == 'cartographer_3d')">
-        <include file="$(find cartographer_ros)/launch/3d_online.launch" />
+        <!-- <include file="$(find cartographer_ros)/launch/3d_online.launch" /> -->
+        <include file="$(find turn_on_robot_htc)/launch/include/cartographer_3d_map.launch" />
     </group>
 
     <!-- lio-sam 3d 建图 -->
@@ -62,7 +63,7 @@
     </group>
 
     <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
-    <node if="$(eval htc_mapping_mode != 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" />
+    <!-- <node if="$(eval htc_mapping_mode != 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" /> -->
     <!--- Run Rviz-->
     <!-- <node if="$(eval htc_mapping_mode == 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/3d_mapping.rviz" /> -->
 

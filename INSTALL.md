@@ -52,7 +52,8 @@ ros-$ROS_DISTRO-mbf-msgs \
 ros-$ROS_DISTRO-gmapping \
 ros-$ROS_DISTRO-hector-mapping \
 ros-$ROS_DISTRO-xacro \
-ros-$ROS_DISTRO-cartographer-ros
+ros-$ROS_DISTRO-cartographer-ros \
+pcl-tools
 
 ros-$ROS_DISTRO-bfl \
 
@@ -310,6 +311,11 @@ https://pypi.org/project/wxPython/4.0.7.post2/#files
 ```
 https://blog.csdn.net/coolwaterld/article/details/72467942
 ```
+
+> gazebo 缺少模型库
+
+git clone https://ghproxy.com/https://github.com/osrf/gazebo_models.git
+https://github.com/osrf/gazebo_models.git
 
 ### LCM
 
