@@ -4,12 +4,12 @@
 [submodule "simulation/wpr_simulation"]
 	path = simulation/wpr_simulation
 	url = https://github.com/6-robot/wpr_simulation.git
-[submodule "drivers/lio_sam"]
-	path = drivers/lio_sam
-	url = https://github.com/TixiaoShan/LIO-SAM.git
 [submodule "drivers/navigation"]
 	path = drivers/navigation
 	url = https://github.com/code-fusheng/navigation.git
 [submodule "drivers/rtabmap_ros"]
 	path = drivers/rtabmap_ros
 	url = https://github.com/code-fusheng/rtabmap_ros.git
+[submodule "drivers/lio_sam"]
+	path = drivers/lio_sam
+	url = https://github.com/code-fusheng/LIO-SAM.git

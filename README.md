@@ -57,7 +57,8 @@ $ catkin_make clean
 git submodule add https://github.com/IntelRealSense/realsense-ros.git drivers/realsense_ros
 git submodule add https://github.com/code-fusheng/navigation.git drivers/navigation
 git submodule add https://github.com/6-robot/wpr_simulation.git simulation/wpr_simulation
-git submodule add https://github.com/TixiaoShan/LIO-SAM.git drivers/lio_sam
+# git submodule add https://github.com/TixiaoShan/LIO-SAM.git drivers/lio_sam
+git submodule add https://github.com/code-fusheng/LIO-SAM.git drivers/lio_sam
 # git submodule add https://github.com/code-fusheng/cartographer_ros.git drivers/cartorgrapher_ros
 git submodule add https://github.com/code-fusheng/rtabmap_ros.git drivers/rtabmap_ros
 
