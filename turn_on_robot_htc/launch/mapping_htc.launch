@@ -1,6 +1,6 @@
 <launch>
 
-    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,cartographer_3d,rtabmap,liosam" />
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,cartographer_3d,rtabmap,liosam | ndt" />
 
     <arg name="odom_frame_id"  default="odom"/>
     <arg name="htc_pcd_topic" default="point_cloud_raw"/>
@@ -60,6 +60,10 @@
     <!-- lego-loam 3d 建图 -->
     <group if="$(eval htc_mapping_mode == 'legoloam')">
         <include file="$(find lego_loam)/launch/run.launch" />
+    </group>
+
+    <group if="$(eval htc_mapping_mode == 'ndt')">
+        <include file="$(find ndt_mapping)/launch/ndt_mapping.launch"></include>
     </group>
 
     <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
