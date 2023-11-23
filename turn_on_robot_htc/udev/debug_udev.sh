@@ -12,6 +12,6 @@ echo 'KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTR
 echo 'KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60",ATTRS{serial}=="0002", MODE:="0777", GROUP:="dialout", SYMLINK+="wheeltec_stm32"' >/etc/udev/rules.d/htc_vcu.rules
 echo 'KERNEL=="ttyACM0*", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4",ATTRS{serial}=="0002", MODE:="0777", GROUP:="dialout", SYMLINK+="wheeltec_stm32"' >/etc/udev/rules.d/htc_vcu.rules
 
-service udev reload
+sudo service udev reload
 sleep 2
 service udev restart

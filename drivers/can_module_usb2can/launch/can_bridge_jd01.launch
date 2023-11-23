@@ -10,11 +10,11 @@
 
         <!-- EthCan_UDP -->
         <param name="can_eth_card" type="string" value="enp1s0" />
-        <param name="can1_remote_ip" type="string" value="192.168.100.110" />
+        <param name="can1_remote_ip" type="string" value="192.168.1.10" />
         <param name="can1_remote_port" type="int" value="4001" />
-        <param name="can2_remote_ip" type="string" value="192.168.100.110" />
+        <param name="can2_remote_ip" type="string" value="192.168.1.10" />
         <param name="can2_remote_port" type="int" value="4002" />
-        <param name="local_ip" type="string" value="192.168.100.10" />
+        <param name="local_ip" type="string" value="192.168.1.102" />
         <param name="local_port" type="int" value="8002" />
 
         <!-- Common -->

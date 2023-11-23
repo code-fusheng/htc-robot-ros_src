@@ -1,7 +1,7 @@
 Header header
 
-float32 motor # 目标速度
-float32 steer # 转向
+float32 motor # 目标速度 (m/s)
+float32 steer # 转向 (度)
 bool brake # 紧急停车
 float32 cur_speed # 当前速度
 float32 speed_ratio # 控制速度比率的

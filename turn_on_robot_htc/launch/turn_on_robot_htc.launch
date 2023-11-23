@@ -4,15 +4,15 @@
     <rosparam file="$(find turn_on_robot_htc)/config/htc_common_param.yaml" command="load" />
 
     <!-- 是否开启 gazebo 仿真 -->
-    <arg name="is_simulation" default="gazebo" doc="null gazebo" />
+    <arg name="is_simulation" default="null" doc="null gazebo" />
 
     <!-- 是否开启建图 -->
     <arg name="is_mapping" default="true" />
     <!-- 是否开启导航 -->
-    <arg name="is_navigation" default="true" />
+    <arg name="is_navigation" default="false" />
 
     <!-- 底盘类型｜车辆类型 -->
-    <arg name="htc_car_mode" default="htcbot" doc="opt:htcbot wheeltec_mini_akm yunle_small_bee_akm" /> 
+    <arg name="htc_car_mode" default="yunle_jd01" doc="opt:htcbot wheeltec_mini_akm yunle_small_bee_akm yunle_jd01" /> 
     <!-- 建图类型 -->
     <!-- rtabmap: 修改 odom_frame_id = odom -->
     <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping | hector | cartographer | karto | rtabmap | liosam | cartographer_3d" />
@@ -32,8 +32,8 @@
     <arg name="repeat"  default="false"/>
 
     <!-- 里程计 framd_id -->
-    <!-- odom_combined -->
-    <arg name="odom_frame_id" default="odom"/>
+    <!-- odom_combined odom -->
+    <arg name="odom_frame_id" default="odom_combined"/>
 
     <!-- cmd topic -->
     <arg name="htc_cmd_topic" default="/cmd_vel"/>

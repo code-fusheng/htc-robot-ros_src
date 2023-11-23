@@ -22,7 +22,7 @@
     <!-- 启动 镭神 C16 雷达 -->
     <group if="$(eval htc_lidar_mode == 'ls_C16')">
         <include file="$(find lslidar_driver)/launch/lslidar_c16.launch">
-            <arg name="device_ip" value="192.168.100.201" />
+            <!-- <arg name="device_ip" value="192.168.1.201" /> -->
         </include>
         <!-- <include file="$(find pointcloud_to_laserscan/launch/pointcloud_scan.launch)" /> -->
     </group>

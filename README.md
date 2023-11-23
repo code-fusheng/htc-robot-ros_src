@@ -22,6 +22,7 @@ ibus-setup
 sudo apt install -y openssh-server
 
 
+
 # 安装ros环境
 wget http://fishros.com/install -O fishros && . fishros
 ```

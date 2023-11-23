@@ -1,7 +1,7 @@
 <launch>
 
     <arg name="odom_frame"  default="odom"/>
-    <arg name="scan_topic"  default="scan_raw" />
+    <arg name="scan_topic"  default="scan" />
 
     <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping">
 
