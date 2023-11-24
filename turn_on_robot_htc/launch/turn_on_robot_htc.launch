@@ -33,7 +33,7 @@
 
     <!-- 里程计 framd_id -->
     <!-- odom_combined odom -->
-    <arg name="odom_frame_id" default="odom_combined"/>
+    <arg name="odom_frame_id" default="odom"/>
 
     <!-- cmd topic -->
     <arg name="htc_cmd_topic" default="/cmd_vel"/>
