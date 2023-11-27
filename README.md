@@ -55,7 +55,9 @@ $ catkin_make clean
 
 ```shell
 # 子仓库管理
+
 git submodule add https://github.com/code-fusheng/realsense-ros.git drivers/realsense_ros
+git submodule add https://github.com/IntelRealSense/realsense-ros.git drivers/realsense_ros
 git submodule add https://github.com/code-fusheng/navigation.git drivers/navigation
 git submodule add https://github.com/6-robot/wpr_simulation.git simulation/wpr_simulation
 # git submodule add https://github.com/TixiaoShan/LIO-SAM.git drivers/lio_sam
