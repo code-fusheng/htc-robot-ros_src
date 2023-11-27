@@ -1,6 +1,3 @@
-[submodule "drivers/realsense_ros"]
-	path = drivers/realsense_ros
-	url = https://github.com/IntelRealSense/realsense-ros.git
 [submodule "simulation/wpr_simulation"]
 	path = simulation/wpr_simulation
 	url = https://github.com/6-robot/wpr_simulation.git
@@ -13,3 +10,6 @@
 [submodule "drivers/lio_sam"]
 	path = drivers/lio_sam
 	url = https://github.com/code-fusheng/LIO-SAM.git
+[submodule "drivers/realsense_ros"]
+	path = drivers/realsense_ros
+	url = https://github.com/code-fusheng/realsense-ros.git
