@@ -14,7 +14,7 @@
     <param name="imu_topic"  value="imu"/>
 
     <!-- 发布的imu话题中的frame_id -->
-    <param name="imu_frame"  value="gyro_link"/>
+    <param name="imu_frame"  value="imu_link"/>
 
     <!-- 地磁北的yaw角 -->
     <!-- MSG_AHRS 0X41数据包的数据 -->

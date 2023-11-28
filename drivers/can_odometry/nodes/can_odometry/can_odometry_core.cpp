@@ -88,7 +88,7 @@ void CanOdometryNode::publishOdometry(const can_msgs::vehicle_statusConstPtr& ms
   // next, we'll publish the odometry message over ROS
   nav_msgs::Odometry odom;
   odom.header.stamp = msg->Header.stamp;
-  odom.header.frame_id = "odom";
+  odom.header.frame_id = "odom_combined";
 
   // set the position
   odom.pose.pose.position.x = odom_.x;
@@ -115,16 +115,6 @@ void CanOdometryNode::publishOdometry(const can_msgs::vehicle_statusConstPtr& ms
 
   // publish the message
   pub1_.publish(odom);
-
-  // create and send the TF transform
-  static tf::TransformBroadcaster br;
-  tf::Transform transform;
-  transform.setOrigin(tf::Vector3(odom_.x, odom_.y, 0.0));
-  tf::Quaternion q;
-  q.setRPY(0, 0, odom_.th);
-  transform.setRotation(q);
-  br.sendTransform(tf::StampedTransform(transform, msg->Header.stamp, "odom", "base_footprint"));
-
 }
 
 void CanOdometryNode::callbackFromVehicleStatus(const can_msgs::vehicle_statusConstPtr& msg)
