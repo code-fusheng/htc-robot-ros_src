@@ -26,3 +26,6 @@ include_directories(include/${PROJECT_NAME})
 
 add_executable(htc_wheeltec_robot_node src/htc_wheeltec_robot.cpp src/Quaternion_Solution.cpp)
 target_link_libraries(htc_wheeltec_robot_node ${catkin_LIBRARIES})
+
+add_executable(htc_yunle_robot_node src/htc_yunle_robot.cpp)
+target_link_libraries(htc_yunle_robot_node ${catkin_LIBRARIES})

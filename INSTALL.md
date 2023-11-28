@@ -29,6 +29,7 @@ wget http://fishros.com/install -O fishros && . fishros
 ### 工程部署
 
 ```shell
+sudo apt install -y git
 git clone -b master https://github.com/code-fusheng/htc-robot-ros_src.git
 git submodule update --init --recursive
 ```
@@ -53,8 +54,7 @@ ros-$ROS_DISTRO-gmapping \
 ros-$ROS_DISTRO-hector-mapping \
 ros-$ROS_DISTRO-xacro \
 ros-$ROS_DISTRO-cartographer-ros \
-pcl-tools
-
+pcl-tools \
 ros-$ROS_DISTRO-bfl \
 
 ```
@@ -83,7 +83,7 @@ ros-$ROS_DISTRO-rqt-runtime-monitor
 ```shell
 sudo apt install -y ros-$ROS_DISTRO-rgbd-launch \
 ros-$ROS_DISTRO-libuvc-camera \
-ros-$ROS_DISTRO-libuvc-ros
+ros-$ROS_DISTRO-libuvc-ros \
 
 ros-$ROS_DISTRO-libuvc \
 ```
@@ -195,7 +195,7 @@ ros-$ROS_DISTRO-robot-state-publisher \
 ros-$ROS_DISTRO-fake-localization \
 libmetis-dev \
 libtbb-dev
-# gtsam method:1 (需要科学) # noetic 见下方问题处理
+# gtsam method:1 (可能需要科学) # noetic 见下方问题处理
 sudo add-apt-repository ppa:borglab/gtsam-release-4.0
 sudo apt update
 sudo apt install libgtsam-dev libgtsam-unstable-dev

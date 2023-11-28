@@ -4,7 +4,7 @@
     <rosparam file="$(find turn_on_robot_htc)/config/htc_common_param.yaml" command="load" />
 
     <!-- 是否开启 gazebo 仿真 -->
-    <arg name="is_simulation" default="gazebo" doc="null gazebo" />
+    <arg name="is_simulation" default="null" doc="null gazebo" />
 
     <!-- 是否开启建图 -->
     <arg name="is_mapping" default="true" />
@@ -12,7 +12,7 @@
     <arg name="is_navigation" default="false" />
 
     <!-- 底盘类型｜车辆类型 -->
-    <arg name="htc_car_mode" default="htcbot" doc="opt:htcbot wheeltec_mini_akm yunle_small_bee_akm" /> 
+    <arg name="htc_car_mode" default="yunle_jd01" doc="opt:htcbot wheeltec_mini_akm yunle_small_bee_akm yunle_jd01 yunle_jd01_debug" /> 
     <!-- 建图类型 -->
     <!-- rtabmap: 修改 odom_frame_id = odom -->
     <arg name="htc_mapping_mode" default="ndt" doc="opt: gmapping | hector | cartographer | karto | rtabmap | liosam | cartographer_3d | ndt" />
@@ -32,9 +32,9 @@
     <arg name="repeat"  default="false"/>
 
     <!-- 里程计 framd_id -->
-    <!-- odom_combined -->
-    <arg name="odom_frame_id" default="odom"/>
-
+    <!-- odom_combined odom -->
+    <arg name="odom_frame_id" default="odom_combined"/>
+    <arg name="imu_frame_id" default="imu_link" />
     <!-- cmd topic -->
     <arg name="htc_cmd_topic" default="/cmd_vel"/>
     <!-- laser_scan topic -->
@@ -83,8 +83,8 @@
     </group>
 
     <!-- 扩张卡尔曼滤波 发布odom_combined到footprint的TF,即小车定位 使用cartographer算法时不使用该滤波算法-->
-    <!-- <include if="$(eval htc_mapping_mode != 'legoloam')" file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
-    </include> -->
+    <include if="$(eval htc_mapping_mode != 'legoloam')" file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
+    </include>
 
     <!-- 建图控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/mapping_htc.launch" if="$(arg is_mapping)">

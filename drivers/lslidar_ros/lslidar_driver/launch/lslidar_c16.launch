@@ -18,10 +18,11 @@
   <arg name= "pcl_type" default="1"/>
 
   <arg  name="frame_id" default="laser"/>
-
+  <arg name="packet_rate" default="840.0"/>
 
   <node pkg="lslidar_driver" type="lslidar_driver_node" name="lslidar_driver_node" output="screen">
     <!--param name="pcap" value="$(find lslidar_c16_driver)/pcap/xxx.pcap" /-->
+    <param name="packet_rate" value="$(arg packet_rate)"/>
     <param name="device_ip" value="$(arg device_ip)" />
     <param name="msop_port" value="$(arg msop_port)" />
     <param name="difop_port" value="$(arg difop_port)"/>
@@ -34,22 +35,24 @@
     <param name="group_ip" value="224.1.1.2"/>
     <param name="rpm" value="600"/>
     <param name="use_gps_ts" value="$(arg use_gps_ts)"/>
-    <param name="min_range" value="0.15"/>
+    <param name="min_range" value="0.2"/>
     <param name="max_range" value="150.0"/>
     <param name="frequency" value="10"/>
     <param name="frame_id" value="$(arg frame_id)"/>
-    <param name="distance_unit" value="0.25"/>
+    <param name="distance_unit" value="0.40"/>
     <param name="scan_start_angle" value="0"/>       <!-- 起始角度可以设置为负值 例如 -15750  -->
     <param name="scan_end_angle" value="36000"/>     
     <param name="scan_num" value="8"/>
     <param name="publish_scan" value="true"/>
     <param name="pointcloud_topic" value="point_cloud_raw"/>
-    <param name="coordinate_opt" value="false"/>
+    <param name="coordinate_opt" value="true"/>
     <param name="is_filter" value="false"/>
-    <param name="filter_distance_min" value="0.0"/>
-    <param name="filter_distance_max" value="0.0"/>
+    <param name="filter_distance_min" value="0.3"/>
+    <param name="filter_distance_max" value="150.0"/>
     <param name="filter_intensity_min" value="0.0"/>
     <param name="filter_intensity_max" value="0.0"/>
+    <!-- <param name="horizontal_angle_resolution" value="0.18"/> -->
+    <remap from="scan_raw" to="scan" />
   </node>
 
   <!--node pkg="rviz" type="rviz" name="rviz" args="-d $(find lslidar_driver)/rviz_cfg/lslidar.rviz"/-->
