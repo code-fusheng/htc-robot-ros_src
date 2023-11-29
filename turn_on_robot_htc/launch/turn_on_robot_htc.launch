@@ -10,12 +10,14 @@
     <arg name="is_mapping" default="true" />
     <!-- 是否开启导航 -->
     <arg name="is_navigation" default="false" />
+    <!-- 是否展示Rviz -->
+    <arg name="is_rviz" default="true" />
 
     <!-- 底盘类型｜车辆类型 -->
     <arg name="htc_car_mode" default="yunle_jd01" doc="opt:htcbot wheeltec_mini_akm yunle_small_bee_akm yunle_jd01 yunle_jd01_debug" /> 
     <!-- 建图类型 -->
     <!-- rtabmap: 修改 odom_frame_id = odom -->
-    <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping | hector | cartographer | karto | rtabmap | liosam | cartographer_3d" />
+    <arg name="htc_mapping_mode" default="gmapping" doc="opt: ndt | gmapping | hector | cartographer | karto | rtabmap | liosam | cartographer_3d" />
     <!-- 激光雷达类型 -->
     <arg name="htc_lidar_mode" default="ls_C16" />
     <!-- 双目深度相机类型 -->
@@ -40,6 +42,7 @@
     <!-- laser_scan topic -->
     <!-- C16 线的是 scan_raw 单线的是 scan -->
     <arg name="htc_laser_scan_topic" default="/scan" />
+    <arg name="htc_point_cloud_topic" default="/points_raw" />
     <!-- imu topic -->
     <arg name="htc_imu_topic" default="/imu"/>
 
@@ -67,6 +70,7 @@
         <!-- 激光雷达控制节点 -->
         <include file="$(find turn_on_robot_htc)/launch/lidar_htc.launch">
             <arg name="htc_lidar_mode" value="$(arg htc_lidar_mode)" />
+            <arg name="htc_point_cloud_topic" value="$(arg htc_point_cloud_topic)" />
         </include>
 
         <!-- 双目深度相机控制节点 -->
@@ -81,13 +85,14 @@
     </group>
 
     <!-- 扩张卡尔曼滤波 发布odom_combined到footprint的TF,即小车定位 使用cartographer算法时不使用该滤波算法-->
-    <include if="$(eval htc_mapping_mode != 'legoloam')" file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
-    </include>
+    <!-- <include if="$(eval htc_mapping_mode != 'legoloam')" file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
+    </include> -->
 
     <!-- 建图控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/mapping_htc.launch" if="$(arg is_mapping)">
         <arg name="odom_frame_id" value="$(arg odom_frame_id)"/>
         <arg name="htc_laser_scan_topic" value="$(arg htc_laser_scan_topic)" />
+        <arg name="htc_point_cloud_topic" value="$(arg htc_point_cloud_topic)" /> 
         <arg name="htc_mapping_mode" value="$(arg htc_mapping_mode)"/>
     </include>
 
@@ -106,10 +111,12 @@
     </include>
 
     <!-- 可视化节点 -->
-    <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" /> -->
-    <!--- Run Rviz-->
-    <!-- <node if="$(eval htc_mapping_mode == 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/3d_mapping.rviz" /> -->
-    <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/nav.rviz" />
+    <group if="$(arg is_rviz)">
+        <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" /> -->
+        <!--- Run Rviz-->
+        <!-- <node if="$(eval htc_mapping_mode == 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/3d_mapping.rviz" /> -->
+        <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
+        <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/nav.rviz" />
+    </group>
     
 </launch>

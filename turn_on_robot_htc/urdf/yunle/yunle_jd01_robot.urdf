@@ -1,0 +1,96 @@
+<robot name="htc_yunle_robot">
+
+    <material name="blue">
+        <color rgba="0.1 0.1 1.0 0.5" />
+    </material>
+    <material name="black">
+        <color rgba="0.0 0.0 0.0 0.5" />
+    </material>
+    <material name="white">
+        <color rgba="255 255 255 1" />
+    </material>
+
+    <link name="base_footprint">
+        <visual>
+            <geometry>
+                <sphere radius="0.001" />
+            </geometry>
+        </visual>
+    </link> 
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="1.15 0.638 0.319" />
+            </geometry>
+            <material name="white" />
+        </visual>  
+    </link> 
+
+    <joint name="base_2_footpinrt" type="fixed">
+        <parent link="base_footprint" />
+        <child link="base_link" />
+        <origin xyz="0.0 0.0 0.249" />
+    </joint>
+
+    <link name="left_front_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.18" length="0.079" />
+            </geometry>
+            <material name="black" />
+        </visual>
+    </link>
+    <joint name="left_front_wheel_joint" type="continuous">
+        <origin xyz="0.29 0.319 -0.2" rpy="1.57 0 0" />
+        <parent link="base_link" />
+        <child link="left_front_wheel_link" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="right_front_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.18" length="0.079" />
+            </geometry>
+            <material name="black" />
+        </visual>
+    </link>
+    <joint name="right_front_wheel_joint" type="continuous">
+        <origin xyz="0.29 -0.319 -0.2" rpy="1.57 0 0" />
+        <parent link="base_link" />
+        <child link="right_front_wheel_link" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="left_rear_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.18" length="0.079" />
+            </geometry>
+            <material name="black" />
+        </visual>
+    </link>
+    <joint name="left_rear_wheel_joint" type="continuous">
+        <origin xyz="-0.29 0.319 -0.2" rpy="1.57 0 0" />
+        <parent link="base_link" />
+        <child link="left_rear_wheel_link" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="right_rear_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.18" length="0.079" />
+            </geometry>
+            <material name="black" />
+        </visual>
+    </link>
+    <joint name="right_rear_wheel_joint" type="continuous">
+        <origin xyz="-0.29 -0.319 -0.2" rpy="1.57 0 0" />
+        <parent link="base_link" />
+        <child link="right_rear_wheel_link" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+</robot>

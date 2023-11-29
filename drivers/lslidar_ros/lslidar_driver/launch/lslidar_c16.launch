@@ -19,6 +19,7 @@
 
   <arg  name="frame_id" default="laser"/>
   <arg name="packet_rate" default="840.0"/>
+  <arg name="pointcloud_topic" default="/points_raw" />
 
   <node pkg="lslidar_driver" type="lslidar_driver_node" name="lslidar_driver_node" output="screen">
     <!--param name="pcap" value="$(find lslidar_c16_driver)/pcap/xxx.pcap" /-->
@@ -44,7 +45,7 @@
     <param name="scan_end_angle" value="36000"/>     
     <param name="scan_num" value="8"/>
     <param name="publish_scan" value="true"/>
-    <param name="pointcloud_topic" value="point_cloud_raw"/>
+    <param name="pointcloud_topic" value="points_raw"/>
     <param name="coordinate_opt" value="true"/>
     <param name="is_filter" value="false"/>
     <param name="filter_distance_min" value="0.3"/>

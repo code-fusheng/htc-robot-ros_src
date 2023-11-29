@@ -3,9 +3,9 @@
     <arg name="htc_mapping_mode" default="gmapping" doc="opt: gmapping,hector,cartographer,karto,cartographer_3d,rtabmap,liosam" />
 
     <arg name="odom_frame_id"  default="odom"/>
-    <arg name="htc_pcd_topic" default="point_cloud_raw"/>
     <arg name="htc_imu_topic" default="imu"/>
     <arg name="htc_laser_scan_topic" default="scan" />
+    <arg name="htc_point_cloud_topic" default="points_raw" /> 
 
     <!-- 2d 建图算法 -->
 
@@ -60,6 +60,12 @@
     <!-- lego-loam 3d 建图 -->
     <group if="$(eval htc_mapping_mode == 'legoloam')">
         <include file="$(find lego_loam)/launch/run.launch" />
+    </group>
+
+    <!-- ndt-mapping 建图 -->
+    <group if="$(eval htc_mapping_mode == 'ndt')">
+        <include file="$(find ndt_mapping)/launch/ndt_mapping.launch">
+        </include>
     </group>
 
     <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->

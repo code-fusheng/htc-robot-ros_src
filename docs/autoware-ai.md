@@ -19,7 +19,7 @@ $ pip3 install -U setuptools
 #Download Eigen
 $ wget https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz
 #Decompress
-$ mkdir eigen && tar -xzvf 3.3.7.tar.gz -C eigen
+$ tar -xzvf 3.3.7.tar.gz
 #Build and install
 $ cd eigen && mkdir build && cd build && cmake .. && make && sudo make install
 #Remove downloaded and temporary files
@@ -52,60 +52,35 @@ rosdepc install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
 ```
 
 ```
-sudo apt-get install -y ros-melodic-automotive-navigation-msgs
-sudo apt-get install -y ros-melodic-image-view2
-sudo apt-get install -y ros-melodic-uvc-camera
-sudo apt-get install -y ros-melodic-velocity-controllers
-sudo apt-get install -y ros-melodic-jsk-topic-tools
-sudo apt-get install -y ros-melodic-effort-controllers
-sudo apt-get install -y ros-melodic-gps-common
-sudo apt-get install -y ros-melodic-jsk-rviz-plugins
-sudo apt-get install -y ros-melodic-carla-msgs
-sudo apt-get install -y ros-melodic-velodyne-description
-sudo apt-get install -y ros-melodic-jsk-rviz-plugins
-sudo apt-get install -y ros-melodic-nmea-msgs
-sudo apt-get install -y ros-melodic-jsk-recognition-msgs
-sudo apt-get install -y ros-melodic-jsk-recognition-msgs
-sudo apt-get install -y ros-melodic-velodyne-pointcloud
-sudo apt-get install -y ros-melodic-gscam
-sudo apt-get install -y ros-melodic-jsk-recognition-msgs
-sudo apt-get install -y ros-melodic-lgsvl-msgs
-sudo apt-get install -y ros-melodic-velodyne
-sudo apt-get install -y ros-melodic-qpoases-vendor
-sudo apt-get install -y ros-melodic-nmea-msgs
-sudo apt-get install -y ros-melodic-automotive-platform-msgs
-sudo apt-get install -y ros-melodic-sound-play
-sudo apt-get install -y ros-melodic-grid-map-ros
-sudo apt-get install -y ros-melodic-velodyne-description
-sudo apt-get install -y ros-melodic-velodyne
-sudo apt-get install -y ros-melodic-nmea-msgs
-sudo apt-get install -y ros-melodic-lgsvl-msgs
-sudo apt-get install -y ros-melodic-jsk-rviz-plugins
-sudo apt-get install -y ros-melodic-geodesy
-sudo apt-get install -y ros-melodic-jsk-topic-tools
-sudo apt-get install -y ros-melodic-jsk-recognition-msgs
-sudo apt-get install -y ros-melodic-gscam
-sudo apt-get install -y ros-melodic-image-view2
-sudo apt-get install -y ros-melodic-velodyne-gazebo-plugins
-sudo apt-get install -y ros-melodic-carla-msgs
-sudo apt-get install -y ros-melodic-grid-map-ros
-sudo apt-get install -y ros-melodic-rosbridge-server
-sudo apt-get install -y ros-melodic-imu-tools
-sudo apt-get install -y ros-melodic-gps-common
-sudo apt-get install -y ros-melodic-velodyne-pointcloud
-sudo apt-get install -y ros-melodic-qpoases-vendor
-sudo apt-get install -y ros-melodic-nmea-navsat-driver
-
-sudo apt-get install -y libglew-dev
-
-sudo apt-get install -y ros-$ROS_DISTRO-nmea-navsat-driver \
-ros-$ROS_DISTRO-lanelet2* \
-ros-$ROS_DISTRO-automotive-platform-msgs \
-ros-$ROS_DISTRO-velodyne-pointcloud \
+sudo apt-get install -y \
+ros-$ROS_DISTRO-automotive-navigation-msgs \
+ros-$ROS_DISTRO-image-view2 \
+ros-$ROS_DISTRO-uvc-camera \
+ros-$ROS_DISTRO-velocity-controllers \
+ros-$ROS_DISTRO-jsk-topic-tools \
+ros-$ROS_DISTRO-effort-controllers \
 ros-$ROS_DISTRO-gps-common \
+ros-$ROS_DISTRO-jsk-rviz-plugins \
+ros-$ROS_DISTRO-carla-msgs \
+ros-$ROS_DISTRO-velodyne-description \
+ros-$ROS_DISTRO-nmea-msgs \
+ros-$ROS_DISTRO-jsk-recognition-msgs \
+ros-$ROS_DISTRO-velodyne-pointcloud \
+ros-$ROS_DISTRO-gscam \
+ros-$ROS_DISTRO-lgsvl-msgs \
+ros-$ROS_DISTRO-velodyne \
 ros-$ROS_DISTRO-qpoases-vendor \
-ros-$ROS_DISTRO-geodesy
-
+ros-$ROS_DISTRO-automotive-platform-msgs \
+ros-$ROS_DISTRO-sound-play \
+ros-$ROS_DISTRO-grid-map-ros \
+ros-$ROS_DISTRO-geodesy \
+ros-$ROS_DISTRO-jsk-topic-tools \
+ros-$ROS_DISTRO-velodyne-gazebo-plugins \
+ros-$ROS_DISTRO-rosbridge-server \
+ros-$ROS_DISTRO-imu-tools \
+ros-$ROS_DISTRO-nmea-navsat-driver \
+libglew-dev \
+ros-$ROS_DISTRO-lanelet2*
 ```
 
 > 编译
