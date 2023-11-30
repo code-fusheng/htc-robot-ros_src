@@ -41,8 +41,8 @@
     <arg name="htc_cmd_topic" default="/cmd_vel"/>
     <!-- laser_scan topic -->
     <!-- C16 线的是 scan_raw 单线的是 scan -->
-    <arg name="htc_laser_scan_topic" default="/scan" />
-    <arg name="htc_point_cloud_topic" default="/points_raw" />
+    <arg name="htc_lidar_scan_topic" default="/scan" />
+    <arg name="htc_lidar_points_topic" default="/points_raw" />
     <!-- imu topic -->
     <arg name="htc_imu_topic" default="/imu"/>
 
@@ -70,7 +70,7 @@
         <!-- 激光雷达控制节点 -->
         <include file="$(find turn_on_robot_htc)/launch/lidar_htc.launch">
             <arg name="htc_lidar_mode" value="$(arg htc_lidar_mode)" />
-            <arg name="htc_point_cloud_topic" value="$(arg htc_point_cloud_topic)" />
+            <arg name="htc_lidar_points_topic" value="$(arg htc_lidar_points_topic)" />
         </include>
 
         <!-- 双目深度相机控制节点 -->
@@ -91,8 +91,8 @@
     <!-- 建图控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/mapping_htc.launch" if="$(arg is_mapping)">
         <arg name="odom_frame_id" value="$(arg odom_frame_id)"/>
-        <arg name="htc_laser_scan_topic" value="$(arg htc_laser_scan_topic)" />
-        <arg name="htc_point_cloud_topic" value="$(arg htc_point_cloud_topic)" /> 
+        <arg name="htc_lidar_scan_topic" value="$(arg htc_lidar_scan_topic)" />
+        <arg name="htc_lidar_points_topic" value="$(arg htc_lidar_points_topic)" /> 
         <arg name="htc_mapping_mode" value="$(arg htc_mapping_mode)"/>
     </include>
 
@@ -100,7 +100,7 @@
     <include file="$(find turn_on_robot_htc)/launch/navigation_htc.launch" if="$(arg is_navigation)">
         <arg name="htc_car_mode" value="$(arg htc_car_mode)"/>
         <arg name="htc_nav_mode" value="$(arg htc_nav_mode)"/>
-        <arg name="htc_laser_scan_topic" value="$(arg htc_laser_scan_topic)" />
+        <arg name="htc_lidar_scan_topic" value="$(arg htc_lidar_scan_topic)" />
     </include>
 
     <!-- 车辆终端控制节点 -->

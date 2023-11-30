@@ -1,19 +1,16 @@
 <launch>
 
-    <!-- IMU 惯导类型 -->
+    <!-- IMU 惯导 -->
     <arg name="htc_imu_mode" default="N100" />
-    <!-- imu topic -->
     <arg name="htc_imu_topic" default="imu"/>
-
-    <arg name="imu_frame_id" default="gyro_link" />
-
-    <!-- imu port 串口名称 -->
+    <arg name="htc_imu_frame" default="gyro_link" />
     <arg name="htc_imu_port" default="/dev/imu_n100" />
 
+    <!-- 飞迪 N100 IMU 惯导 -->
     <include if="$(eval htc_imu_mode == 'N100')" file="$(find fdilink_ahrs)/launch/ahrs_data.launch">
-        <param name="port"  value="$(arg htc_imu_port)"/>
-        <param name="imu_topic"  value="$(arg htc_imu_topic)"/>
-        <param name="imu_frame" value="$(arg imu_frame_id)"/>
+        <arg name="imu_port"  value="$(arg htc_imu_port)"/>
+        <arg name="imu_topic"  value="$(arg htc_imu_topic)"/>
+        <arg name="imu_frame" value="$(arg htc_imu_frame)"/>
     </include>
 
 </launch>
