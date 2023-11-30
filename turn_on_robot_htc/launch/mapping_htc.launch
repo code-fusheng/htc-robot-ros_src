@@ -4,8 +4,8 @@
 
     <arg name="odom_frame_id"  default="odom"/>
     <arg name="htc_imu_topic" default="imu"/>
-    <arg name="htc_laser_scan_topic" default="scan" />
-    <arg name="htc_point_cloud_topic" default="points_raw" /> 
+    <arg name="htc_lidar_scan_topic" default="scan" />
+    <arg name="htc_lidar_points_topic" default="points_raw" /> 
 
     <!-- 2d 建图算法 -->
 
@@ -13,7 +13,7 @@
     <group if="$(eval htc_mapping_mode == 'gmapping')">
         <include file="$(find turn_on_robot_htc)/launch/include/2d_slam_gmapping.launch">
             <arg name="odom_frame"  value="$(arg odom_frame_id)"/>
-            <arg name="scan_topic"  value="$(arg htc_laser_scan_topic)" />
+            <arg name="scan_topic"  value="$(arg htc_lidar_scan_topic)" />
         </include>
     </group>
 
@@ -21,7 +21,7 @@
     <group if="$(eval htc_mapping_mode == 'hector')">
         <include file="$(find turn_on_robot_htc)/launch/include/2d_slam_hector.launch">
             <arg name="odom_frame"  value="$(arg odom_frame_id)"/>
-            <arg name="scan_topic"  value="$(arg htc_laser_scan_topic)" />
+            <arg name="scan_topic"  value="$(arg htc_lidar_scan_topic)" />
         </include>
     </group>
 

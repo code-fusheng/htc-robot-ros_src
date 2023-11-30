@@ -1,7 +1,9 @@
 <launch>
 
     <arg name="htc_lidar_mode" default="ls_N10P" doc="opt: ls_N10P, ls_N10P_net, ls_C16"/>
-    <arg name="htc_point_cloud_topic" default="/points_raw" />
+    <arg name="htc_lidar_points_topic" default="/points_raw" />
+    <arg name="htc_lidar_scan_topic" default="/scan" />
+    <arg name="htc_lidar_frame" default="laser" />
 
     <!--所有雷达正前方（小车正前方）为0度角方向，扫描角度顺时针方向增加 -->
     <!--
@@ -24,7 +26,8 @@
     <group if="$(eval htc_lidar_mode == 'ls_C16')">
         <include file="$(find lslidar_driver)/launch/lslidar_c16.launch">
             <!-- <arg name="device_ip" value="192.168.1.201" /> -->
-            <arg name="pointcloud_topic" value="$(arg htc_point_cloud_topic)" />
+            <arg name="pointcloud_topic" value="$(arg htc_lidar_points_topic)" />
+            <arg name="frame_id" value="$(arg htc_lidar_frame)" />
         </include>
         <!-- <include file="$(find pointcloud_to_laserscan/launch/pointcloud_scan.launch)" /> -->
     </group>

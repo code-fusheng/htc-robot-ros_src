@@ -27,14 +27,14 @@
         <!-- <node pkg="turn_on_robot_htc" type="htc_yunle_robot_node" name="htc_yunle_robot" output="screen" respawn="false">
         </node> -->
         <include file="$(find can_module_usb2can)/launch/can_bridge_jd01.launch" />
-        <include file="$(find can_odometry)/launch/can2odom.launch" />
+        <!-- <include file="$(find can_odometry)/launch/can2odom.launch" /> -->
         <include file="$(find cmdvel_to_ecu)/launch/run_cmdvel_to_ecu.launch" />
     </group>
 
     <group if="$(eval htc_car_mode == 'yunle_jd01_debug')">
         <!-- <node pkg="turn_on_robot_htc" type="htc_yunle_robot_node" name="htc_yunle_robot" output="screen" respawn="false">
         </node> -->
-        <include file="$(find can_module_usb2can)/launch/can_bridge_jd01.launch" />
+        <include file="$(find can_module_usb2can)/launch/can_bridge_jd03.launch" />
         <!-- <include file="$(find can_odometry)/launch/can2odom.launch" /> -->
         <include file="$(find cmdvel_to_ecu)/launch/run_cmdvel_to_ecu.launch" />
     </group>

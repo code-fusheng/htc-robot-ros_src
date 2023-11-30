@@ -3,7 +3,7 @@
     <arg name="htc_car_mode" default="" /> 
     <arg name="htc_nav_mode" default="" />
     <arg name="htc_map" default="test_2.yaml" />
-    <arg name="htc_laser_scan_topic" default="/scan" />
+    <arg name="htc_lidar_scan_topic" default="/scan" />
 
     <!-- 设置用于导航的地图 -->
     <arg name="map_file" default="$(find turn_on_robot_htc)/map/$(arg htc_map)" />
@@ -16,7 +16,7 @@
     <group if="$(eval htc_nav_mode == 'navigation')">
         <!-- 开启用于导航的自适应蒙特卡洛定位amcl-->
         <include file="$(find turn_on_robot_htc)/launch/include/amcl.launch">
-            <arg name="scan_topic" value="$(arg htc_laser_scan_topic)" />
+            <arg name="scan_topic" value="$(arg htc_lidar_scan_topic)" />
         </include>
         <include file="$(find turn_on_robot_htc)/launch/include/move_base.launch">
             <arg name="htc_car_mode" value="$(arg htc_car_mode)" /> 

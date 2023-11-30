@@ -61,10 +61,11 @@ namespace USB2CAN
         // jd01转角极限值为120, 超过将引起反转
         if (v > 120) v = 120;
         if (v < -120) v = -120;
-        if (ecuMsg.shift == ecuMsg.SHIFT_D)
-            writeInt(canMsg.Data, JD01_SCU_STEER_WHEEL_F_OFFSET, JD01_SCU_STEER_WHEEL_F_LENGTH, v);
-        else if (ecuMsg.shift == ecuMsg.SHIFT_R)
-            writeInt(canMsg.Data, JD01_SCU_STEER_WHEEL_R_OFFSET, JD01_SCU_STEER_WHEEL_R_LENGTH, v);
+        // TODO
+        // if (ecuMsg.shift == ecuMsg.SHIFT_D)
+        writeInt(canMsg.Data, JD01_SCU_STEER_WHEEL_F_OFFSET, JD01_SCU_STEER_WHEEL_F_LENGTH, v);
+        // else if (ecuMsg.shift == ecuMsg.SHIFT_R)
+        writeInt(canMsg.Data, JD01_SCU_STEER_WHEEL_R_OFFSET, JD01_SCU_STEER_WHEEL_R_LENGTH, v);
     }
 
     VCI_CAN_OBJ MsgJD01::getMessage(){
