@@ -16,7 +16,6 @@
     <arg name="htc_lidar_points_topic" default="/points_raw" />
     <arg name="htc_lidar_frame" default="velodyne" />
 
-
     <!-- 激光雷达控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/lidar_htc.launch">
         <arg name="htc_lidar_mode" value="$(arg htc_lidar_mode)" />

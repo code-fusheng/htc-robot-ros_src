@@ -23,10 +23,10 @@
     <param name="tf_yaw"   value="0" />
 
     <!-- 激光雷达节点 -->
-    <include file="$(find lslidar_driver)/launch/lslidar_c16.launch"></include>
+    <include file="$(find lslidar_driver)/launch/lslidar_c16_autox.launch"></include>
 
     <!-- can 驱动 -->
-    <include file="$(find can_module_usb2can)/launch/can_bridge_jd01.launch"></include>
+    <include file="$(find can_module_usb2can)/launch/can_bridge_nwd.launch"></include>
 
     <!-- PCB 地图的加载路径待确认 -->
     <!-- pcb map manager -->
@@ -94,7 +94,76 @@
         <param name="voxel_size_filter_before_add_to_map" value="0.5" />
     </node>
 
+    <node pkg="grid_map_generator" type="pcd_grid_divider" name="pcd_grid_divider" output="screen">
+    </node>
+
+    <!-- 全局路径规划 -->
+    <node pkg="global_planning" type="traj_plan_dij.py" name="global_planning_dynamic" output="screen">
+    </node>
+
+    <!-- waypoint follower : 航迹点跟随 -->
+    <node pkg="waypoint_follower" type="pure_persuit_node" name="pure_pursuit" output="screen" >
+        <rosparam command="load"  file="$(find waypoint_follower)/params/config_htc.yaml"/>
+    </node>
+
+    <!-- state machine : 车辆状态 -->
+    <!-- 
+        0x01: Wait（default）：待定 
+        0x02: Start：开始 
+        0x03: End：结束 
+        0x04: Pause：暂停 
+        0x05: Continue：继续 
+    -->
+    <node pkg="state_machine" type="main.py" name="state_machine" output="screen">
+        <rosparam command="load"  file="$(find state_machine)/params/difei_nwd01.yaml"/>
+    </node>
+
+    <!-- can adapter : can 通讯适配器 -->
+    <node pkg="can_adapter" type="can_adapter_node" name="can_adapter_node" output="screen">
+        <param name="sub_topic" value="/pure_pursuit/ecu" />
+        <param name="pub_topic" value="/ecu" />
+        <param name="sub_status_topic" value="/SmartcarState" />
+        <param name="sub_laser_urgent_obs" value="/detection/laser_combined_detect/simple" />
+
+        <rosparam command="load"  file="$(find can_adapter)/params/bee_nwd02.yaml"/>
+
+        <!-- dist to start fixing speed (m/s) = limit speed * ratio (TODO::Use current_speed when vehicle status can publish)-->
+        <param name="ratio_fix_speed" value="4" type="double" /> 
+        <!-- <param name="dist_front_fix_speed" value="4" /> -->
+        <param name="dist_front_stop" value="1.0" type="double"/>
+        <!-- <param name="dist_back_fix_speed" value="/SmartcarState" /> -->
+        <param name="dist_back_stop" value="1.0" type="double"/>
+
+        <!-- Distance to enter ending process -->
+        <param name="distance_ending_process" value="6.0" type="double"/>
+
+        <!-- 最小和最大速度限制 -->
+        <param name="min_speed_limit" value="2.0" type="double"/>
+        <param name="max_speed_limit" value="4.0" type="double"/>
+    </node>
+
+    <!-- 点云聚类检测 -->
+    <node pkg="euclidean_cluster" type="euclidean_cluster_node" name="euclidean_cluster_node" output="screen">
+        <param name="lidar_height" value="0.7" type="double"/>
+        <param name="down_height" value="-0.5" type="double"/>
+        <param name="up_height" value="0.8" type="double"/>
+        <param name="low_x" value="0.3" type="double"/>
+        <param name="high_x" value="20" type="double"/>
+        <param name="low_y" value="-8" type="double"/>
+        <param name="high_y" value="8" type="double"/>
+        <param name="in_cloud_topic" value="/rslidar_points" type="string" />
+    </node>
+
     <!-- other -->
     <node pkg="rviz" type="rviz" name="Rviz" args="-d $(find turn_on_robot_htc)/rviz/yunle.rviz" required="true"/>
+    
+    <node pkg="visualization" type="visualization" name="visualization_node" output="screen">
+        <param name="show_model_car" value="true" type="bool" />
+        <param name="show_history_path" value="true" type="bool" />
+        <param name="show_followed_path" value="true" type="bool" />
+        <param name="show_default_pathes" value="true" type="bool" />
+        <param name="path_dir" value="/home/data/yy/1" type="string" />
+        <param name="dist_interval" value="0.2" type="double" />
+    </node>
 
 </launch>
