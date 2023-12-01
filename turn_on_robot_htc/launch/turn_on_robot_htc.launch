@@ -36,7 +36,7 @@
     <!-- 里程计 framd_id -->
     <!-- odom_combined odom -->
     <arg name="odom_frame_id" default="odom_combined"/>
-    <arg name="imu_frame_id" default="imu_link" />
+    <arg name="htc_imu_frame" default="imu_link" />
     <!-- cmd topic -->
     <arg name="htc_cmd_topic" default="/cmd_vel"/>
     <!-- laser_scan topic -->
@@ -65,6 +65,7 @@
         <include file="$(find turn_on_robot_htc)/launch/imu_htc.launch">
             <arg name="htc_imu_mode" value="$(arg htc_imu_mode)" />
             <arg name="htc_imu_topic" value="$(arg htc_imu_topic)"/>
+            <arg name="htc_imu_frame" value="$(arg htc_imu_frame)" />
         </include>
 
         <!-- 激光雷达控制节点 -->
@@ -85,8 +86,8 @@
     </group>
 
     <!-- 扩张卡尔曼滤波 发布odom_combined到footprint的TF,即小车定位 使用cartographer算法时不使用该滤波算法-->
-    <!-- <include if="$(eval htc_mapping_mode != 'legoloam')" file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
-    </include> -->
+    <include if="$(eval htc_mapping_mode != 'legoloam')" file="$(find turn_on_robot_htc)/launch/include/robot_pose_ekf.launch">
+    </include>
 
     <!-- 建图控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/mapping_htc.launch" if="$(arg is_mapping)">

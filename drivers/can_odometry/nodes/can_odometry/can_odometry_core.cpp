@@ -115,6 +115,16 @@ void CanOdometryNode::publishOdometry(const can_msgs::vehicle_statusConstPtr& ms
 
   // publish the message
   pub1_.publish(odom);
+
+  // create and send the TF transform
+  // static tf::TransformBroadcaster br;
+  // tf::Transform transform;
+  // transform.setOrigin(tf::Vector3(odom_.x, odom_.y, 0.0));
+  // tf::Quaternion q;
+  // q.setRPY(0, 0, odom_.th);
+  // transform.setRotation(q);
+  // br.sendTransform(tf::StampedTransform(transform, msg->Header.stamp, "odom", "base_footprint"));
+
 }
 
 void CanOdometryNode::callbackFromVehicleStatus(const can_msgs::vehicle_statusConstPtr& msg)
