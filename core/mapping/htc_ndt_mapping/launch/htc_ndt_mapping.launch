@@ -8,7 +8,7 @@
     <arg name="step_size" default="0.1" doc="step_size maximum step length[m]"/>
     <arg name="ndt_res" default="5.0" doc="resolution side length of voxels[m]"/>
     <arg name="trans_eps" default="0.01" doc="transform epsilon to stop iteration"/>
-    <arg name="voxel_leaf_size" default="1.5" doc="a down sample size of a input cloud[m]"/>
+    <arg name="voxel_leaf_size" default="1.0" doc="a down sample size of a input cloud[m]"/>
 
     <!-- Mapping Parameters -->
     <arg name="scan_rate" default="10.0" doc="scan_rate"/>

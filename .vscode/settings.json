@@ -99,7 +99,8 @@
         "memory_resource": "cpp",
         "utility": "cpp",
         "stop_token": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "format": "cpp"
     },
     "commentTranslate.source": "Google",
     // "fileheader.Author": "robot_Fu.Sheng",

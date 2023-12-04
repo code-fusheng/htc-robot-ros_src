@@ -1,5 +1,7 @@
 <launch>
 
+    <param name="is_on_mapping" value="true" />
+
     <param name="lidar_frame" value="laser"/>
     <param name="lidar_topic" value="/points_raw"/>
 
@@ -44,7 +46,7 @@
         <param name="voxel_leaf_size" value="$(arg voxel_leaf_size)" />
         <param name="min_scan_range" value="0.4" />
         <param name="max_scan_range" value="80" />
-        <param name="min_add_scan_shift" value="1.0" />
+        <param name="min_add_scan_shift" value="0.2" />
         <param name="is_filter_before_add_to_map" value="true" />
         <param name="voxel_size_filter_before_add_to_map" value="0.5" />
     </node>

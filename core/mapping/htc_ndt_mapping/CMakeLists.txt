@@ -35,10 +35,9 @@ include_directories(
   ${EIGEN3_INCLUDE_DIRS}
 )
 
-SET(CMAKE_CXX_FLAGS "-O2 -g -Wall ${CMAKE_CXX_FLAGS}")
-
 add_executable(yunle_ndt_mapping src/yunle_ndt_mapping.cpp)
-target_link_libraries(yunle_ndt_mapping ${catkin_LIBRARIES})
+target_link_libraries(yunle_ndt_mapping ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(yunle_ndt_mapping ndt_cpu pcl_omp_registration)
 add_dependencies(yunle_ndt_mapping ${catkin_EXPORTED_TARGETS})
 
 add_executable(htc_ndt_mapping src/ndt_mapping_node.cpp src/ndt_mapping.cpp)

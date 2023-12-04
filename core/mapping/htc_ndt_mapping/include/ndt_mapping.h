@@ -54,6 +54,7 @@ private:
   struct pose current_pose, current_pose_imu, current_pose_odom;
   struct pose previous_pose;
   struct pose ndt_pose, guess_pose, guess_pose_imu;
+  struct pose added_pose, localizer_pose;
 
   ros::Time current_scan_time;
   ros::Time previous_scan_time;
@@ -130,5 +131,6 @@ private:
   double wrapToPm(double a_num, const double a_max);
   double wrapToPmPi(double a_angle_rad);
   double calcDiffForRadian(const double lhs_rad, const double rhs_rad);
+  double getAbsoluteAngleDiff(const double &current_yaw, const double &added_yaw);
 
 };

@@ -258,11 +258,28 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
   // 前三行 前三列 表示旋转矩阵
   // 第四列前三行表示的是平移向量
 
+  mat_l.setValue(static_cast<double>(t_localizer(0, 0)),
+                   static_cast<double>(t_localizer(0, 1)),
+                   static_cast<double>(t_localizer(0, 2)),
+                   static_cast<double>(t_localizer(1, 0)),
+                   static_cast<double>(t_localizer(1, 1)),
+                   static_cast<double>(t_localizer(1, 2)),
+                   static_cast<double>(t_localizer(2, 0)),
+                   static_cast<double>(t_localizer(2, 1)),
+                   static_cast<double>(t_localizer(2, 2)));
+
   mat_b.setValue(static_cast<double>(t_base_link(0, 0)), static_cast<double>(t_base_link(0, 1)),
                  static_cast<double>(t_base_link(0, 2)), static_cast<double>(t_base_link(1, 0)),
                  static_cast<double>(t_base_link(1, 1)), static_cast<double>(t_base_link(1, 2)),
                  static_cast<double>(t_base_link(2, 0)), static_cast<double>(t_base_link(2, 1)),
                  static_cast<double>(t_base_link(2, 2)));
+
+  // Update localizer_pose.
+  localizer_pose.x = t_localizer(0, 3);
+  localizer_pose.y = t_localizer(1, 3);
+  localizer_pose.z = t_localizer(2, 3);
+  mat_l.getRPY(localizer_pose.roll, localizer_pose.pitch, localizer_pose.yaw,
+                 1);
 
   // Update ndt_pose
   ndt_pose.x = t_base_link(0, 3);
@@ -332,17 +349,20 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
   offset_imu_pitch = 0.0;
   offset_imu_yaw = 0.0;
 
-  double shift = sqrt(pow(current_pose.x - previous_pose.x, 2.0) + pow(current_pose.y - previous_pose.y, 2.0));
-  if (shift >= min_add_scan_shift)
+  double shift = sqrt(pow(current_pose.x - added_pose.x, 2.0) +
+                        pow(current_pose.y - added_pose.y, 2.0));
+  double _diff_angle = getAbsoluteAngleDiff(current_pose.yaw, added_pose.yaw) ; 
+  if (shift >= min_add_scan_shift || _diff_angle > 7)
   {
     map += *transformed_scan_ptr;
-    previous_pose.x = current_pose.x;
-    previous_pose.y = current_pose.y;
-    previous_pose.z = current_pose.z;
-    previous_pose.roll = current_pose.roll;
-    previous_pose.pitch = current_pose.pitch;
-    previous_pose.yaw = current_pose.yaw;
-    
+
+    added_pose.x = current_pose.x;
+    added_pose.y = current_pose.y;
+    added_pose.z = current_pose.z;
+    added_pose.roll = current_pose.roll;
+    added_pose.pitch = current_pose.pitch;
+    added_pose.yaw = current_pose.yaw;
+
     ndt.setInputTarget(map_ptr);
 
     // 声明 ROS 可用的点云对象
@@ -351,7 +371,6 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
     pcl::toROSMsg(*map_ptr, *map_msg_ptr);
     // 发布 ndt_map 地图数据
     ndt_map_pub.publish(*map_msg_ptr);
-
   }
 
   q.setRPY(current_pose.roll, current_pose.pitch, current_pose.yaw);
@@ -524,4 +543,12 @@ void ndt_mapping::imu_calc(ros::Time current_time)
   guess_pose_imu.yaw = previous_pose.yaw + offset_imu_yaw;
 
   previous_time = current_time;
+}
+
+double ndt_mapping::getAbsoluteAngleDiff(const double &current_yaw, const double &added_yaw) {
+  double diff = (current_yaw - added_yaw) * 180.0 / PI;
+  diff = diff + 360*4;
+  int res = int(diff) % 360;
+  if ( res > 180 ) res = 360 -res;
+  return res;
 }

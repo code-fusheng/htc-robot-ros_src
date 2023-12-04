@@ -16,6 +16,8 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/registration/ndt.h>
 
+#include <ndt_cpu/NormalDistributionsTransform.h>
+
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
@@ -69,6 +71,7 @@ static double current_velocity_imu_z = 0.0;
 static pcl::PointCloud<pcl::PointXYZI> map;
 
 static pcl::NormalDistributionsTransform<pcl::PointXYZI, pcl::PointXYZI> ndt;
+static cpu::NormalDistributionsTransform<pcl::PointXYZI, pcl::PointXYZI> anh_ndt;
 
 // Default values
 static int max_iter = 30;        // Maximum iterations
@@ -154,7 +157,11 @@ static inline double get_absolute_angle_diff(const double &current_yaw, const do
 }
 
 static void points_callback(const sensor_msgs::PointCloud2::ConstPtr &input) {
-    
+    // if (!is_on_mapping) return;
+    // static bool _is_running = false;
+    // if ( !_is_running ) {
+    //     _is_running = true;
+    // }
     ros::Time start_handle_time = ros::Time::now();
     double r;
     pcl::PointXYZI p;
@@ -193,6 +200,7 @@ static void points_callback(const sensor_msgs::PointCloud2::ConstPtr &input) {
         pcl::transformPointCloud(*scan_ptr, *transformed_scan_ptr, tf_btol);
         map += *transformed_scan_ptr;
         initial_scan_loaded = 1;
+        is_first_map = true;
     }
 
     // Apply voxelgrid filter
@@ -202,20 +210,31 @@ static void points_callback(const sensor_msgs::PointCloud2::ConstPtr &input) {
     voxel_grid_filter.setInputCloud(scan_ptr);
     voxel_grid_filter.filter(*filtered_scan_ptr);
 
+    pcl::PointCloud<pcl::PointXYZI>::Ptr map_ptr(new pcl::PointCloud<pcl::PointXYZI>(map));
+    
     if (_method_type == MethodType::PCL_GENERIC) {
         ndt.setTransformationEpsilon(trans_eps);
         ndt.setStepSize(step_size);
         ndt.setResolution(ndt_res);
         ndt.setMaximumIterations(max_iter);
         ndt.setInputSource(filtered_scan_ptr);
+    } else if (_method_type == MethodType::PCL_ANH) {
+        anh_ndt.setTransformationEpsilon(trans_eps);
+        anh_ndt.setStepSize(step_size);
+        anh_ndt.setResolution(ndt_res);
+        anh_ndt.setMaximumIterations(max_iter);
+        anh_ndt.setInputSource(filtered_scan_ptr);
     }
-    ros::Time start_set_ndt_target = ros::Time::now();
 
-    pcl::PointCloud<pcl::PointXYZI>::Ptr map_ptr(new pcl::PointCloud<pcl::PointXYZI>(map));
+    ros::Time start_set_ndt_target = ros::Time::now();
     if (is_first_map == true) {
         if (_method_type == MethodType::PCL_GENERIC)
             ndt.setInputTarget(map_ptr);
+        else if (_method_type == MethodType::PCL_ANH)
+            anh_ndt.setInputTarget(map_ptr);
         is_first_map = false;
+        // _is_running = false;
+        return;
     }
             
     ndt_set_target_time = (ros::Time::now() - start_set_ndt_target).toSec();
@@ -262,6 +281,12 @@ static void points_callback(const sensor_msgs::PointCloud2::ConstPtr &input) {
         has_converged = ndt.hasConverged();
         final_num_iteration = ndt.getFinalNumIteration();
         transformation_probability = ndt.getTransformationProbability();
+    } else if (_method_type == MethodType::PCL_ANH) {
+        anh_ndt.align(init_guess);
+        fitness_score = anh_ndt.getFitnessScore();
+        t_localizer = anh_ndt.getFinalTransformation();
+        has_converged = anh_ndt.hasConverged();
+        final_num_iteration = anh_ndt.getFinalNumIteration();
     }
 
     ndt_align_time = (ros::Time::now() - start_ndt_align).toSec();
@@ -392,26 +417,28 @@ static void points_callback(const sensor_msgs::PointCloud2::ConstPtr &input) {
     double shift = sqrt(pow(current_pose.x - added_pose.x, 2.0) +
                         pow(current_pose.y - added_pose.y, 2.0));
     double _diff_angle = get_absolute_angle_diff(current_pose.yaw, added_pose.yaw) ; 
-
-    if (shift >= min_add_scan_shift || _diff_angle > 7)  // 更新地图并发布
+    //  || _diff_angle > 7
+    if (shift >= min_add_scan_shift)  // 更新地图并发布
     {
         global_transformed_scan = *transformed_scan_ptr;
         flag_update_map = true;
         static ros::Time update_st = ros::Time::now();
-        pcl::PointCloud<pcl::PointXYZI>::Ptr tmp_filtered(
-            new pcl::PointCloud<pcl::PointXYZI>());
+        pcl::PointCloud<pcl::PointXYZI>::Ptr tmp_filtered(new pcl::PointCloud<pcl::PointXYZI>());
+        pcl::PointCloud<pcl::PointXYZI>::Ptr input_source(new pcl::PointCloud<pcl::PointXYZI>(global_transformed_scan));
         if (is_filter_before_add_to_map) {
             pcl::VoxelGrid<pcl::PointXYZI> voxel_grid_filter;
             voxel_grid_filter.setLeafSize(voxel_size_filter_before_add_to_map,
-                                          voxel_size_filter_before_add_to_map,
-                                          voxel_size_filter_before_add_to_map);
-            voxel_grid_filter.setInputCloud(transformed_scan_ptr);
+                                            voxel_size_filter_before_add_to_map,
+                                            voxel_size_filter_before_add_to_map);
+            voxel_grid_filter.setInputCloud(input_source);
             voxel_grid_filter.filter(*tmp_filtered);
             map += *tmp_filtered;
+            // std::cout << "filter before: " << transformed_scan_ptr->size()
+            //         << " after: " << tmp_filtered->size() << std::endl;
+            ROS_INFO("[ndt mapping] filter before: %d, filter after: %d", global_transformed_scan.size(), tmp_filtered->size());
         } else {
-            map += *transformed_scan_ptr;
+            map += global_transformed_scan;
         }
-
         pcl::PointCloud<pcl::PointXYZI>::Ptr map_ptr(new pcl::PointCloud<pcl::PointXYZI>(map));
 
         added_pose.x = current_pose.x;
@@ -420,14 +447,31 @@ static void points_callback(const sensor_msgs::PointCloud2::ConstPtr &input) {
         added_pose.roll = current_pose.roll;
         added_pose.pitch = current_pose.pitch;
         added_pose.yaw = current_pose.yaw;
+            
+        // 1. init new model
+        pcl::NormalDistributionsTransform<pcl::PointXYZI, pcl::PointXYZI> new_ndt;
+        cpu::NormalDistributionsTransform<pcl::PointXYZI, pcl::PointXYZI> new_anh_ndt;
+
         if (_method_type == MethodType::PCL_GENERIC)
-            ndt.setInputTarget(map_ptr);
+            new_ndt.setInputTarget(map_ptr);
+        else if (_method_type == MethodType::PCL_ANH) {
+            if (_incremental_voxel_update == true)
+                new_anh_ndt.updateVoxelGrid(input_source);
+            else
+                new_anh_ndt.setInputTarget(map_ptr);
+        }  
+        if (_method_type == MethodType::PCL_GENERIC)
+            ndt = new_ndt;
+        else if (_method_type == MethodType::PCL_ANH) {
+            anh_ndt = new_anh_ndt;
+        }
         // 发布更新后的地图
         sensor_msgs::PointCloud2::Ptr map_msg_ptr(new sensor_msgs::PointCloud2);
-        pcl::toROSMsg(*map_ptr, *map_msg_ptr);
+        pcl::toROSMsg(map, *map_msg_ptr);
         ndt_map_pub.publish(*map_msg_ptr);
-
+        flag_update_map = false;
         static ros::Time update_end = ros::Time::now();
+        ROS_INFO("[ndt_mapping] update map used %.2f seconds", (update_end - update_st).toSec());
     }
     q.setRPY(current_pose.roll, current_pose.pitch, current_pose.yaw);
     current_pose_msg.header.frame_id = "map";
@@ -447,6 +491,25 @@ static void points_callback(const sensor_msgs::PointCloud2::ConstPtr &input) {
         history_trajectory.poses.push_back(current_pose_msg);
         history_trajectory_pub.publish(history_trajectory);
     }
+
+    // _is_running = false;
+
+    std::cout << "-----------------------------------------------------------------" << std::endl;
+    std::cout << "Sequence number: " << input->header.seq << std::endl;
+    std::cout << "Number of scan points: " << scan_ptr->size() << " points." << std::endl;
+    std::cout << "Number of filtered scan points: " << filtered_scan_ptr->size() << " points." << std::endl;
+    std::cout << "transformed_scan_ptr: " << transformed_scan_ptr->points.size() << " points." << std::endl;
+    std::cout << "map: " << map.points.size() << " points." << std::endl;
+    std::cout << "NDT has converged: " << ndt.hasConverged() << std::endl;
+    std::cout << "Fitness score: " << ndt.getFitnessScore() << std::endl;
+    std::cout << "Number of iteration: " << ndt.getFinalNumIteration() << std::endl;
+    std::cout << "(x,y,z,roll,pitch,yaw):" << std::endl;
+    std::cout << "(" << current_pose.x << ", " << current_pose.y << ", " << current_pose.z << ", " << current_pose.roll
+                << ", " << current_pose.pitch << ", " << current_pose.yaw << ")" << std::endl;
+    std::cout << "Transformation Matrix:" << std::endl;
+    std::cout << t_localizer << std::endl;
+    std::cout << "shift: " << shift << std::endl;
+    std::cout << "-----------------------------------------------------------------" << std::endl;
 
 }
 
@@ -559,8 +622,10 @@ int main(int argc, char **argv)
     current_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/current_pose", 10);
     history_trajectory_pub = nh.advertise<nav_msgs::Path>("/ndt/history_trajectory", 10);
 
-    ros::Subscriber points_sub = nh.subscribe("points_raw", 100000, points_callback);
+    ros::Subscriber points_sub = nh.subscribe("points_raw", 10, points_callback);
+
     ros::spin();
+
     return 0;
 
 }
