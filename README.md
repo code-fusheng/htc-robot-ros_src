@@ -13,7 +13,7 @@
 sudo apt-get install ibus-pinyin
 # 重启
 ibus-setup
-```
+```ibus-setup
 
 ##### 1. 工程初始化
 

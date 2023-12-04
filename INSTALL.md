@@ -127,7 +127,7 @@ sudo udevadm control --reload-rules && udevadm trigger
 mkdir build
 cd build
 cmake ../ -DBUILD_EXAMPLES=ture
-make
+makesudo make install
 sudo make install
 # 建议上科学
 git clone https://gitcode.net/mirrors/curl/curl.git

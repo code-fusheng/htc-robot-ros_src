@@ -68,6 +68,18 @@
         </include>
     </group>
 
+    <!-- ndt-mapping 建图 -->
+    <group if="$(eval htc_mapping_mode == 'htc_ndt')">
+        <include file="$(find htc_ndt_mapping)/launch/htc_ndt_mapping.launch">
+        </include>
+    </group>
+
+    <!-- ndt-mapping 建图 -->
+    <group if="$(eval htc_mapping_mode == 'yunle_ndt')">
+        <include file="$(find htc_ndt_mapping)/launch/yunle_ndt_mapping.launch">
+        </include>
+    </group>
+
     <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
     <!-- <node if="$(eval htc_mapping_mode != 'rtabmap')" pkg="rviz" type="rviz" name="rviz" args="-d $(find turn_on_robot_htc)/rviz/slam.rviz" /> -->
     <!--- Run Rviz-->

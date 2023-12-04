@@ -44,7 +44,7 @@
     <arg name="htc_lidar_scan_topic" default="/scan" />
     <arg name="htc_lidar_points_topic" default="/points_raw" />
     <!-- imu topic -->
-    <arg name="htc_imu_topic" default="/imu"/>
+    <arg name="htc_imu_topic" default="/imu_raw"/>
 
     <!-- 底盘控制节点? -->
 
