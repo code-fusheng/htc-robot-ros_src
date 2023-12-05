@@ -8,7 +8,7 @@
 
 ##### 0. 系统初始化
 
-```shell
+````shell
 # 安装中文输入法 ibus
 sudo apt-get install ibus-pinyin
 # 重启
@@ -25,7 +25,7 @@ sudo apt install -y openssh-server
 
 # 安装ros环境
 wget http://fishros.com/install -O fishros && . fishros
-```
+````
 
 ```shell
 # 创建工作空间
