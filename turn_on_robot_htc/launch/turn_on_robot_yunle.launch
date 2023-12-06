@@ -4,6 +4,7 @@
     <!-- 模式 -->
     <param name="htc_nav_mode" value="ndt" type="string" />
     <param name="lidar_frame" value="rslidar"/>
+    <param name="lidar_topic" value="/rslidar_points"/>
     <param name="imu_frame" value="imu"/>
 
     <param name="vehicle_odom_topic" value="odom" />

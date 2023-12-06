@@ -519,6 +519,40 @@ static void update_runtime_map() {
             #ifdef USE_PCL_OPENMP
             pcl_omp::NormalDistributionsTransform<pcl::PointXYZI, pcl::PointXYZI> new_omp_ndt;
             #endif
+
+        //     // 2. set model config
+        //     if (_method_type == MethodType::PCL_GENERIC) {
+        //         new_ndt.setTransformationEpsilon(trans_eps);
+        //         new_ndt.setStepSize(step_size);
+        //         new_ndt.setResolution(ndt_res);
+        //         new_ndt.setMaximumIterations(max_iter);
+        //         new_ndt.setInputSource(filtered_scan_ptr);
+        //     } else if (_method_type == MethodType::PCL_ANH) {
+        //         anh_ndt.setTransformationEpsilon(trans_eps);
+        //         anh_ndt.setStepSize(step_size);
+        //         anh_ndt.setResolution(ndt_res);
+        //         anh_ndt.setMaximumIterations(max_iter);
+        //         anh_ndt.setInputSource(filtered_scan_ptr);
+        //     }
+        // #ifdef CUDA_FOUND
+        //     else if (_method_type == MethodType::PCL_ANH_GPU) {
+        //         anh_gpu_ndt.setTransformationEpsilon(trans_eps);
+        //         anh_gpu_ndt.setStepSize(step_size);
+        //         anh_gpu_ndt.setResolution(ndt_res);
+        //         anh_gpu_ndt.setMaximumIterations(max_iter);
+        //         anh_gpu_ndt.setInputSource(filtered_scan_ptr);
+        //     }
+        // #endif
+        // #ifdef USE_PCL_OPENMP
+        //     else if (_method_type == MethodType::PCL_OPENMP) {
+        //         omp_ndt.setTransformationEpsilon(trans_eps);
+        //         omp_ndt.setStepSize(step_size);
+        //         omp_ndt.setResolution(ndt_res);
+        //         omp_ndt.setMaximumIterations(max_iter);
+        //         omp_ndt.setInputSource(filtered_scan_ptr);
+        //     }
+        // #endif
+
             if (_method_type == MethodType::PCL_GENERIC)
                 new_ndt.setInputTarget(map_ptr);
             else if (_method_type == MethodType::PCL_ANH) {
@@ -567,15 +601,14 @@ static void update_runtime_map() {
 }
 
 static void points_callback(const sensor_msgs::PointCloud2::ConstPtr &input) {
-    // if (!is_on_mapping) return;
+    if (!is_on_mapping) return;
     static bool _is_running = false;
-    // if ( !_is_running ) {
-    //     _is_running = true;
-    // }else{
-    //     ROS_WARN("[ndt_mapping] Previous matching is on, one point cloud lost!");
-    //     return;
-    // }
-    _is_running = true;
+    if ( !_is_running ) {
+        _is_running = true;
+    }else{
+        ROS_WARN("[ndt_mapping] Previous matching is on, one point cloud lost!");
+        return;
+    }
 
     ros::Time start_handle_time = ros::Time::now();
     double r;
@@ -999,34 +1032,34 @@ static void points_callback(const sensor_msgs::PointCloud2::ConstPtr &input) {
     //     << "," << min_add_scan_shift << "," << ndt_set_target_time << ","
     //     << ndt_align_time << "," << total_time << std::endl;
 
-    std::cout
-        << "-----------------------------------------------------------------"
-        << std::endl;
-    std::cout << "Sequence number: " << input->header.seq << std::endl;
-    std::cout << "Number of scan points: " << scan_ptr->size() << " points."
-              << std::endl;
-    std::cout << "Number of filtered scan points: " << filtered_scan_ptr->size()
-              << " points." << std::endl;
-    std::cout << "transformed_scan_ptr: " << transformed_scan_ptr->points.size()
-              << " points." << std::endl;
-    std::cout << "map: " << map.points.size() << " points." << std::endl;
-    std::cout << "NDT has converged: " << has_converged << std::endl;
-    std::cout << "Fitness score: " << fitness_score << std::endl;
-    std::cout << "Number of iteration: " << final_num_iteration << std::endl;
-    std::cout << "(x,y,z,roll,pitch,yaw):" << std::endl;
-    std::cout << "(" << current_pose.x << ", " << current_pose.y << ", "
-              << current_pose.z << ", " << current_pose.roll << ", "
-              << current_pose.pitch << ", " << current_pose.yaw << ")"
-              << std::endl;
-    std::cout << "Transformation Matrix:" << std::endl;
-    std::cout << t_localizer << std::endl;
-    std::cout << "shift: " << shift << std::endl;
-    std::cout << "ndt_set_target_time: " << ndt_set_target_time << std::endl;
-    std::cout << "ndt_align_time: " << ndt_align_time << std::endl;
-    std::cout << "total_time: " << total_time << std::endl;
-    std::cout
-        << "-----------------------------------------------------------------"
-        << std::endl;
+    // std::cout
+    //     << "-----------------------------------------------------------------"
+    //     << std::endl;
+    // std::cout << "Sequence number: " << input->header.seq << std::endl;
+    // std::cout << "Number of scan points: " << scan_ptr->size() << " points."
+    //           << std::endl;
+    // std::cout << "Number of filtered scan points: " << filtered_scan_ptr->size()
+    //           << " points." << std::endl;
+    // std::cout << "transformed_scan_ptr: " << transformed_scan_ptr->points.size()
+    //           << " points." << std::endl;
+    // std::cout << "map: " << map.points.size() << " points." << std::endl;
+    // std::cout << "NDT has converged: " << has_converged << std::endl;
+    // std::cout << "Fitness score: " << fitness_score << std::endl;
+    // std::cout << "Number of iteration: " << final_num_iteration << std::endl;
+    // std::cout << "(x,y,z,roll,pitch,yaw):" << std::endl;
+    // std::cout << "(" << current_pose.x << ", " << current_pose.y << ", "
+    //           << current_pose.z << ", " << current_pose.roll << ", "
+    //           << current_pose.pitch << ", " << current_pose.yaw << ")"
+    //           << std::endl;
+    // std::cout << "Transformation Matrix:" << std::endl;
+    // std::cout << t_localizer << std::endl;
+    // std::cout << "shift: " << shift << std::endl;
+    // std::cout << "ndt_set_target_time: " << ndt_set_target_time << std::endl;
+    // std::cout << "ndt_align_time: " << ndt_align_time << std::endl;
+    // std::cout << "total_time: " << total_time << std::endl;
+    // std::cout
+    //     << "-----------------------------------------------------------------"
+    //     << std::endl;
 }
 
 static void reset() {
@@ -1493,10 +1526,7 @@ int main(int argc, char **argv) {
 
     reset();
 
-    // ros::ServiceServer mapping_service = nh.advertiseService("online_mapping", onServiceOnlineMapping);
-    is_on_mapping = true;
-
-    points_sub = nh.subscribe(lidar_topic, 10, points_callback);
+    ros::ServiceServer mapping_service = nh.advertiseService("online_mapping", onServiceOnlineMapping);
 
     // // 使用多线程spin, 防止points cloud队列过满，其他队列无法执行的问题
     // ros::MultiThreadedSpinner spinner(6); // 数字表示调用的线程数  
