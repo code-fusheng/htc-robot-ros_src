@@ -100,7 +100,13 @@
         "utility": "cpp",
         "stop_token": "cpp",
         "thread": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "strstream": "cpp",
+        "forward_list": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "cfenv": "cpp",
+        "typeindex": "cpp"
     },
     "commentTranslate.source": "Google",
     // "fileheader.Author": "robot_Fu.Sheng",

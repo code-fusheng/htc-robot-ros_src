@@ -120,6 +120,8 @@ private:
   std::ofstream ofs;
   std::string filename;
 
+  double PI = 3.141592654;
+
   void param_callback();
   void output_callback();
 

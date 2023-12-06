@@ -1,2 +1,2 @@
 #!/bin/bash
-rsync -avz --progress --exclude='.git' . code@192.168.1.143:/home/code/htc-robot-ros_ws/src
+rsync --delete -avz --progress --exclude='.git' . code@192.168.1.144:/home/code/htc-robot-ros_ws/src

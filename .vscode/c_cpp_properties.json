@@ -18,6 +18,7 @@
         "/home/code/htc-robot-ros_ws/src/vel_pkg/include/**",
         "/home/code/htc-robot-ros_ws/src/wpr_simulation/include/**",
         "/home/code/htc-robot-ros_ws/src/core/mapping/htc_ndt_mapping/include/**",
+        "/home/code/htc-robot-ros_ws/src/core/localizer/htc_ndt_localizer/include/**",
         "/usr/include/**"
       ],
       "name": "ROS",
