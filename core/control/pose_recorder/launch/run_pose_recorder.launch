@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="pose_recorder" name="pose_recorder" type="pose_recorder.py" output="screen">
+        <param name="filter"  value="true"/>
+        <param name="filter_distance"  value="0.1"/>
+    </node>
+ 
+</launch>
