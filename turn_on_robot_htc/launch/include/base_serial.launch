@@ -37,6 +37,7 @@
         <include file="$(find can_module_usb2can)/launch/can_bridge_jd03.launch" />
         <!-- <include file="$(find can_odometry)/launch/can2odom.launch" /> -->
         <include file="$(find cmdvel_to_ecu)/launch/run_cmdvel_to_ecu.launch" />
+        <node pkg="can_test_puber" type="twist2ack.py" name="twist_to_ecu" output="screen"></node>
     </group>
 
 </launch>
