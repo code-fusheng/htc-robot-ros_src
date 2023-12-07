@@ -44,3 +44,10 @@ rostopic pub /mapping/save_map
 /home/robot/htc-robot-ros_ws/data/test.pcd
 1.0
 ```
+
+```
+网格地图
+rostopic pub -1 /gridmap_task_set
+
+rostopic echo /gridmap_task_status
+```
