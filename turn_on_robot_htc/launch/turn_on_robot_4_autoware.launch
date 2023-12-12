@@ -4,6 +4,11 @@
     <arg name="htc_imu_mode" default="N100" />
     <!-- IMU 话题名称 -->
     <arg name="htc_imu_topic" default="/imu_raw"/>
+    <!-- car -->
+    <arg name="htc_car_mode" default="yunle_jd01" /> 
+
+    <arg name="htc_odom_frame" default="odom_combined"/>
+    
 
     <!-- IMU惯导控制节点 -->
     <include file="$(find turn_on_robot_htc)/launch/imu_htc.launch">
@@ -28,9 +33,10 @@
     <node pkg="tf" type="static_transform_publisher" name="world_to_map"    args="0 0 0 0 0 0 /world /map 10" />
 
     <!-- 底盘控制 -->
-    
-
-    <!-- 控制转换 -->
-
+    <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch">
+        <arg name="htc_car_mode" value="$(arg htc_car_mode)" /> 
+        <arg name="htc_imu_mode" value="$(arg htc_imu_mode)" />
+        <arg name="odom_frame_id"  value="$(arg htc_odom_frame)" />
+    </include>
 
 </launch>

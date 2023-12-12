@@ -9,6 +9,9 @@ twist_to_ecu::~twist_to_ecu() {};
 void twist_to_ecu::run()
 {
 
+    private_nh.param<std::string>("source_topic", source_topic, "/twist_raw");
+    private_nh.param<std::string>("target_topic", target_topic, "ecu");
+
     twist_sub = nh.subscribe("/twist_raw", 1, &twist_to_ecu::twist_callback, this);
     ecu_pub = nh.advertise<can_msgs::ecu>("ecu", 1);
     ros::spin();

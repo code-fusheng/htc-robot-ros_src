@@ -20,6 +20,9 @@ private:
     ros::Publisher ecu_pub;
     ros::Subscriber twist_sub;
 
+    std::string source_topic;
+    std::string target_topic;
+
     double PI = 3.141592654;
 
     void twist_callback(const geometry_msgs::TwistStamped::Ptr& input);

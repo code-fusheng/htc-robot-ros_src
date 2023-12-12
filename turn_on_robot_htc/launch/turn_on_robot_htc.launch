@@ -27,18 +27,14 @@
 
     <!-- 导航算法 -->
     <arg name="htc_nav_mode" default="navigation" doc="opt: navigation | rtabmap" />
-
-    <!-- 控制类型 -->
-    <arg name="htc_cmd_mode" default="steering" doc="opt: steering" />
-    
+  
     <arg name="repeat"  default="false"/>
 
     <!-- 里程计 framd_id -->
     <!-- odom_combined odom -->
     <arg name="odom_frame_id" default="odom_combined"/>
     <arg name="htc_imu_frame" default="imu_link" />
-    <!-- cmd topic -->
-    <arg name="htc_cmd_topic" default="/cmd_vel"/>
+
     <!-- laser_scan topic -->
     <!-- C16 线的是 scan_raw 单线的是 scan -->
     <arg name="htc_lidar_scan_topic" default="/scan" />

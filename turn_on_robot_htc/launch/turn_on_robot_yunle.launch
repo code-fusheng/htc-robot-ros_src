@@ -5,7 +5,12 @@
     <param name="htc_nav_mode" value="ndt" type="string" />
     <param name="lidar_frame" value="rslidar"/>
     <param name="lidar_topic" value="/rslidar_points"/>
-    <param name="imu_frame" value="imu"/>5
+    <param name="imu_frame" value="imu"/>
+
+    <!-- 控制类型 -->
+    <arg name="htc_cmd_mode" default="steering" doc="opt: steering" />
+    <!-- cmd topic -->
+    <arg name="htc_cmd_topic" default="/cmd_vel"/>  
 
     <param name="vehicle_odom_topic" value="odom" />
     <param name="vehicle_twist_topic" value="/vehicle/twist" />
@@ -26,6 +31,7 @@
 
     <!-- can 驱动 -->
     <include file="$(find can_module_usb2can)/launch/can_bridge_jd01.launch"></include>
+    <include file="$(find twist_to_ecu)/launch/twist_to_ecu.launch" />
 
     <!-- PCB 地图的加载路径待确认 -->
     <!-- pcb map manager -->
@@ -124,7 +130,7 @@
         <param name="sub_status_topic" value="/SmartcarState" />
         <param name="sub_laser_urgent_obs" value="/detection/laser_combined_detect/simple" />
 
-        <rosparam command="load"  file="$(find can_adapter)/params/bee_nwd02.yaml"/>
+        <rosparam command="load"  file="$(find can_adapter)/params/jd01.yaml"/>
 
         <!-- dist to start fixing speed (m/s) = limit speed * ratio (TODO::Use current_speed when vehicle status can publish)-->
         <param name="ratio_fix_speed" value="4" type="double" /> 
@@ -167,5 +173,12 @@
         <param name="path_dir" value="/home/data/yy/1" type="string" />
         <param name="dist_interval" value="0.2" type="double" />
     </node>
+
+    <!-- 车辆终端控制节点 -->
+    <!-- TODO keyboard 需要打开新窗口 不会 -->
+    <include file="$(find turn_on_robot_htc)/launch/robot_cmd_htc.launch">
+        <arg name="htc_cmd_topic" value="$(arg htc_cmd_topic)" />
+        <arg name="htc_cmd_mode" value="$(arg htc_cmd_mode)" />
+    </include>
 
 </launch>
