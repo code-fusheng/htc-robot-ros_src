@@ -1,7 +1,7 @@
 <launch>
 
     <arg name="source_topic" default="twist_raw" />
-    <arg name="target_topic" default="pure_pursuit" />
+    <arg name="target_topic" default="ecu" />
 
     <node pkg="twist_to_ecu" type="twist_to_ecu" name="twist_to_ecu" output="screen">
         <param name="source_topic" value="$(arg source_topic)"></param>

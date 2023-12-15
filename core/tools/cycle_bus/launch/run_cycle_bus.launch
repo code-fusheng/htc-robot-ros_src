@@ -1,0 +1,12 @@
+<launch>
+    <node pkg="cycle_bus" name="cycle_bus" type="cycle_bus.py" output="screen">
+        <!-- 是否将path倒序 -->
+        <param name="reverse" value="False"/>
+        <!-- 轨迹目录 -->
+        <param name="path_dir" value="/home/robot/htc-robot-ros_ws/data/test/cs2104t2/lidar_mode/pathes"/>
+        <!-- 两次发布时间间隔, 单位: 秒 -->
+        <param name="publish_interval" value="15"/>
+        <param name="current_pose_topic" value="/current_pose"/>
+    </node>
+ 
+</launch>

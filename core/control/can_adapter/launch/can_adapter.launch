@@ -16,7 +16,7 @@
         <param name="distance_ending_process" value="4.0" type="double"/>
 
         <!-- 最小和最大速度限制 -->
-        <param name="min_speed_limit" value="1.0" type="double"/>
-        <param name="max_speed_limit" value="4.0" type="double"/>
+        <param name="min_speed_limit" value="0.1" type="double"/>
+        <param name="max_speed_limit" value="0.5" type="double"/>
     </node>
 </launch>

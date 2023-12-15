@@ -417,6 +417,7 @@ static void task_control_callback( const automotive_msgs::CmdVehicleControlConst
 }
 
 static void map_callback(const sensor_msgs::PointCloud2::ConstPtr& input) {
+    ROS_INFO("[ZZZ : ndt_localization] ===> %d", input -> width);
     // if (map_loaded == 0)
     if (true) {
         ROS_INFO("[ndt localization]Update points_map, input points num = %d", input->width);
@@ -600,7 +601,7 @@ static void initialpose_callback(
     const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& input) {
 
     if ( !_enable_sub_init_pose ) return;
-
+    ROS_INFO("[ZZZ : ndt_localizer] ===> _enable_sub_init_pose: %d", _enable_sub_init_pose);
     tf2_ros::Buffer tf_buffer;
     tf2_ros::TransformListener tf_listener(tf_buffer);
     geometry_msgs::TransformStamped tf_msg;
@@ -922,6 +923,7 @@ static void imu_callback(const sensor_msgs::Imu::Ptr& input) {
 static void points_callback(const sensor_msgs::PointCloud2::ConstPtr& input) {
     //   health_checker_ptr_->CHECK_RATE("topic_rate_filtered_points_slow", 8,
     //   5, 1, "topic filtered_points subscribe rate slow.");
+    ROS_INFO("[ZZZ : ndt_localiztion#points_callback()] ===> map_loaded: %d init_pos_set: %d", map_loaded, init_pos_set);
     if (map_loaded == 1 && init_pos_set == 1) {
         matching_start = std::chrono::system_clock::now();
 

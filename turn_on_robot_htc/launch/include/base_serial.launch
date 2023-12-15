@@ -30,31 +30,6 @@
         <include file="$(find can_odometry)/launch/can2odom.launch" />
         <include file="$(find cmdvel_to_ecu)/launch/run_cmdvel_to_ecu.launch" />
         <include file="$(find twist_to_ecu)/launch/twist_to_ecu.launch" />
-
-        <!-- can adapter : can 通讯适配器 -->
-        <node pkg="can_adapter" type="can_adapter_node" name="can_adapter_node" output="screen">
-            <param name="sub_topic" value="/ecu_raw" />
-            <param name="pub_topic" value="/ecu" />
-            <param name="sub_status_topic" value="/SmartcarState" />
-            <param name="sub_laser_urgent_obs" value="/detection/laser_combined_detect/simple" />
-
-            <rosparam command="load"  file="$(find can_adapter)/params/jd01.yaml"/>
-
-            <!-- dist to start fixing speed (m/s) = limit speed * ratio (TODO::Use current_speed when vehicle status can publish)-->
-            <param name="ratio_fix_speed" value="4" type="double" /> 
-            <!-- <param name="dist_front_fix_speed" value="4" /> -->
-            <param name="dist_front_stop" value="1.0" type="double"/>
-            <!-- <param name="dist_back_fix_speed" value="/SmartcarState" /> -->
-            <param name="dist_back_stop" value="1.0" type="double"/>
-
-            <!-- Distance to enter ending process -->
-            <param name="distance_ending_process" value="6.0" type="double"/>
-
-            <!-- 最小和最大速度限制 -->
-            <param name="min_speed_limit" value="0.1" type="double"/>
-            <param name="max_speed_limit" value="1.0" type="double"/>
-        </node>
-
     </group>
 
     <group if="$(eval htc_car_mode == 'yunle_jd01_debug')">

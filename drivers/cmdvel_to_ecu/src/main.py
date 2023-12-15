@@ -15,7 +15,7 @@ class App:
         self.steer_type = rospy.get_param("~steer_type", default="akm")
 
     def add_pub(self):
-        self.pub_ecu = rospy.Publisher("ecu_raw", ecu, queue_size=5)
+        self.pub_ecu = rospy.Publisher("ecu", ecu, queue_size=5)
 
     def add_sub(self):
         rospy.Subscriber("/cmd_vel", Twist, self.cb_cmdvel, queue_size=5)

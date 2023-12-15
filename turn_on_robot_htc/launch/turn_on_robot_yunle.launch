@@ -56,8 +56,10 @@
     <arg name="output_tf_frame_id" default="base_link"/>
     <arg name="gnss_reinit_fitness" default="500.0" />
     <arg name="voxel_leaf_size" default="1.5" />
+    <arg name="enable_debug" default="false" />
 
     <node pkg="yunle_ndt_localization" type="ndt_localization_node" name="ndt_localization" output="screen" required="true">
+        <param name="enable_debug" value="$(arg enable_debug)" />
         <param name="method_type" value="$(arg method_type)" />
         <param name="use_gnss" value="$(arg use_gnss)" />
         <param name="use_odom" value="$(arg use_odom)" />
