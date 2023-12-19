@@ -1,26 +1,47 @@
 #include "ndt_mapping.h"
 
 ndt_mapping::ndt_mapping(ros::NodeHandle &nh, ros::NodeHandle &private_nh)
-{
+{}
+
+ndt_mapping::~ndt_mapping() {};
+
+void ndt_mapping::run() {
+
+  ros::CallbackQueue control_queue;
+
+  init_param();
 
   points_sub = nh.subscribe("points_raw", 100000, &ndt_mapping::points_callback, this);
   imu_sub = nh.subscribe("imu_raw", 100000, &ndt_mapping::imu_callback, this);
+  output_sub = nh.subscribe("mapping/save_map", 10, &ndt_mapping::output_callback, this);
+
   ndt_map_pub = nh.advertise<sensor_msgs::PointCloud2>("/ndt_map", 1000);
   current_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/current_pose", 1000);
   history_trajectory_pub = nh.advertise<nav_msgs::Path>("/ndt/history_trajectory", 10);
+  // control save
+
+  ros::spin();
+
+}
+
+void ndt_mapping::init_param() {
 
   // init params
   private_nh.param<int>("max_iter", max_iter, 30);
-  private_nh.param<double>("setp_size", step_size, 0.1);
+  private_nh.param<double>("setp_size", step_size, 0.5);
   private_nh.param<float>("ndt_res", ndt_res, 5.0);
   private_nh.param<double>("trans_eps", trans_eps, 0.01);
-  private_nh.param<double>("voxel_leaf_size", voxel_leaf_size, 2.0);
+  private_nh.param<double>("voxel_leaf_size", voxel_leaf_size, 1.0);
   private_nh.param<double>("scan_rate", scan_rate, 10.0);
-  private_nh.param<double>("min_scan_range", min_scan_range, 5.0);
+  private_nh.param<double>("min_scan_range", min_scan_range, 1.0);
   private_nh.param<double>("max_scan_range", max_scan_range, 200.0);
   private_nh.param<double>("min_add_scan_shift", min_add_scan_shift, 1.5);
   private_nh.param<bool>("use_imu", use_imu, false);
   private_nh.param<std::string>("imu_topic", imu_topic, "imu_raw");
+  private_nh.param<std::string>("base_dir", base_dir, "/home/data");
+  private_nh.param<std::string>("parent_path", parent_path, "test");
+  private_nh.param<std::string>("child_path", child_path, "code");
+  
 
   // init tf params
   private_nh.param<double>("x", _tf_x, 0.0);
@@ -29,7 +50,6 @@ ndt_mapping::ndt_mapping(ros::NodeHandle &nh, ros::NodeHandle &private_nh)
   private_nh.param<double>("roll", _tf_roll, 0.0);
   private_nh.param<double>("pitch", _tf_pitch, 0.0);
   private_nh.param<double>("yaw", _tf_yaw, 0.0);
-
 
   private_nh.param<int>("initial_scan_loaded", initial_scan_loaded, 0);
   private_nh.param<bool>("incremental_voxel_update", incremental_voxel_update, false);  
@@ -126,7 +146,14 @@ ndt_mapping::ndt_mapping(ros::NodeHandle &nh, ros::NodeHandle &private_nh)
 
 }
 
-ndt_mapping::~ndt_mapping() {};
+void ndt_mapping::output_callback(const automotive_msgs::SaveMap::ConstPtr& input) {
+  pcl::PointCloud<pcl::PointXYZI>::Ptr map_ptr(new pcl::PointCloud<pcl::PointXYZI>(map));
+  map_ptr->header.frame_id = "map";
+  sensor_msgs::PointCloud2::Ptr map_msg_ptr(new sensor_msgs::PointCloud2);
+  pcl::toROSMsg(*map_ptr, *map_msg_ptr);
+  std::string filename = base_dir + "/" + parent_path + "/" + child_path + "/lidar_mode/pcd_map/static_map/static.map";
+  pcl::io::savePCDFileASCII(filename, *map_ptr);
+}
 
 void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& input) 
 {

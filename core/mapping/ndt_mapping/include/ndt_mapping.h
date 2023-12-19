@@ -4,6 +4,7 @@
 #include <string>
 
 #include <ros/ros.h>
+#include <ros/callback_queue.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <sensor_msgs/Imu.h>
 #include <tf/transform_broadcaster.h>
@@ -16,6 +17,9 @@
 #include <pcl/registration/ndt.h>
 
 #include <time.h>
+#include <thread>
+
+#include <automotive_msgs/SaveMap.h>
 
 class ndt_mapping
 {
@@ -24,12 +28,17 @@ public:
   ndt_mapping(ros::NodeHandle &nh, ros::NodeHandle &private_nh);
   ~ndt_mapping();
 
+  void run();
+
 private:
   ros::NodeHandle nh, private_nh;
   
   ros::Subscriber points_sub;
   ros::Subscriber odom_sub;
   ros::Subscriber imu_sub;
+  ros::Subscriber output_sub;
+
+  ros::SubscribeOptions map_ops;
 
   enum class MethodType
   {
@@ -99,6 +108,10 @@ private:
 
   std::string imu_topic;
 
+  std::string base_dir;
+  std::string parent_path;
+  std::string child_path;
+
   ros::Publisher ndt_map_pub, current_pose_pub;
   ros::Publisher history_trajectory_pub;
   geometry_msgs::PoseStamped current_pose_msg;
@@ -122,8 +135,9 @@ private:
 
   double PI = 3.141592654;
 
+  void init_param();
   void param_callback();
-  void output_callback();
+  void output_callback(const automotive_msgs::SaveMap::ConstPtr& input);
 
   void points_callback(const sensor_msgs::PointCloud2::ConstPtr& input);
   void imu_callback(const sensor_msgs::Imu::Ptr& input);

@@ -49,6 +49,7 @@ namespace can_adapter
         }
 
         // 如果laser数据有延迟, 则标识传感器异常, 禁止行车
+        ROS_INFO("[ZZZ : can_adapter] ===> front_obstacle_update_time:%d diff:%d", front_obstacle_update_time, (now - front_obstacle_update_time));
         if ( (now - front_obstacle_update_time).toSec() > 0.5 ) {
             // ROS_INFO("brake front_obstacle_update_time delay");
             return automotive_msgs::CanAdapterStatus::DEVICE_UNFUNC;

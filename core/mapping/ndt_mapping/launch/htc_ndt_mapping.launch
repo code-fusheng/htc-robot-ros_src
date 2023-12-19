@@ -1,7 +1,8 @@
 <launch>
 
-    <!-- htc ndt param -->
-    
+    <arg name="base_dir" default="/home/robot/htc-robot-ros_ws/data" />
+    <arg name="parent_path" default="test" />
+    <arg name="child_path" default="code" />
 
     <!-- NDT Parameters -->
     <arg name="max_iter" default="30" doc="max iteration for alignment"/>
@@ -16,20 +17,26 @@
     <arg name="max_scan_range" default="200.0" doc="max_scan_range"/>
     <arg name="min_add_scan_shift" default="0.1" doc="a moving distance of a map update[m]"/>
     <arg name="use_imu" default="true" doc="use imu or not"/>
+    <arg name="imu_topic" default="imu_raw" />
 
     <!-- Static Transform Parameters -->
     <!-- 0.37 0 0.275   -1.57 -->
-    <arg name="x" default="0.37" doc="static_transform_x localizer_to_base_link"/>
-    <arg name="y" default="0.0" doc="static_transform_y localizer_to_base_link"/>
-    <arg name="z" default="0.275" doc="static_transform_z localizer_to_base_link"/>
-    <arg name="roll" default="0.0" doc="static_transform_roll localizer_to_base_link"/>
-    <arg name="pitch" default="0.0" doc="static_transform_pitch localizer_to_base_link"/>
-    <arg name="yaw" default="-1.57" doc="static_transform_yaw localizer_to_base_link"/>
+    <arg name="x" default="0" doc="static_transform_x lidar_to_base_link"/>
+    <arg name="y" default="0.0" doc="static_transform_y lidar_to_base_link"/>
+    <arg name="z" default="0" doc="static_transform_z lidar_to_base_link"/>
+    <arg name="roll" default="0.0" doc="static_transform_roll lidar_to_base_link"/>
+    <arg name="pitch" default="0.0" doc="static_transform_pitch lidar_to_base_link"/>
+    <arg name="yaw" default="0" doc="static_transform_yaw lidar_to_base_link"/>
 
     <!-- Save Map -->
-    <node pkg="pcl_ros" type="pointcloud_to_pcd" name="pointcloud_to_pcd" args="input:=/ndt_map _prefix:=$(find htc_ndt_mapping)/map/map_" output="screen"/>
+    <!-- <node pkg="pcl_ros" type="pointcloud_to_pcd" name="pointcloud_to_pcd" args="input:=/ndt_map _prefix:=$(find htc_ndt_mapping)/map/map_" output="screen"/> -->
+    
     <!-- Generate Map -->
-    <node pkg="htc_ndt_mapping" type="htc_ndt_mapping" name="htc_ndt_mapping" output="screen">
+    <node pkg="ndt_mapping" type="htc_ndt_mapping" name="htc_ndt_mapping" output="screen">
+      <param name="base_dir" value="$(arg base_dir)" />
+      <param name="parent_path" value="$(arg parent_path)" />
+      <param name="child_path" value="$(arg child_path)" />
+
       <param name="max_iter" value="$(arg max_iter)" />
       <param name="step_size" value="$(arg step_size)" />
       <param name="ndt_res" value="$(arg ndt_res)" />
@@ -41,6 +48,7 @@
       <param name="max_scan_range" value="$(arg max_scan_range)" />
       <param name="min_add_scan_shift" value="$(arg min_add_scan_shift)" />
       <param name="use_imu" value="$(arg use_imu)" />
+      <param name="imu_topic" value="$(arg imu_topic)" />
 
       <param name="x" value="$(arg x)" />
       <param name="y" value="$(arg y)" />

@@ -7,6 +7,10 @@
     <param name="lidar_topic" value="/rslidar_points"/>
     <param name="imu_frame" value="imu"/>
 
+    <!-- 公共基础路径 -->
+    <param name="base_dir" value="/home/robot/htc-robot-ros_ws/data" /> 
+
+
     <!-- 控制类型 -->
     <arg name="htc_cmd_mode" default="steering" doc="opt: steering" />
     <!-- cmd topic -->

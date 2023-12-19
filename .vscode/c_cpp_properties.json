@@ -17,7 +17,7 @@
         "/home/code/htc-robot-ros_ws/src/turn_on_robot_htc/include/**",
         "/home/code/htc-robot-ros_ws/src/vel_pkg/include/**",
         "/home/code/htc-robot-ros_ws/src/wpr_simulation/include/**",
-        "/home/code/htc-robot-ros_ws/src/core/mapping/htc_ndt_mapping/include/**",
+        "/home/code/htc-robot-ros_ws/src/core/mapping/ndt_mapping/include/**",
         "/home/code/htc-robot-ros_ws/src/core/localizer/htc_ndt_localizer/include/**",
         "/home/code/htc-robot-ros_ws/src/core/map/htc_pcd_map_manager/include/**",
         "/home/code/htc-robot-ros_ws/src/core/control/twist_to_ecu/include/**",
