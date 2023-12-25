@@ -1,9 +1,12 @@
 <launch>
 
     <!-- 全局参数定义 -->
+    <arg name="is_base" default="false" />
 
     <!-- 公共基础路径 -->
     <param name="base_dir" value="/home/robot/htc-robot-ros_ws/data" />
+    <param name="parent_path" value="test" />
+    <param name="child_path" value="t0" />
 
     <!-- lidar -->
     <!-- 激光雷达类型 -->
@@ -11,6 +14,13 @@
     <arg name="htc_lidar_frame" value="lidar"/>
     <arg name="htc_lidar_scan_topic" default="/scan" />
     <arg name="htc_lidar_points_topic" default="/points_raw" />
+
+    <!-- 激光雷达控制节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/lidar_htc.launch">
+        <arg name="htc_lidar_frame" value="$(arg htc_lidar_frame)"/>
+        <arg name="htc_lidar_mode" value="$(arg htc_lidar_mode)" />
+        <arg name="htc_lidar_points_topic" value="$(arg htc_lidar_points_topic)" />
+    </include>
 
     <!-- imu -->
     <arg name="htc_imu_mode" default="N100" />
@@ -29,8 +39,9 @@
     <arg name="tf_lidar_roll"  value="0" />
     <arg name="tf_lidar_pitch" value="0" />
     <arg name="tf_lidar_yaw"   value="-1.57" />
+
     <!-- ndt_mapping -->
-    <include file="$(find ndt_mapping)/include/htc_ndt_mapping.launch">
+    <include file="$(find ndt_mapping)/launch/htc_ndt_mapping.launch">
         <arg name="x" value="$(arg tf_lidar_x)" />
         <arg name="y" value="$(arg tf_lidar_y)" />
         <arg name="z" value="$(arg tf_lidar_z)" />
@@ -40,4 +51,9 @@
         <arg name="use_imu" value="true"/>
     </include>
 
+    <!-- ndt_localizer -->
+    <!-- <include if="$(arg !is_base)" file="$(find ndt_localizer)/launch/htc_ndt_localizer.launch">
+        <arg name="use_imu" value="true"/>
+    </include> -->
 
+</launch>

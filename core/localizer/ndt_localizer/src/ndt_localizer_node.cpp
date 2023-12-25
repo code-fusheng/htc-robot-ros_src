@@ -6,10 +6,7 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nh;
     ros::NodeHandle private_nh("~");
-
-    ndt_localizer ndt_localizer(nh, private_nh);
-
-    ros::spin();
-
+    ndt_localizer node(nh, private_nh);
+    node.run();
     return 0;
 }

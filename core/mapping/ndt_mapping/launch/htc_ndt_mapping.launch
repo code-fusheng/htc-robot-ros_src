@@ -1,8 +1,6 @@
 <launch>
 
-    <arg name="base_dir" default="/home/robot/htc-robot-ros_ws/data" />
-    <arg name="parent_path" default="test" />
-    <arg name="child_path" default="code" />
+    <arg name="map_path" default="/home/robot/htc-robot-ros_ws/data/map" />
 
     <!-- NDT Parameters -->
     <arg name="max_iter" default="30" doc="max iteration for alignment"/>
@@ -13,7 +11,7 @@
 
     <!-- Mapping Parameters -->
     <arg name="scan_rate" default="10.0" doc="scan_rate"/>
-    <arg name="min_scan_range" default="2" doc="min_scan_range"/>
+    <arg name="min_scan_range" default="0" doc="min_scan_range"/>
     <arg name="max_scan_range" default="200.0" doc="max_scan_range"/>
     <arg name="min_add_scan_shift" default="0.1" doc="a moving distance of a map update[m]"/>
     <arg name="use_imu" default="true" doc="use imu or not"/>
@@ -33,9 +31,7 @@
     
     <!-- Generate Map -->
     <node pkg="ndt_mapping" type="htc_ndt_mapping" name="htc_ndt_mapping" output="screen">
-      <param name="base_dir" value="$(arg base_dir)" />
-      <param name="parent_path" value="$(arg parent_path)" />
-      <param name="child_path" value="$(arg child_path)" />
+      <param name="map_path" value="$(arg map_path)" />
 
       <param name="max_iter" value="$(arg max_iter)" />
       <param name="step_size" value="$(arg step_size)" />

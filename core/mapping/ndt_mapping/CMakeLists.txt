@@ -23,10 +23,13 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   pcl_conversions
   automotive_msgs
+  htcbot_msgs
+  ndt_cpu
 )
 
 catkin_package(
   CATKIN_DEPENDS std_msgs  
+  ndt_cpu
   DEPENDS PCL
 )
 

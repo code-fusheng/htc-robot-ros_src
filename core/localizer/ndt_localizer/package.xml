@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>htc_ndt_localizer</name>
+  <name>ndt_localizer</name>
   <version>0.0.0</version>
   <description>The htc_ndt_localizer package</description>
 

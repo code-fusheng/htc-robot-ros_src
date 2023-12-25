@@ -1,0 +1,9 @@
+<library path="lib/libhtcbot_control">
+  <class name="htcbot_control/HtcbotControl"
+         type="htcbot_control::HtcbotControl"
+         base_class_type="rviz::Panel">
+    <description>
+      A panel widget for htcbot control.
+    </description>
+  </class>
+</library>

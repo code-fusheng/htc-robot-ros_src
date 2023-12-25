@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(htc_ndt_localizer)
+project(ndt_localizer)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -27,6 +27,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_conversions
   pcl_ros
   autoware_msgs 
+  ndt_cpu
 )
 
 catkin_package(
@@ -43,6 +44,7 @@ catkin_package(
   pcl_conversions
   pcl_ros
   autoware_msgs
+  ndt_cpu
   DEPENDS PCL
 )
 

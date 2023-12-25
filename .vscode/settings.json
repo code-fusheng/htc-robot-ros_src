@@ -106,9 +106,11 @@
         "hash_map": "cpp",
         "hash_set": "cpp",
         "cfenv": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "filesystem": "cpp"
     },
     "commentTranslate.source": "Google",
+    "commentTranslate.hover.concise": true
     // "fileheader.Author": "robot_Fu.Sheng",
     // "fileheader.LastModifiedBy": "robot_Fu.Sheng"
 }

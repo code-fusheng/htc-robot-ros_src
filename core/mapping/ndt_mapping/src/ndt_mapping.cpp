@@ -11,10 +11,16 @@ void ndt_mapping::run() {
 
   init_param();
 
-  points_sub = nh.subscribe("points_raw", 100000, &ndt_mapping::points_callback, this);
-  imu_sub = nh.subscribe("imu_raw", 100000, &ndt_mapping::imu_callback, this);
-  output_sub = nh.subscribe("mapping/save_map", 10, &ndt_mapping::output_callback, this);
+  switch_sub = nh.subscribe("/htcbot/mode_switch", 10, &ndt_mapping::swtich_callback, this);
+  map_path_conf_sub = nh.subscribe("/htcbot/map_path_conf", 10, &ndt_mapping::path_conf_callback, this);
 
+  if (mode_switch) {
+    // sub datasource input
+    points_sub = nh.subscribe("points_raw", 100000, &ndt_mapping::points_callback, this);
+    imu_sub = nh.subscribe("imu_raw", 100000, &ndt_mapping::imu_callback, this);
+  }
+
+  // output_sub = nh.subscribe("mapping/save_map", 10, &ndt_mapping::output_callback, this);
   ndt_map_pub = nh.advertise<sensor_msgs::PointCloud2>("/ndt_map", 1000);
   current_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/current_pose", 1000);
   history_trajectory_pub = nh.advertise<nav_msgs::Path>("/ndt/history_trajectory", 10);
@@ -37,12 +43,12 @@ void ndt_mapping::init_param() {
   private_nh.param<double>("max_scan_range", max_scan_range, 200.0);
   private_nh.param<double>("min_add_scan_shift", min_add_scan_shift, 1.5);
   private_nh.param<bool>("use_imu", use_imu, false);
-  private_nh.param<std::string>("imu_topic", imu_topic, "imu_raw");
-  private_nh.param<std::string>("base_dir", base_dir, "/home/data");
-  private_nh.param<std::string>("parent_path", parent_path, "test");
-  private_nh.param<std::string>("child_path", child_path, "code");
+  private_nh.param<bool>("use_odom", use_odom, false);
+  private_nh.param<std::string>("imu_topic", _imu_topic, "/imu_raw");
+  private_nh.param<std::string>("lidar_topic", _lidar_topic, "/points_raw");
+  private_nh.param<std::string>("odom_topic", _odom_topic, "/odom");
+  private_nh.param<std::string>("map_path", map_path, "");
   
-
   // init tf params
   private_nh.param<double>("x", _tf_x, 0.0);
   private_nh.param<double>("y", _tf_y, 0.0);
@@ -58,6 +64,11 @@ void ndt_mapping::init_param() {
   std::cout << "(tf_x,tf_y,tf_z,tf_roll,tf_pitch,tf_yaw): (" << _tf_x << ", " << _tf_y << ", " << _tf_z << ", "
             << _tf_roll << ", " << _tf_pitch << ", " << _tf_yaw << ")" << std::endl;
 
+  /**
+   * 计算激光雷达相对于车身底盘的初始变换矩阵 激光雷达 localizer => 车身底盘 base_link 坐标系
+   * 对应的关系由 tf_x, tf_y, tf_z 给出
+  */
+
   // 初始化平移向量
   Eigen::Translation3f tl_btol(_tf_x, _tf_y, _tf_z);                 // tl: translation
   // 初始化旋转向量，分别绕着 x、y、z 轴旋转
@@ -67,22 +78,13 @@ void ndt_mapping::init_param() {
   tf_btol = (tl_btol * rot_z_btol * rot_y_btol * rot_x_btol).matrix();
   tf_ltob = tf_btol.inverse();
 
-  // current_pose: 当前帧点云车辆位置
-  current_pose.x = 0.0;
-  current_pose.y = 0.0;
-  current_pose.z = 0.0;
-  current_pose.roll = 0.0;
-  current_pose.pitch = 0.0;
-  current_pose.yaw = 0.0;
-
-  // previous: 前一帧点云车辆的位置
+   // previous: 前一帧点云车辆的位置
   previous_pose.x = 0.0;
   previous_pose.y = 0.0;
   previous_pose.z = 0.0;
   previous_pose.roll = 0.0;
   previous_pose.pitch = 0.0;
   previous_pose.yaw = 0.0;
-
   // ndt_pose: NDT 配准算法得到的车辆位置
   ndt_pose.x = 0.0;
   ndt_pose.y = 0.0;
@@ -90,7 +92,13 @@ void ndt_mapping::init_param() {
   ndt_pose.roll = 0.0;
   ndt_pose.pitch = 0.0;
   ndt_pose.yaw = 0.0;
-
+  // current_pose: 当前帧点云车辆位置
+  current_pose.x = 0.0;
+  current_pose.y = 0.0;
+  current_pose.z = 0.0;
+  current_pose.roll = 0.0;
+  current_pose.pitch = 0.0;
+  current_pose.yaw = 0.0;
   // current_pose_imu: 当前帧imu位置
   current_pose_imu.x = 0.0;
   current_pose_imu.y = 0.0;
@@ -98,7 +106,6 @@ void ndt_mapping::init_param() {
   current_pose_imu.roll = 0.0;
   current_pose_imu.pitch = 0.0;
   current_pose_imu.yaw = 0.0;
-
   // guess_pose: NDT 配准算法所需的初始位置
   guess_pose.x = 0.0;
   guess_pose.y = 0.0;
@@ -106,7 +113,13 @@ void ndt_mapping::init_param() {
   guess_pose.roll = 0.0;
   guess_pose.pitch = 0.0;
   guess_pose.yaw = 0.0;
-
+  // added: 用于计算地图更新的距离变化
+  added_pose.x = 0.0;
+  added_pose.y = 0.0;
+  added_pose.z = 0.0;
+  added_pose.roll = 0.0;
+  added_pose.pitch = 0.0;
+  added_pose.yaw = 0.0;
   // diff: 前后两次接收到传感器(IMU或者odom)消息时位姿的变化
   diff_x = 0.0;
   diff_y = 0.0;
@@ -114,12 +127,27 @@ void ndt_mapping::init_param() {
   diff_yaw = 0.0;
 
   // offset: 位姿的偏差矫正
+
   offset_imu_x = 0.0;
   offset_imu_y = 0.0;
   offset_imu_z = 0.0;
   offset_imu_roll = 0.0;
   offset_imu_pitch = 0.0;
   offset_imu_yaw = 0.0;
+
+  offset_odom_x = 0.0;
+  offset_odom_y = 0.0;
+  offset_odom_z = 0.0;
+  offset_odom_roll = 0.0;
+  offset_odom_pitch = 0.0;
+  offset_odom_yaw = 0.0;
+
+  offset_imu_odom_x = 0.0;
+  offset_imu_odom_y = 0.0;
+  offset_imu_odom_z = 0.0;
+  offset_imu_odom_roll = 0.0;
+  offset_imu_odom_pitch = 0.0;
+  offset_imu_odom_yaw = 0.0;
 
   // 发布和订阅相关消息
   map.header.frame_id = "map";
@@ -135,6 +163,8 @@ void ndt_mapping::init_param() {
 
   is_first_map = true;
 
+  mode_switch = false;
+
   std::cout << "ndt_res: " << ndt_res << std::endl;
   std::cout << "step_size: " << step_size << std::endl;
   std::cout << "trans_epsilon: " << trans_eps << std::endl;
@@ -143,7 +173,39 @@ void ndt_mapping::init_param() {
   std::cout << "min_scan_range: " << min_scan_range << std::endl;
   std::cout << "max_scan_range: " << max_scan_range << std::endl;
   std::cout << "min_add_scan_shift: " << min_add_scan_shift << std::endl;
+  std::cout << "use_odom: " << use_odom << std::endl;
+  std::cout << "use_imu: " << use_imu << std::endl;
+  std::cout << "odom_topic: " << _odom_topic << std::endl;
+  std::cout << "lidar_topic: " << _lidar_topic << std::endl;
+  std::cout << "imu_topic: " << _imu_topic << std::endl;
 
+}
+
+void ndt_mapping::swtich_callback(const htcbot_msgs::ModeSwitch::ConstPtr& input) {
+  ROS_INFO("[htc_ndt_mapping] ==> mode: %s switch: %s", input->mode.c_str(), input->switch_to ? "true" : "false");
+  if (input->mode == "Mapping") {
+    mode_switch = input->switch_to ? true : false;
+    if (mode_switch) {
+      // sub datasource input
+      ROS_INFO("xxxx");
+      points_sub = nh.subscribe("points_raw", 100000, &ndt_mapping::points_callback, this);
+      imu_sub = nh.subscribe("imu_raw", 100000, &ndt_mapping::imu_callback, this);
+    } else {
+      ROS_INFO("yyyy");
+      // save map
+      pcl::PointCloud<pcl::PointXYZI>::Ptr map_ptr(new pcl::PointCloud<pcl::PointXYZI>(map));
+      map_ptr->header.frame_id = "map";
+      sensor_msgs::PointCloud2::Ptr map_msg_ptr(new sensor_msgs::PointCloud2);
+      pcl::toROSMsg(*map_ptr, *map_msg_ptr);
+      std::string filename = map_path + "/static.map";
+      pcl::io::savePCDFileASCII(filename, *map_ptr);
+    }
+  }
+}
+
+void ndt_mapping::path_conf_callback(const htcbot_msgs::MapPathConf::ConstPtr& input) {
+  ROS_INFO("[htc_ndt_localizer] ==> path_static: %s", input->path_static.c_str());
+  map_path = input->path_static;
 }
 
 void ndt_mapping::output_callback(const automotive_msgs::SaveMap::ConstPtr& input) {
@@ -151,13 +213,12 @@ void ndt_mapping::output_callback(const automotive_msgs::SaveMap::ConstPtr& inpu
   map_ptr->header.frame_id = "map";
   sensor_msgs::PointCloud2::Ptr map_msg_ptr(new sensor_msgs::PointCloud2);
   pcl::toROSMsg(*map_ptr, *map_msg_ptr);
-  std::string filename = base_dir + "/" + parent_path + "/" + child_path + "/lidar_mode/pcd_map/static_map/static.map";
+  std::string filename = map_path + "/static.map";
   pcl::io::savePCDFileASCII(filename, *map_ptr);
 }
 
 void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& input) 
 {
-
   // r 表示激光点云到激光雷达的距离
   double r;
   pcl::PointXYZI p;
@@ -217,6 +278,7 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
   voxel_grid_filter.setInputCloud(scan_ptr);
   voxel_grid_filter.filter(*filtered_scan_ptr);
 
+  // 设置转换参数 Epsilon、最大步长、网格大小、最大迭代次数 以及设置输入数据为 已过滤点云 filtered_scan_ptr
   ndt.setTransformationEpsilon(trans_eps);
   ndt.setStepSize(step_size);
   ndt.setResolution(ndt_res);
@@ -239,16 +301,26 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
   guess_pose.roll = previous_pose.roll;
   guess_pose.pitch = previous_pose.pitch;
   guess_pose.yaw = previous_pose.yaw + diff_yaw;
-  // 选择使用初值的计算方法
-  if (use_imu == true)
+  // 1. 使用 imu + odom 融合
+  if (use_imu == true && use_odom == true)
+    imu_odom_calc(current_scan_time);
+  // 2. 单独使用 imu 求初值
+  if (use_imu == true && use_odom == false)
     imu_calc(current_scan_time);
-
+  // 3. 单独使用 odom 里程计求初值
+  if (use_imu == false && use_odom == true)
+    odom_calc(current_scan_time);
+  // 声明 NDT 初值 => 根据方法赋初值
   pose guess_pose_for_ndt;
   
-  if (use_imu == true)
+  if (use_imu == true && use_odom == true)
+    guess_pose_for_ndt = guess_pose_imu_odom;
+  else if (use_imu == true && use_odom == false)
     guess_pose_for_ndt = guess_pose_imu;
+  else if (use_imu == false && use_odom == true)
+    guess_pose_for_ndt = guess_pose_odom;
   else
-  // 使用原始初值
+    // 使用原始初值
     guess_pose_for_ndt = guess_pose;
 
   // 利用 current_pose 位置的位姿旋转量 来初始化关于xyz轴的旋转向量
@@ -263,17 +335,29 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
   
   pcl::PointCloud<pcl::PointXYZI>::Ptr output_cloud(new pcl::PointCloud<pcl::PointXYZI>);
 
-  // 进行 NDT 配准
-  ndt.align(*output_cloud, init_guess);
-  // 计算目标点云与源点云之间的欧式距离平方和作为适应分数
-  fitness_score = ndt.getFitnessScore();
-  // 得到最终的激光雷达相对于 map 坐标系的变换矩阵 t_localizer
-  t_localizer = ndt.getFinalTransformation();
-  // 判断是否收敛
-  has_converged = ndt.hasConverged();
-  // 得到最后的迭代次数
-  final_num_iteration = ndt.getFinalNumIteration();
-  transformation_probability = ndt.getTransformationProbability();
+  // 根据选择类型，进行 NDT 配准
+  if (method_type == MethodType::PCL_GENERIC)
+  {
+    // 开始 NDT 配准，ndt.align 以 init_guess 为初值进行迭代优化 => 然后将配准结果保存在 output_cloud 点云中
+    ndt.align(*output_cloud, init_guess);
+    // 计算目标点云与源点云之间的欧式距离平方和作为适应分数
+    fitness_score = ndt.getFitnessScore();
+    // 得到最终的激光雷达相对于 map 坐标系的变换矩阵 t_localizer
+    t_localizer = ndt.getFinalTransformation();
+    // 判断是否收敛
+    has_converged = ndt.hasConverged();
+    // 得到最后的迭代次数
+    final_num_iteration = ndt.getFinalNumIteration();
+    transformation_probability = ndt.getTransformationProbability();
+  }
+  else if (method_type == MethodType::PCL_ANH)
+  {
+    anh_ndt.align(init_guess);
+    fitness_score = anh_ndt.getFitnessScore();
+    t_localizer = anh_ndt.getFinalTransformation();
+    has_converged = anh_ndt.hasConverged();
+    final_num_iteration = anh_ndt.getFinalNumIteration();
+  }
 
   t_base_link = t_localizer * tf_ltob;
   // 将原始图像经过 NDT 变换之后输出转换点云 transformed_scan_ptr
@@ -285,15 +369,11 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
   // 前三行 前三列 表示旋转矩阵
   // 第四列前三行表示的是平移向量
 
-  mat_l.setValue(static_cast<double>(t_localizer(0, 0)),
-                   static_cast<double>(t_localizer(0, 1)),
-                   static_cast<double>(t_localizer(0, 2)),
-                   static_cast<double>(t_localizer(1, 0)),
-                   static_cast<double>(t_localizer(1, 1)),
-                   static_cast<double>(t_localizer(1, 2)),
-                   static_cast<double>(t_localizer(2, 0)),
-                   static_cast<double>(t_localizer(2, 1)),
-                   static_cast<double>(t_localizer(2, 2)));
+  mat_l.setValue(static_cast<double>(t_localizer(0, 0)), static_cast<double>(t_localizer(0, 1)),
+                 static_cast<double>(t_localizer(0, 2)), static_cast<double>(t_localizer(1, 0)),
+                 static_cast<double>(t_localizer(1, 1)), static_cast<double>(t_localizer(1, 2)),
+                 static_cast<double>(t_localizer(2, 0)), static_cast<double>(t_localizer(2, 1)),
+                 static_cast<double>(t_localizer(2, 2)));
 
   mat_b.setValue(static_cast<double>(t_base_link(0, 0)), static_cast<double>(t_base_link(0, 1)),
                  static_cast<double>(t_base_link(0, 2)), static_cast<double>(t_base_link(1, 0)),
@@ -305,8 +385,7 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
   localizer_pose.x = t_localizer(0, 3);
   localizer_pose.y = t_localizer(1, 3);
   localizer_pose.z = t_localizer(2, 3);
-  mat_l.getRPY(localizer_pose.roll, localizer_pose.pitch, localizer_pose.yaw,
-                 1);
+  mat_l.getRPY(localizer_pose.roll, localizer_pose.pitch, localizer_pose.yaw, 1);
 
   // Update ndt_pose
   ndt_pose.x = t_base_link(0, 3);
@@ -354,6 +433,20 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
   current_pose_imu.pitch = current_pose.pitch;
   current_pose_imu.yaw = current_pose.yaw;
 
+  current_pose_odom.x = current_pose.x;
+  current_pose_odom.y = current_pose.y;
+  current_pose_odom.z = current_pose.z;
+  current_pose_odom.roll = current_pose.roll;
+  current_pose_odom.pitch = current_pose.pitch;
+  current_pose_odom.yaw = current_pose.yaw;
+
+  current_pose_imu_odom.x = current_pose.x;
+  current_pose_imu_odom.y = current_pose.y;
+  current_pose_imu_odom.z = current_pose.z;
+  current_pose_imu_odom.roll = current_pose.roll;
+  current_pose_imu_odom.pitch = current_pose.pitch;
+  current_pose_imu_odom.yaw = current_pose.yaw;
+
   current_velocity_imu_x = current_velocity_x;
   current_velocity_imu_y = current_velocity_y;
   current_velocity_imu_z = current_velocity_z;
@@ -376,6 +469,23 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
   offset_imu_pitch = 0.0;
   offset_imu_yaw = 0.0;
 
+  offset_odom_x = 0.0;
+  offset_odom_y = 0.0;
+  offset_odom_z = 0.0;
+  offset_odom_roll = 0.0;
+  offset_odom_pitch = 0.0;
+  offset_odom_yaw = 0.0;
+
+  offset_imu_odom_x = 0.0;
+  offset_imu_odom_y = 0.0;
+  offset_imu_odom_z = 0.0;
+  offset_imu_odom_roll = 0.0;
+  offset_imu_odom_pitch = 0.0;
+  offset_imu_odom_yaw = 0.0;
+
+  // Calculate the shift between added_pos and current_pos
+  // 计算 added_pose 与 current_pose 之间的距离
+  // added_pose 为上一次更新地图的位姿信息
   double shift = sqrt(pow(current_pose.x - added_pose.x, 2.0) +
                         pow(current_pose.y - added_pose.y, 2.0));
   double _diff_angle = getAbsoluteAngleDiff(current_pose.yaw, added_pose.yaw) ; 
@@ -390,7 +500,15 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
     added_pose.pitch = current_pose.pitch;
     added_pose.yaw = current_pose.yaw;
 
-    ndt.setInputTarget(map_ptr);
+    if (method_type == MethodType::PCL_GENERIC)
+      ndt.setInputTarget(map_ptr);
+    else if (method_type == MethodType::PCL_ANH)
+    {
+      if (incremental_voxel_update == true)
+        anh_ndt.updateVoxelGrid(transformed_scan_ptr);
+      else
+        anh_ndt.setInputTarget(map_ptr);
+    }
 
     // 声明 ROS 可用的点云对象
     sensor_msgs::PointCloud2::Ptr map_msg_ptr(new sensor_msgs::PointCloud2);
@@ -438,7 +556,7 @@ void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& inpu
 
 }
 
-void ndt_mapping::imu_callback(const sensor_msgs::Imu::Ptr& input) 
+void ndt_mapping::imu_callback(const sensor_msgs::Imu::Ptr& input)
 {
   // 当接收到 imu 的消息的时候，获取 imu 当前的时间戳 => 作为当前时间 current_time
   const ros::Time current_time = input->header.stamp;
@@ -485,16 +603,17 @@ void ndt_mapping::imu_callback(const sensor_msgs::Imu::Ptr& input)
     imu.angular_velocity.y = 0;
     imu.angular_velocity.z = 0;
   }
+}
 
-  // 利用 imu 计算位置初值 为 NDT 配准提供初始位置
-  imu_calc(input->header.stamp);
-
-  previous_time = current_time;
-  previous_imu_roll = imu_roll;
-  previous_imu_pitch = imu_pitch;
-  previous_imu_yaw = imu_yaw;
-
-};
+/**
+ * odom_callback 函数
+ * 以接收到的里程计信息为输入参数 调用 odom_calc 计算求得 NDT 的初始位姿估计
+*/
+void ndt_mapping::odom_callback(const nav_msgs::Odometry::ConstPtr& input)
+{
+  odom = *input;
+  odom_calc(input->header.stamp);
+}
 
 double ndt_mapping::wrapToPm(double a_num, const double a_max)
 {
@@ -572,7 +691,79 @@ void ndt_mapping::imu_calc(ros::Time current_time)
   previous_time = current_time;
 }
 
-double ndt_mapping::getAbsoluteAngleDiff(const double &current_yaw, const double &added_yaw) {
+void ndt_mapping::odom_calc(ros::Time current_time)
+{
+  static ros::Time previous_time = current_time;
+  // 获取前后两帧时间差
+  double diff_time = (current_time - previous_time).toSec();
+
+  // 计算两帧时间间隔内的里程计旋转角度
+  double diff_odom_roll = odom.twist.twist.angular.x * diff_time;
+  double diff_odom_pitch = odom.twist.twist.angular.y * diff_time;
+  double diff_odom_yaw = odom.twist.twist.angular.z * diff_time;
+  // 更新当前里程计位置的角度
+  current_pose_odom.roll += diff_odom_roll;
+  current_pose_odom.pitch += diff_odom_pitch;
+  current_pose_odom.yaw += diff_odom_yaw;
+  // diff_distance 表示在 x 方向的变化距离
+  // offset 表示车身不稳定造成的计算偏差
+  double diff_distance = odom.twist.twist.linear.x * diff_time;
+  offset_odom_x += diff_distance * cos(-current_pose_odom.pitch) * cos(current_pose_odom.yaw);
+  offset_odom_y += diff_distance * cos(-current_pose_odom.pitch) * sin(current_pose_odom.yaw);
+  offset_odom_z += diff_distance * sin(-current_pose_odom.pitch);
+
+  offset_odom_roll += diff_odom_roll;
+  offset_odom_pitch += diff_odom_pitch;
+  offset_odom_yaw += diff_odom_yaw;
+
+  // 对初始位置进行修正 = 前一帧位置 + 偏差位置
+  guess_pose_odom.x = previous_pose.x + offset_odom_x;
+  guess_pose_odom.y = previous_pose.y + offset_odom_y;
+  guess_pose_odom.z = previous_pose.z + offset_odom_z;
+  guess_pose_odom.roll = previous_pose.roll + offset_odom_roll;
+  guess_pose_odom.pitch = previous_pose.pitch + offset_odom_pitch;
+  guess_pose_odom.yaw = previous_pose.yaw + offset_odom_yaw;
+
+  previous_time = current_time;
+}
+
+/**
+ * 里程计 + imu 联合初值计算函数
+*/
+void ndt_mapping::imu_odom_calc(ros::Time current_time)
+{
+  static ros::Time previous_time = current_time;
+  double diff_time = (current_time - previous_time).toSec();
+
+  double diff_imu_roll = imu.angular_velocity.x * diff_time;
+  double diff_imu_pitch = imu.angular_velocity.y * diff_time;
+  double diff_imu_yaw = imu.angular_velocity.z * diff_time;
+
+  current_pose_imu_odom.roll += diff_imu_roll;
+  current_pose_imu_odom.pitch += diff_imu_pitch;
+  current_pose_imu_odom.yaw += diff_imu_yaw;
+
+  double diff_distance = odom.twist.twist.linear.x * diff_time;
+  offset_imu_odom_x += diff_distance * cos(-current_pose_imu_odom.pitch) * cos(current_pose_imu_odom.yaw);
+  offset_imu_odom_y += diff_distance * cos(-current_pose_imu_odom.pitch) * sin(current_pose_imu_odom.yaw);
+  offset_imu_odom_z += diff_distance * sin(-current_pose_imu_odom.pitch);
+
+  offset_imu_odom_roll += diff_imu_roll;
+  offset_imu_odom_pitch += diff_imu_pitch;
+  offset_imu_odom_yaw += diff_imu_yaw;
+
+  guess_pose_imu_odom.x = previous_pose.x + offset_imu_odom_x;
+  guess_pose_imu_odom.y = previous_pose.y + offset_imu_odom_y;
+  guess_pose_imu_odom.z = previous_pose.z + offset_imu_odom_z;
+  guess_pose_imu_odom.roll = previous_pose.roll + offset_imu_odom_roll;
+  guess_pose_imu_odom.pitch = previous_pose.pitch + offset_imu_odom_pitch;
+  guess_pose_imu_odom.yaw = previous_pose.yaw + offset_imu_odom_yaw;
+
+  previous_time = current_time;
+}
+
+double ndt_mapping::getAbsoluteAngleDiff(const double &current_yaw, const double &added_yaw) 
+{
   double diff = (current_yaw - added_yaw) * 180.0 / PI;
   diff = diff + 360*4;
   int res = int(diff) % 360;
