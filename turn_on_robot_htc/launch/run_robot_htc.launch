@@ -40,6 +40,12 @@
     <arg name="tf_lidar_pitch" value="0" />
     <arg name="tf_lidar_yaw"   value="0" />
 
+    <!-- pcb map manager -->
+    <node pkg="pcd_map_manager" type="pcd_map_manager" name="pcd_map_manager" output="screen">
+        <param name="margin" value="130.0" type="double" /> <!-- 需要加载的距离范围 m -->
+        <param name="update_interval" value="1000" type="double" /> <!-- 时间更新间隔 ms -->
+    </node>
+
     <!-- ndt_mapping -->
     <include file="$(find ndt_mapping)/launch/htc_ndt_mapping.launch">
         <arg name="x" value="$(arg tf_lidar_x)" />
