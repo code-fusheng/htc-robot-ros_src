@@ -1,0 +1,16 @@
+<launch>
+
+    <node pkg="laserscan_detector" type="laserscan_detector_node" name="laserscan_detector_node" output="screen">
+        <param name="bound_left" value="-0.5" type="double"/>
+        <param name="bound_right" value="0.5" type="double"/>
+        <param name="bound_back" value="0" type="double"/>
+        <param name="bound_front" value="0.5" type="double"/>
+        <param name="nums_of_obstacle" value="5" type="int"/>
+        <param name="scan_frame" value="laser" type="string"/>
+        <param name="scan_topic" value="scan" type="string"/>
+        <param name="debug" value="true" type="bool"/>
+        <!-- direction: 0-front 1-back -->
+        <param name="direction" value="0" type="int"/> 
+    </node>
+
+</launch>

@@ -84,7 +84,6 @@ ros-$ROS_DISTRO-rqt-runtime-monitor
 sudo apt install -y ros-$ROS_DISTRO-rgbd-launch \
 ros-$ROS_DISTRO-libuvc-camera \
 ros-$ROS_DISTRO-libuvc-ros \
-
 ros-$ROS_DISTRO-libuvc \
 ```
 
@@ -127,7 +126,7 @@ sudo udevadm control --reload-rules && udevadm trigger
 mkdir build
 cd build
 cmake ../ -DBUILD_EXAMPLES=ture
-makesudo make install
+make sudo make install
 sudo make install
 # 建议上科学
 git clone https://gitcode.net/mirrors/curl/curl.git

@@ -14,6 +14,8 @@
 #include <automotive_msgs/GridMapCreateConfig.h>
 #include <automotive_msgs/GridMapCreateStatus.h>
 
+#include <htcbot_msgs/GridMapBuild.h>
+
 namespace MAP_TOOLS{
 // default
 using Point = pcl::PointXYZI;
@@ -50,6 +52,8 @@ private:
 
     ros::Subscriber sub_create_grid_map_topic;
 
+    ros::Subscriber grid_map_build_sub;
+
 public:
     void setInFolder(const std::string &folder); // or input file
     void setOutFolder(const std::string &folder);
@@ -59,7 +63,7 @@ public:
     void check_point_type(const std::string &file);
 
     void cb_grid_map_create_task(const automotive_msgs::GridMapCreateConfigConstPtr &msg);
-
+    void handle_grid_map_build(const htcbot_msgs::GridMapBuildConstPtr &msg);
     bool do_process();
     
     void run();

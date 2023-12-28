@@ -11,16 +11,14 @@ void ndt_mapping::run() {
 
   init_param();
 
+  mapping_conf_sub = nh.subscribe("/htcbot/mapping_conf", 10, &ndt_mapping::mapping_conf_callback, this);
   switch_sub = nh.subscribe("/htcbot/mode_switch", 10, &ndt_mapping::swtich_callback, this);
   map_path_conf_sub = nh.subscribe("/htcbot/map_path_conf", 10, &ndt_mapping::path_conf_callback, this);
+  
+  // sub datasource input
+  points_sub = nh.subscribe("points_raw", 100000, &ndt_mapping::points_callback, this);
+  imu_sub = nh.subscribe("imu_raw", 100000, &ndt_mapping::imu_callback, this);
 
-  if (mode_switch) {
-    // sub datasource input
-    points_sub = nh.subscribe("points_raw", 100000, &ndt_mapping::points_callback, this);
-    imu_sub = nh.subscribe("imu_raw", 100000, &ndt_mapping::imu_callback, this);
-  }
-
-  // output_sub = nh.subscribe("mapping/save_map", 10, &ndt_mapping::output_callback, this);
   ndt_map_pub = nh.advertise<sensor_msgs::PointCloud2>("/ndt_map", 1000);
   current_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/current_pose", 1000);
   history_trajectory_pub = nh.advertise<nav_msgs::Path>("/ndt/history_trajectory", 10);
@@ -188,8 +186,6 @@ void ndt_mapping::swtich_callback(const htcbot_msgs::ModeSwitch::ConstPtr& input
     if (mode_switch) {
       // sub datasource input
       ROS_INFO("xxxx");
-      points_sub = nh.subscribe("points_raw", 100000, &ndt_mapping::points_callback, this);
-      imu_sub = nh.subscribe("imu_raw", 100000, &ndt_mapping::imu_callback, this);
     } else {
       ROS_INFO("yyyy");
       // save map
@@ -197,15 +193,34 @@ void ndt_mapping::swtich_callback(const htcbot_msgs::ModeSwitch::ConstPtr& input
       map_ptr->header.frame_id = "map";
       sensor_msgs::PointCloud2::Ptr map_msg_ptr(new sensor_msgs::PointCloud2);
       pcl::toROSMsg(*map_ptr, *map_msg_ptr);
-      std::string filename = map_path + "/static.map";
+      std::string filename = map_path + "/static.pcd";
       pcl::io::savePCDFileASCII(filename, *map_ptr);
     }
   }
 }
 
+void ndt_mapping::mapping_conf_callback(const htcbot_msgs::MappingConf::ConstPtr& input) {
+  map_path = input->save_dir.c_str();
+  voxel_leaf_size = input->voxel_size;
+  step_size = input->step_size;
+  if (mapping_state == htcbot_msgs::MappingConf::START_MAPPING) {
+    mapping_state = input->mapping_state;
+  } else if (mapping_state == htcbot_msgs::MappingConf::END_MAPPING) 
+  {
+    mapping_state = input->mapping_state;
+    pcl::PointCloud<pcl::PointXYZI>::Ptr map_ptr(new pcl::PointCloud<pcl::PointXYZI>(map));
+    map_ptr->header.frame_id = "map";
+    sensor_msgs::PointCloud2::Ptr map_msg_ptr(new sensor_msgs::PointCloud2);
+    pcl::toROSMsg(*map_ptr, *map_msg_ptr);
+    std::string filename = map_path + "/static.pcd";
+    pcl::io::savePCDFileASCII(filename, *map_ptr);
+  }
+   
+}
+
 void ndt_mapping::path_conf_callback(const htcbot_msgs::MapPathConf::ConstPtr& input) {
-  ROS_INFO("[htc_ndt_localizer] ==> path_static: %s", input->path_static.c_str());
-  map_path = input->path_static;
+  ROS_INFO("[htc_ndt_localizer] ==> map_static_path: %s", input->map_static_path.c_str());
+  map_path = input->map_static_path;
 }
 
 void ndt_mapping::output_callback(const automotive_msgs::SaveMap::ConstPtr& input) {
@@ -213,12 +228,17 @@ void ndt_mapping::output_callback(const automotive_msgs::SaveMap::ConstPtr& inpu
   map_ptr->header.frame_id = "map";
   sensor_msgs::PointCloud2::Ptr map_msg_ptr(new sensor_msgs::PointCloud2);
   pcl::toROSMsg(*map_ptr, *map_msg_ptr);
-  std::string filename = map_path + "/static.map";
+  std::string filename = map_path + "/static.pcd";
   pcl::io::savePCDFileASCII(filename, *map_ptr);
 }
 
 void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& input) 
 {
+  ROS_INFO("[htc_ndt_localizer] ==> mode_switch: %s mapping_state: %d", mode_switch ? "true" : "false", mapping_state);
+  if (!mode_switch && mapping_state != htcbot_msgs::MappingConf::START_MAPPING) {
+    ROS_INFO("???");
+    return;
+  }
   // r 表示激光点云到激光雷达的距离
   double r;
   pcl::PointXYZI p;

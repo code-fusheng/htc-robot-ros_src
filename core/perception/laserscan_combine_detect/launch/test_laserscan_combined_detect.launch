@@ -1,0 +1,53 @@
+<launch>
+
+    <node pkg="tf" type="static_transform_publisher" name="base2scan_left"  args="1.7 0.5  0.115 0.785  0 0  base_link laser_left  50" />
+    <node pkg="tf" type="static_transform_publisher" name="base2scan_right" args="1.7 -0.5 0.115 -0.785 0 0  base_link laser_right 50" />
+
+    <node name="richbeam_lidar_left" pkg="lakibeam1" type="lakibeam1_scan_node" output="screen">
+        <param name="frame_id" type="string" value="laser_left"/><!--frame_id设置-->
+        <param name="output_topic" type="string" value="scan_left" /><!--topic设置-->
+        <param name="inverted" type="bool" value="false"/><!--配置是否倒装,true倒装-->
+        <param name="hostip" type="string" value="0.0.0.0"/><!--配置本机监听地址，0.0.0.0表示监听全部-->
+        <param name="sensorip" type="string" value="192.168.100.200"/><!--配置sensor地址-->
+        <param name="port" type="string" value="2468"/><!--配置本机监听端口-->
+        <param name="angle_offset" type="int" value="0"/><!--配置点云旋转角度，可以是负数-->
+
+        <param name="scanfreq" type="string" value="20" /><!--配置扫描频率，范围：10、20、25、30-->
+        <param name="filter" type="string" value="3" /><!--配置滤波选项，范围：3、2、1、0 -->
+        <param name="laser_enable" type="string" value="true" /><!--雷达扫描使能，范围：true、false-->
+        <param name="scan_range_start" type="string" value="45" /><!--雷达扫描起始角度，范围：45~315-->
+        <param name="scan_range_stop" type="string" value="315" /><!--雷达扫描结束角度，范围：45~315，结束角度必须大于起始角度-->
+        <remap from="/richbeam_lidar_left/scan_left" to="/scan_left" />
+    </node>
+
+    <node name="richbeam_lidar_right" pkg="lakibeam1" type="lakibeam1_scan_node" output="screen">
+        <param name="frame_id" type="string" value="laser_right"/><!--frame_id设置-->
+        <param name="output_topic" type="string" value="scan_right" /><!--topic设置-->
+        <param name="inverted" type="bool" value="false"/><!--配置是否倒装,true倒装-->
+        <param name="hostip" type="string" value="0.0.0.0"/><!--配置本机监听地址，0.0.0.0表示监听全部-->
+        <param name="sensorip" type="string" value="192.168.100.210"/><!--配置sensor地址-->
+        <param name="port" type="string" value="2568"/><!--配置本机监听端口-->
+        <param name="angle_offset" type="int" value="0"/><!--配置点云旋转角度，可以是负数-->
+
+        <param name="scanfreq" type="string" value="20" /><!--配置扫描频率，范围：10、20、25、30-->
+        <param name="filter" type="string" value="3" /><!--配置滤波选项，范围：3、2、1、0 -->
+        <param name="laser_enable" type="string" value="true" /><!--雷达扫描使能，范围：true、false-->
+        <param name="scan_range_start" type="string" value="45" /><!--雷达扫描起始角度，范围：45~315-->
+        <param name="scan_range_stop" type="string" value="315" /><!--雷达扫描结束角度，范围：45~315，结束角度必须大于起始角度-->
+        <remap from="/richbeam_lidar_right/scan_right" to="/scan_right" />
+    </node>
+
+    <node pkg="laserscan_combine_detect" type="laserscan_combine_detect_node" name="laserscan_combine_detect_node" output="screen">
+        <param name="rate"               value="10"          type="int"/>
+        <param name="scan_left_topic"    value="/scan_left"  type="string"/>
+        <param name="scan_left_frame"    value="laser_left"  type="string"/>
+        <param name="scan_right_topic"   value="/scan_right" type="string"/>
+        <param name="scan_right_frame"   value="laser_right" type="string"/>
+        <param name="vehicle_width"      value="0.64"        type="double"/>
+        <param name="dist_front_to_base" value="1.7"         type="double"/>
+        <param name="hor_detect_dist"    value="0.2"         type="double"/>
+        <param name="ver_detect_dist"    value="6"           type="double"/>
+        <param name="obs_points_num"     value="5"           type="int"/>
+    </node>
+
+</launch>

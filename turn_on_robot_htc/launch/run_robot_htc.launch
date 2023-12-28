@@ -29,7 +29,7 @@
 
     <!-- 发布 tf 坐标树 -->
     <!-- 0.37 0 0.275   -1.57 -->
-    <node pkg="tf" type="static_transform_publisher" name="base_2_lidar" args="0.37 0 0.275   -1.57 0 0 base_link lidar 50" />
+    <node pkg="tf" type="static_transform_publisher" name="base_2_lidar" args="0.37 0 0.275 0 0 0 base_link lidar 50" />
     <node pkg="tf" type="static_transform_publisher" name="base_2_imu" args="0 0 0 0 0 0 base_link imu_link 100" />
 
     <!-- ndt_param -->
@@ -38,7 +38,7 @@
     <arg name="tf_lidar_z"     value="0.275" />
     <arg name="tf_lidar_roll"  value="0" />
     <arg name="tf_lidar_pitch" value="0" />
-    <arg name="tf_lidar_yaw"   value="-1.57" />
+    <arg name="tf_lidar_yaw"   value="0" />
 
     <!-- ndt_mapping -->
     <include file="$(find ndt_mapping)/launch/htc_ndt_mapping.launch">
@@ -55,5 +55,8 @@
     <!-- <include if="$(arg !is_base)" file="$(find ndt_localizer)/launch/htc_ndt_localizer.launch">
         <arg name="use_imu" value="true"/>
     </include> -->
+
+    <node pkg="grid_map_generator" type="pcd_grid_divider" name="pcd_grid_divider" output="screen">
+    </node>
 
 </launch>

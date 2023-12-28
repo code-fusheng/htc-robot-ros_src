@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   rviz
   visualization_msgs
   htcbot_msgs
+  automotive_msgs
 )
 
 find_package(PCL REQUIRED)

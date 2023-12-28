@@ -32,6 +32,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   automotive_msgs
+  htcbot_msgs
 )
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(PCL REQUIRED)

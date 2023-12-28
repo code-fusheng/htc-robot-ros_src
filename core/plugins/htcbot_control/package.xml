@@ -56,6 +56,7 @@
   <build_depend>rviz</build_depend>
   <build_depend>visualization_msgs</build_depend>
   <build_depend>htcbot_msgs</build_depend>
+  <build_depend>automotive_msgs</build_depend>
   <build_export_depend>sensor_msgs</build_export_depend>
   <build_export_depend>geometry_msgs</build_export_depend>
   <build_export_depend>nav_msgs</build_export_depend>
@@ -63,6 +64,7 @@
   <build_export_depend>rviz</build_export_depend>
   <build_export_depend>visualization_msgs</build_export_depend>
   <build_export_depend>htcbot_msgs</build_export_depend>
+  <build_export_depend>automotive_msgs</build_export_depend>
   <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>nav_msgs</exec_depend>
@@ -70,6 +72,7 @@
   <exec_depend>rviz</exec_depend>
   <exec_depend>visualization_msgs</exec_depend>
   <exec_depend>htcbot_msgs</exec_depend>
+  <exec_depend>automotive_msgs</exec_depend>
   
   <export>
       <rviz plugin="${prefix}/plugin_description.xml"/>

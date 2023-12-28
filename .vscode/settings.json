@@ -110,7 +110,8 @@
         "filesystem": "cpp"
     },
     "commentTranslate.source": "Google",
-    "commentTranslate.hover.concise": true
+    "commentTranslate.hover.concise": true,
+    "cmake.sourceDirectory": "/Users/fusheng/WorkSpace/CompanyWork/work-fusheng/robot-pro/htc-robot-ros_ws/src/core/common/utils"
     // "fileheader.Author": "robot_Fu.Sheng",
     // "fileheader.LastModifiedBy": "robot_Fu.Sheng"
 }

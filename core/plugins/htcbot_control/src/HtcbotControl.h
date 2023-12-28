@@ -15,8 +15,13 @@
 #include <QComboBox>
 #include <QStringList>
 #include <std_msgs/String.h>
+
 #include <htcbot_msgs/MapPathConf.h>
 #include <htcbot_msgs/ModeSwitch.h>
+#include <htcbot_msgs/GridMapBuild.h>
+#include <htcbot_msgs/MappingConf.h>
+
+#include <automotive_msgs/ConfigMapManager.h>
 
 namespace htcbot_control
 {
@@ -28,12 +33,21 @@ public:
 
 public Q_SLOTS:
   void confirmTopic();
+  void pubMappingConf();
   void pubMappingSwitch();
   void pubLocalizerSwitch();
+  void pubRunningManualSwitch();
+  void pubRunningAutoSwitch();
+  void pubRunningAvoidSwitch();
+  void pubBuildGridMap();
 
 private:
 
   const QString base_dir = "/home/data";
+
+  QString map_static_str_;
+  QString map_dynamic_str_;
+  QString pathes_str_;
 
   QVBoxLayout *main_layout_;
 
@@ -57,10 +71,36 @@ private:
   QPushButton *localizer_switch_button_;
   bool localizer_switch_value_ = false;
 
+  QLineEdit *mapping_voxel_input_;
+  QLineEdit *mapping_step_input_; 
+
+  // Grid Map Build
+  QLineEdit *grid_voxel_input_;
+  QLineEdit *grid_side_input_;
+
+  QPushButton *manual_running_button_;
+  bool manual_running_switch_value_ = false;
+  QLabel *manual_running_label_;
+
+  QPushButton *auto_running_button_;
+  bool auto_running_switch_value_ = false;
+  QLabel *auto_running_label_; 
+
+  QPushButton *avoid_running_button_;
+  bool avoid_running_switch_value_ = false;
+  QLabel *avoid_running_label_;
+
+  QPushButton *task_start_button_;
+  QPushButton *task_puse_button_;
+  QPushButton *task_end_button_;
+  QString task_state_value_ = "INIT";
+
   ros::Publisher topic_publisher_;
   // 场景/地图路径配置发布者
   ros::Publisher map_path_conf_pub_;
   ros::Publisher mode_switch_pub_;
+  ros::Publisher mapping_conf_pub_;
+  ros::Publisher grid_map_build_pub_;
   ros::NodeHandle nh_;
 
   QTabWidget *tab_widget_;

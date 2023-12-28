@@ -25,6 +25,7 @@
 
 #include <htcbot_msgs/ModeSwitch.h>
 #include <htcbot_msgs/MapPathConf.h>
+#include <htcbot_msgs/MappingConf.h>
 
 class ndt_mapping
 {
@@ -149,6 +150,7 @@ private:
 
   ros::Subscriber switch_sub;
   ros::Subscriber map_path_conf_sub;
+  ros::Subscriber mapping_conf_sub;
 
   geometry_msgs::PoseStamped current_pose_msg;
 
@@ -173,9 +175,11 @@ private:
   double PI = 3.141592654;
 
   bool mode_switch;
+  int mapping_state;
 
   void init_param();
   void param_callback();
+  void mapping_conf_callback(const htcbot_msgs::MappingConf::ConstPtr& input);
   void swtich_callback(const htcbot_msgs::ModeSwitch::ConstPtr& input);
   void path_conf_callback(const htcbot_msgs::MapPathConf::ConstPtr& input);
   void output_callback(const automotive_msgs::SaveMap::ConstPtr& input);

@@ -17,6 +17,8 @@ add_message_files(
         FILES
         MapPathConf.msg
         ModeSwitch.msg
+        GridMapBuild.msg
+        MappingConf.msg
 )
 
 add_service_files(

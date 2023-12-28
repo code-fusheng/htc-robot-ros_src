@@ -309,11 +309,23 @@ void pcd_grid_divider::cb_grid_map_create_task(const automotive_msgs::GridMapCre
   this->pub_grid_task_status.publish(res_msg);
 }
 
+void pcd_grid_divider::handle_grid_map_build(const htcbot_msgs::GridMapBuildConstPtr &msg) {
+  this->setInFolder(msg->input_dir);
+  this->setOutFolder(msg->output_dir);
+  this->setGridSize(msg->side_length);
+  this->setVoxelSize(msg->voxel_size);
+
+  bool res = this->do_process();
+
+}
+
 
 void pcd_grid_divider::run() {
   pub_grid_task_status = nh_.advertise<automotive_msgs::GridMapCreateStatus>("/gridmap_task_status", 3);
 
   sub_create_grid_map_topic = nh_.subscribe("/gridmap_task_set", 3, &pcd_grid_divider::cb_grid_map_create_task, this);
+
+  grid_map_build_sub = nh_.subscribe("/htcbot/grid_map_build", 3, &pcd_grid_divider::handle_grid_map_build, this);
 
   ros::spin();
 }

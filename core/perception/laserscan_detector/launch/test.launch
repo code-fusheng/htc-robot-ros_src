@@ -1,0 +1,39 @@
+<launch>
+
+    <include file="$(find timoo_pointcloud)/launch/TM16_with_scan.launch" />
+
+    <node name="bm661" pkg="bm_scan" type="bm661" output="screen">
+        <param name="frame_id" type="string" value="laser"/><!--frame_id设置-->
+        <param name="scan_topic" type="string" value="scan_back" /><!--topic设置-->
+        <param name="inverted" type="bool" value="true"/><!--配置是否倒装,true倒装-->
+        <param name="hostip" type="string" value="0.0.0.0"/><!--配置本机监听地址，0.0.0.0表示监听全部-->
+        <param name="port" type="string" value="2468"/><!--配置本机监听端口-->
+        <param name="angle_offset" type="int" value="0"/><!--配置点云旋转角度，可以是负数-->
+    </node>
+
+    <node pkg="laserscan_detector" type="laserscan_detector_node" name="laserscan_detector_back_node" output="screen">
+        <param name="bound_left" value="-0.3" type="double"/>
+        <param name="bound_right" value="0.3" type="double"/>
+        <param name="bound_back" value="0" type="double"/>
+        <param name="bound_front" value="0.5" type="double"/>
+        <param name="nums_of_obstacle" value="5" type="int"/>
+        <param name="scan_frame" value="laser" type="string"/>
+        <param name="scan_topic" value="scan_back" type="string"/>
+        <param name="debug" value="false" type="bool"/>
+        <param name="direction" value="1" type="int"/> 
+    </node>
+
+    <!--  direction: 0-front 1-back -->
+    <node pkg="laserscan_detector" type="laserscan_detector_node" name="laserscan_detector_front_node" output="screen">
+        <param name="bound_left" value="-0.3" type="double"/>
+        <param name="bound_right" value="0.3" type="double"/>
+        <param name="bound_back" value="0" type="double"/>
+        <param name="bound_front" value="0.5" type="double"/>
+        <param name="nums_of_obstacle" value="5" type="int"/>
+        <param name="scan_frame" value="timoo" type="string"/>
+        <param name="scan_topic" value="scan" type="string"/>
+        <param name="debug" value="false" type="bool"/>
+        <param name="direction" value="0" type="int"/> 
+    </node>
+
+</launch>

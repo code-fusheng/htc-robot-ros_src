@@ -49,7 +49,7 @@ namespace can_adapter
         }
 
         // 如果laser数据有延迟, 则标识传感器异常, 禁止行车
-        ROS_INFO("[ZZZ : can_adapter] ===> front_obstacle_update_time:%d diff:%d", front_obstacle_update_time, (now - front_obstacle_update_time));
+        // ROS_INFO("[ZZZ : can_adapter] ===> front_obstacle_update_time:%d diff:%d", front_obstacle_update_time, (now - front_obstacle_update_time));
         if ( (now - front_obstacle_update_time).toSec() > 0.5 ) {
             // ROS_INFO("brake front_obstacle_update_time delay");
             return automotive_msgs::CanAdapterStatus::DEVICE_UNFUNC;
@@ -83,7 +83,7 @@ namespace can_adapter
         }
 
         if (ret != automotive_msgs::CanAdapterStatus::NO_BRAKE) {
-            ROS_INFO("[ZZZ : can_adapter  break ================> ret: %d]", ret);
+            // ROS_INFO("[ZZZ : can_adapter  break ================> ret: %d]", ret);
             // 对于fcontroller jd01双转,为了实现低速稳定性，因此取消了刹车时候shift=N的限制，以使得能够利用点击反拖的特性减速
             pub_msg.shift = pub_msg.SHIFT_D;  // 对于非JD01车型, 需注释掉该行, 并开启下一行
             // pub_msg.shift = can_msgs::ecu::SHIFT_N;
