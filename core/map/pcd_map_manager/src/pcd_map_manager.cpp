@@ -19,6 +19,8 @@
 #include <automotive_msgs/SmartcarSolutionRequest.h>
 #include <automotive_msgs/SmartcarRunTypeResponse.h>
 
+#include <htcbot_msgs/MapPathConf.h>
+
 
 namespace pcd_map_manager
 {
@@ -125,6 +127,8 @@ public:
 		initial_sub = nh_.subscribe("/initialpose", 1, &pcd_dynamicmap_manager::publish_dragged_pcd, this);
 		config_sub = nh_.subscribe("/set_pcdmap_manager", 1, &pcd_dynamicmap_manager::cb_config, this);
 
+		map_path_conf_sub = nh_.subscribe("/htcbot/map_path_conf", 1, &pcd_dynamicmap_manager::handle_map_path_conf, this);
+
 		ros::ServiceServer function_service = nh_.advertiseService("/function_switch/pcd_map_manager", &pcd_dynamicmap_manager::on_callback_function_switch, this);	
 
 		ros::spin();
@@ -137,6 +141,7 @@ private:
 	uint8_t auto_pilot_status = automotive_msgs::SmartcarSolution::Response::SMARTCAR_LIDAR;
 	ros::Publisher pcd_pub, pcd_pub_sparse;
 	ros::Subscriber current_sub, initial_sub, config_sub;
+	ros::Subscriber map_path_conf_sub;
 
 	bool on_callback_function_switch(automotive_msgs::FunctionSwitch::Request &req, automotive_msgs::FunctionSwitch::Response &res) {
 		if (_FUNCTION_STATUS == req.switch_to) {
@@ -273,6 +278,13 @@ private:
 		ROS_INFO("[PCD Map Manager] Received config setting");
 		_dir_static_map = msg->path_static_map;
 		_dir_dynamic_map = msg->path_dynamic_map;
+		default_AreaList = read_arealist(_dir_dynamic_map + "/" + AREALIST_FILENAME);
+		publish_sparse_map();
+	}
+
+	void handle_map_path_conf(const htcbot_msgs::MapPathConfConstPtr &input) {
+		_dir_static_map = input->map_static_path;
+		_dir_dynamic_map = input->map_dynamic_path;
 		default_AreaList = read_arealist(_dir_dynamic_map + "/" + AREALIST_FILENAME);
 		publish_sparse_map();
 	}

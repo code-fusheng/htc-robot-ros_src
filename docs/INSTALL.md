@@ -18,6 +18,7 @@ https://sub.wl-sub1.com/api/v1/client/subscribe?token=1ddb6feb800a114b7bdb3afc43
 sudo apt install -y openssh-server
 sudo vim /etc/ssh/sshd_config
 sudo service ssh restart
+# ~/.ssh/authorized_keys
 ```
 
 ### 安装 ROS
