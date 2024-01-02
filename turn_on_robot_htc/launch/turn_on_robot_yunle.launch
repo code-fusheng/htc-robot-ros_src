@@ -32,6 +32,18 @@
     <!-- 激光雷达节点 -->
     <include file="$(find lslidar_driver)/launch/lslidar_c16_autox.launch"></include>
 
+    <!-- imu -->
+    <arg name="htc_imu_mode" default="N100" />
+    <arg name="htc_imu_frame" default="imu" />
+    <arg name="htc_imu_topic" default="imu_raw"/>
+
+    <!-- IMU惯导控制节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/imu_htc.launch">
+        <arg name="htc_imu_mode" value="$(arg htc_imu_mode)" />
+        <arg name="htc_imu_frame" value="$(arg htc_imu_frame)" />
+        <arg name="htc_imu_topic" value="$(arg htc_imu_topic)"/>
+    </include>
+
     <!-- can 驱动 -->
     <include file="$(find can_module_usb2can)/launch/can_bridge_jd01.launch"></include>
     <include file="$(find twist_to_ecu)/launch/twist_to_ecu.launch" />

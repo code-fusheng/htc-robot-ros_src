@@ -7,3 +7,4 @@ bool OFF = 0    # 关闭
 string LOCALIZER = "Localizer"
 string CAR_TASK = "CarTask"
 string RUNNING_AUTO = "RunningAuto"
+string POSE_RECORD = "PoseRecord"

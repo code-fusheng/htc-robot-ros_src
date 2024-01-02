@@ -155,6 +155,16 @@ void HtcbotControl::pubRunningAvoidSwitch()
   QMessageBox::information(this, "当前自主避障开关状态", QString(avoid_running_switch_value_ ? "true" : "false"));
 }
 
+void HtcbotControl::pubPoseRecordSwitch()
+{
+  pose_record_switch_value_ = !pose_record_switch_value_;
+  QMessageBox::information(this, "当前轨迹录制开关状态", QString(pose_record_switch_value_ ? "true" : "false"));
+  htcbot_msgs::ModeSwitch switch_msg;
+  switch_msg.mode = htcbot_msgs::ModeSwitch::POSE_RECORD;
+  switch_msg.switch_to = pose_record_switch_value_;
+  mode_switch_pub_.publish(switch_msg);
+}
+
 void HtcbotControl::pubBuildGridMap() 
 {
   // /htcbot/grid_map_build
@@ -265,7 +275,7 @@ void HtcbotControl::switchNavigationPanel()
 void HtcbotControl::switchRoutePanel()
 {
   route_panel_ = new QWidget(tab_widget_);
-  tab_widget_->addTab(route_panel_, "轨迹");
+  tab_widget_->addTab(route_panel_, "轨迹绘制");
   // 在这里添加路线面板的控件和逻辑
 }
 
@@ -289,6 +299,11 @@ void HtcbotControl::switchHomePanel()
   localizer_switch_button_ = new QPushButton("定位模块");
   mode_switch_layout->addWidget(localizer_switch_button_);
   connect(localizer_switch_button_, SIGNAL(clicked()), this, SLOT(pubLocalizerSwitch()));
+
+  // 轨迹录制
+  pose_record_switch_button_ = new QPushButton("轨迹录制");
+  mode_switch_layout->addWidget(pose_record_switch_button_);
+  connect(pose_record_switch_button_, SIGNAL(clicked()), this, SLOT(pubPoseRecordSwitch()));
 
   mode_switch_box->setLayout(mode_switch_layout);
 

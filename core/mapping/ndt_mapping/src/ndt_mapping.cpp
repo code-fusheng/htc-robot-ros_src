@@ -16,7 +16,7 @@ void ndt_mapping::run() {
   map_path_conf_sub = nh.subscribe("/htcbot/map_path_conf", 10, &ndt_mapping::path_conf_callback, this);
   
   // sub datasource input
-  points_sub = nh.subscribe("points_raw", 100000, &ndt_mapping::points_callback, this);
+  points_sub = nh.subscribe(_lidar_topic, 100000, &ndt_mapping::points_callback, this);
   imu_sub = nh.subscribe("imu_raw", 100000, &ndt_mapping::imu_callback, this);
 
   ndt_map_pub = nh.advertise<sensor_msgs::PointCloud2>("/ndt_map", 1000);
@@ -43,7 +43,8 @@ void ndt_mapping::init_param() {
   private_nh.param<bool>("use_imu", use_imu, false);
   private_nh.param<bool>("use_odom", use_odom, false);
   private_nh.param<std::string>("imu_topic", _imu_topic, "/imu_raw");
-  private_nh.param<std::string>("lidar_topic", _lidar_topic, "/points_raw");
+  private_nh.param<std::string>("lidar_topic", _lidar_topic, "/rslidar_points");
+    private_nh.param<std::string>("lidar_frame", _lidar_frame, "rslidar");
   private_nh.param<std::string>("odom_topic", _odom_topic, "/odom");
   private_nh.param<std::string>("map_path", map_path, "");
   
@@ -203,10 +204,12 @@ void ndt_mapping::mapping_conf_callback(const htcbot_msgs::MappingConf::ConstPtr
   map_path = input->save_dir.c_str();
   voxel_leaf_size = input->voxel_size;
   step_size = input->step_size;
-  if (mapping_state == htcbot_msgs::MappingConf::START_MAPPING) {
+  if (input->mapping_state == htcbot_msgs::MappingConf::START_MAPPING) {
+    ROS_INFO("1111");
     mapping_state = input->mapping_state;
-  } else if (mapping_state == htcbot_msgs::MappingConf::END_MAPPING) 
+  } else if (input->mapping_state == htcbot_msgs::MappingConf::END_MAPPING) 
   {
+    ROS_INFO("2222");
     mapping_state = input->mapping_state;
     pcl::PointCloud<pcl::PointXYZI>::Ptr map_ptr(new pcl::PointCloud<pcl::PointXYZI>(map));
     map_ptr->header.frame_id = "map";

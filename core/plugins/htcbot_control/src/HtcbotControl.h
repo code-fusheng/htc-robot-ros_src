@@ -39,6 +39,7 @@ public Q_SLOTS:
   void pubRunningManualSwitch();
   void pubRunningAutoSwitch();
   void pubRunningAvoidSwitch();
+  void pubPoseRecordSwitch();
   void pubBuildGridMap();
   void pubCarTaskStart();
   void pubCarTaskPuse();
@@ -72,6 +73,9 @@ private:
 
   QPushButton *localizer_switch_button_;
   bool localizer_switch_value_ = false;
+
+  QPushButton *pose_record_switch_button_;
+  bool pose_record_switch_value_ = false;
 
   QLineEdit *mapping_voxel_input_;
   QLineEdit *mapping_step_input_; 

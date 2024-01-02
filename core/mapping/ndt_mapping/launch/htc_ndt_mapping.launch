@@ -17,8 +17,8 @@
     <arg name="use_imu" default="true" doc="use imu or not"/>
     <arg name="imu_topic" default="imu_raw" />
 
-    <arg name="lidar_frame" default="/lidar" />
-    <arg name="lidar_topic" default="/points_raw" />
+    <arg name="lidar_frame" default="/rslidar" />
+    <arg name="lidar_topic" default="/rslidar_points" />
 
     <!-- Static Transform Parameters -->
     <!-- 0.37 0 0.275   -1.57 -->

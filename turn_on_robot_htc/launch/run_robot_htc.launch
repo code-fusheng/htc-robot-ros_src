@@ -25,10 +25,21 @@
         <arg name="htc_lidar_points_topic" value="$(arg htc_lidar_points_topic)" />
     </include>
 
+    <!-- can 驱动 -->
+    <include file="$(find can_module_usb2can)/launch/can_bridge_jd01.launch"></include>
+    <include file="$(find twist_to_ecu)/launch/twist_to_ecu.launch" />
+
     <!-- imu -->
     <arg name="htc_imu_mode" default="N100" />
     <arg name="htc_imu_frame" default="imu" />
     <arg name="htc_imu_topic" default="imu_raw"/>
+
+    <!-- IMU惯导控制节点 -->
+    <include file="$(find turn_on_robot_htc)/launch/imu_htc.launch">
+        <arg name="htc_imu_mode" value="$(arg htc_imu_mode)" />
+        <arg name="htc_imu_frame" value="$(arg htc_imu_frame)" />
+        <arg name="htc_imu_topic" value="$(arg htc_imu_topic)"/>
+    </include>
 
     <!-- 发布 tf 坐标树 -->
     <!-- 0.37 0 0.275   -1.57 -->
@@ -144,6 +155,22 @@
 
     <include file="$(find local_planner)/launch/rollout_generator_htc.launch" />
     <include file="$(find local_planner)/launch/local_trajectory_generator_htc.launch" />    
+
+    <!-- 轨迹录制 -->
+    <node pkg="pose_recorder" name="pose_recorder" type="pose_recorder.py" required="true" output="screen">
+        <param name="filter"  value="true"/>
+        <param name="filter_distance"  value="0.1"/>
+    </node>
+
+    <!-- GPS driver -->
+    <node name="nmea_serial_driver_node" pkg="nmea_navsat_driver" type="nmea_serial_driver" output="screen">
+        <param name="port" value="/dev/gps"/>
+        <param name="baud" value="115200" />
+        <param name="frame_id" value="gps" />
+        <param name="use_GNSS_time" value="False" />
+        <param name="time_ref_source" value="gps" />
+        <param name="useRMC" value="False" />
+    </node>
 
     <node pkg="visualization" type="visualization" name="visualization_node" output="screen">
         <param name="show_model_car" value="true" type="bool" />

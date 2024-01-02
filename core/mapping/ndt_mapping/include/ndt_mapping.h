@@ -83,6 +83,7 @@ private:
   // Topic
   std::string _odom_topic;
   std::string _lidar_topic;
+  std::string _lidar_frame;
   std::string _imu_topic;
 
   double diff = 0.0;

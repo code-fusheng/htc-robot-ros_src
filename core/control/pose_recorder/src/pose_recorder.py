@@ -17,6 +17,7 @@ import math
 import numpy as np
 from threading import Lock
 # from apscheduler.schedulers.background import BackgroundScheduler
+from htcbot_msgs.msg import MapPathConf, ModeSwitch
 
 USERNAME = getpass.getuser()
 
@@ -28,9 +29,12 @@ class App:
         self.current_rtk_gps_msg = None
         self.path = Path()
         self.path.header.frame_id = "map"
-        self._pilot_mode = None
+        self._pilot_mode = 1
         self.is_record_start = False
         self.last_say_time = rospy.Time.now()
+
+        # code-robot
+        self.route_path_dir = None
 
         self.sub_pose = None
         self.sub_cmd_save_path = None
@@ -60,7 +64,9 @@ class App:
     def _add_sub(self):
         self.sub_cmd_save_station = rospy.Subscriber("/save_station", SaveStation, self._cb_save_station, queue_size=5)
         self.sub_path_record_control = rospy.Subscriber("/path_record_control", CmdPoseRecord, self._cb_cmd_pose_record, queue_size=5)
-
+        self.sub_map_path_conf = rospy.Subscriber("/htcbot/map_path_conf", MapPathConf, self.handle_map_path_conf, queue_size=5)
+        self.sub_mode_switch = rospy.Subscriber("/htcbot/mode_switch", ModeSwitch, self.handle_mode_switch, queue_size=5)
+        
     def _enable_subscribe(self):
         self.sub_pose = rospy.Subscriber("/current_pose", PoseStamped, callback=self._cb_current_pose, queue_size=100)
         if self._pilot_mode == CmdPoseRecord.PILOT_RTKGPS:
@@ -83,6 +89,10 @@ class App:
             length += self._distance_of_two_pose(pre, pose)
             pre = pose
         return length
+    
+    def handle_map_path_conf(self, msg):
+        rospy.loginfo("[pose_recorder] Recivced Map Path Conf ==> {}".format(msg.route_path))
+        self.route_path_dir = msg.route_path
 
     def _cb_cmd_pose_record(self, msg):
         if msg.start_record is None:
@@ -126,7 +136,45 @@ class App:
             rospy.loginfo("[pose_recorder] Stop recording, recording path is empty now")
         else:
             rospy.logwarn("[pose_recorder] Unexpected error")
-    
+
+    def handle_mode_switch(self, msg):
+        if msg.mode is not ModeSwitch.POSE_RECORD:
+            rospy.loginfo("[pose_recorder ???] {}".format(msg.switch_to))
+            return
+        if self.is_record_start and msg.switch_to == msg.ON:
+            msg_status = PathRecordingStatus()
+            msg_status.is_recording = True
+            msg_status.info = "Path-recording is already started, if you want to record a new path, send /start_record_path=false first"
+            self.pub_recording_status.publish(msg_status)
+            rospy.logwarn("[pose_recorder] {}".format(msg_status.info))
+            return
+        if not self.is_record_start and msg.switch_to == msg.OFF:
+            msg_status = PathRecordingStatus()
+            msg_status.is_recording = False
+            msg_status.info = "Path-recording is not running"
+            self.pub_recording_status.publish(msg_status)
+            rospy.logwarn("[pose_recorder] {}".format(msg_status.info))
+            return
+        if msg.start_record == msg.RECORD_START:
+            # 记录的时候就要明确当前是记录什么数据, gps还是lidar
+            self.is_record_start = True
+            self._enable_subscribe()
+            msg_status = PathRecordingStatus()
+            msg_status.is_recording = True
+            self.pub_recording_status.publish(msg_status)
+            rospy.loginfo("[pose_recorder] Start recording")
+        elif msg.start_record == msg.RECORD_STOP:
+            self.is_record_start = False
+            self._disable_subscribe()
+            msg_status = PathRecordingStatus()
+            msg_status.is_recording = False
+            self.pub_recording_status.publish(msg_status)
+            self._do_save_path(self.route_path_dir)
+            self.reset()
+            rospy.loginfo("[pose_recorder] Stop recording, recording path is empty now")
+        else:
+            rospy.logwarn("[pose_recorder] Unexpected error")
+
     def _do_save_path(self, path_dir):
         # now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
         filename = "lane_1.csv"

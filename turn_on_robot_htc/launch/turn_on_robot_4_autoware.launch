@@ -30,7 +30,7 @@
     </include>
 
     <!-- tf -->
-    <!-- <node pkg="tf" type="static_transform_publisher" name="world_to_map"    args="0 0 0 0 0 0 /world /map 10" /> -->
+    <node pkg="tf" type="static_transform_publisher" name="world_to_map"    args="0 0 0 0 0 0 /world /map 10" />
 
     <!-- 底盘控制 -->
     <include file="$(find turn_on_robot_htc)/launch/include/base_serial.launch">

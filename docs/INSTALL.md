@@ -131,6 +131,7 @@ make sudo make install
 sudo make install
 # 建议上科学
 git clone https://gitcode.net/mirrors/curl/curl.git
+git clone https://github.com/curl/curl.git
 cd build/third-party
 
 #
