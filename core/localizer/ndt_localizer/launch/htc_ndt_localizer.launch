@@ -1,13 +1,12 @@
 <launch>
 
-<!-- ndt localization -->
+    <!-- ndt localization -->
     <arg name="method_type" default="1" /> <!-- pcl_generic=0, ndt_cpu=1, ndt_gpu=2, pcl_openmp=3 -->
     <arg name="use_gnss" default="false" />
     <arg name="use_odom" default="false" />
     <arg name="use_imu" default="false" />
     <arg name="imu_upside_down" default="false" />
     <arg name="imu_topic" default="/imu_raw" />
-    <arg name="lidar_topic" default="/points_raw" />
     <arg name="queue_size" default="1" />
     <arg name="offset" default="linear" />
     <arg name="get_height" default="false" />
@@ -17,6 +16,16 @@
     <arg name="output_tf_frame_id" default="base_link"/>
     <arg name="gnss_reinit_fitness" default="500.0" />
     <arg name="voxel_leaf_size" default="1.5" />
+
+    <arg name="lidar_frame" default="/lidar" />
+    <arg name="lidar_topic" default="/points_raw" />
+
+    <arg name="x" default="0" doc="static_transform_x lidar_to_base_link"/>
+    <arg name="y" default="0.0" doc="static_transform_y lidar_to_base_link"/>
+    <arg name="z" default="0" doc="static_transform_z lidar_to_base_link"/>
+    <arg name="roll" default="0.0" doc="static_transform_roll lidar_to_base_link"/>
+    <arg name="pitch" default="0.0" doc="static_transform_pitch lidar_to_base_link"/>
+    <arg name="yaw" default="0" doc="static_transform_yaw lidar_to_base_link"/>   
 
     <node pkg="ndt_localizer" type="htc_ndt_localizer" name="htc_ndt_localizer" output="screen" required="true">
         <param name="method_type" value="$(arg method_type)" />
@@ -33,6 +42,14 @@
         <param name="output_tf_frame_id" value="$(arg output_tf_frame_id)" />
         <param name="gnss_reinit_fitness" value="$(arg gnss_reinit_fitness)" />
         <param name="voxel_leaf_size" value="$(arg voxel_leaf_size)" />
+        <param name="lidar_frame" value="$(arg lidar_frame)" />
+        <param name="lidar_topic" value="$(arg lidar_topic)" />
+        <param name="tf_x"     value="$(arg x)" />
+        <param name="tf_y"     value="$(arg y)" />
+        <param name="tf_z"     value="$(arg z)" />
+        <param name="tf_roll"  value="$(arg roll)" />
+        <param name="tf_pitch" value="$(arg pitch)" />
+        <param name="tf_yaw"   value="$(arg yaw)" />
         <!-- <remap from="/points_raw" to="/sync_drivers/points_raw" if="$(arg sync)" /> -->
     </node>
 

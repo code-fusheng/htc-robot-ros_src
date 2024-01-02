@@ -15,7 +15,7 @@ EuClusterCore::EuClusterCore(ros::NodeHandle &nh, ros::NodeHandle &pnh)
     pnh.param<double>("high_x", x_high, 3.0);
     pnh.param<double>("low_y", y_low, -0.5);
     pnh.param<double>("high_y", y_high, 0.5);
-    pnh.param<std::string>("in_cloud_topic", in_cloud_topic, "/velodyne_points");
+    pnh.param<std::string>("in_cloud_topic", in_cloud_topic, "/points_raw");
 
     seg_distance_ = {15, 30, 45, 60};
     cluster_distance_ = {0.3, 0.6, 0.9, 2.0, 2.5};

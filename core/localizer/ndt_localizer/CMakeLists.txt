@@ -54,6 +54,7 @@ include_directories(
   ${EIGEN3_INCLUDE_DIRS}
 )
 
+# add_executable(htc_ndt_localizer src/ndt_localizer.cpp  src/ndt_localizer_node.cpp)
 add_executable(htc_ndt_localizer src/yunle_ndt_localizer.cpp)
 target_link_libraries(htc_ndt_localizer
   ${catkin_LIBRARIES}

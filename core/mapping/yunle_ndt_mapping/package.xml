@@ -60,6 +60,7 @@
   <build_depend>std_msgs</build_depend>
   <build_depend>tf</build_depend>
   <build_depend>geometry_msgs</build_depend>
+  <build_depend>htcbot_msgs</build_depend>
 
   <build_export_depend>eigen</build_export_depend>
   <build_export_depend>nav_msgs</build_export_depend>
@@ -73,7 +74,7 @@
   <build_export_depend>geometry_msgs</build_export_depend>
   <build_export_depend>config_msgs</build_export_depend>
   <!-- <build_export_depend>message_generation</build_export_depend> -->
-  <build_export_depend>tf</build_export_depend>
+  <build_export_depend>htcbot_msgs</build_export_depend>
 
   <exec_depend>eigen</exec_depend>
   <exec_depend>nav_msgs</exec_depend>
@@ -86,6 +87,7 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>tf</exec_depend>
+  <exec_depend>htcbot_msgs</exec_depend>
   <!-- <exec_depend>message_runtime</exec_depend> -->
 
   <!-- The export tag contains other, unspecified, tags -->

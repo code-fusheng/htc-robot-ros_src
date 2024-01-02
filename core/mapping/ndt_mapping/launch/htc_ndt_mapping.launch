@@ -17,6 +17,9 @@
     <arg name="use_imu" default="true" doc="use imu or not"/>
     <arg name="imu_topic" default="imu_raw" />
 
+    <arg name="lidar_frame" default="/lidar" />
+    <arg name="lidar_topic" default="/points_raw" />
+
     <!-- Static Transform Parameters -->
     <!-- 0.37 0 0.275   -1.57 -->
     <arg name="x" default="0" doc="static_transform_x lidar_to_base_link"/>
@@ -45,6 +48,9 @@
       <param name="min_add_scan_shift" value="$(arg min_add_scan_shift)" />
       <param name="use_imu" value="$(arg use_imu)" />
       <param name="imu_topic" value="$(arg imu_topic)" />
+
+      <param name="lidar_frame" value="$(arg lidar_frame)" />
+      <param name="lidar_topic" value="$(arg lidar_topic)" />
 
       <param name="x" value="$(arg x)" />
       <param name="y" value="$(arg y)" />

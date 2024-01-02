@@ -12,6 +12,7 @@ from enum import Enum
 from std_msgs.msg import Bool
 from ultrasonic_driver.msg import UltraSonicDetect
 from automotive_msgs.srv import SmartcarSolution, SmartcarSolutionRequest, SmartcarSolutionResponse
+from htcbot_msgs.msg import ModeSwitch
 
 
 SPIN_RATE = 20 # hz
@@ -108,6 +109,7 @@ class App():
 
     def _add_sub(self):
         rospy.Subscriber("/UserCmd", UserCmd, self._cb_user_command, queue_size=5)
+        rospy.Subscriber("/htcbot/mode_switch", ModeSwitch, self.handle_user_cmd, queue_size=5)
         # rospy.Subscriber("/detected_bounding_boxs", BoundingBoxArray, self._cb_lidar_cluster, queue_size=5)
         # rospy.Subscriber("/detected_bounding_nums", Int16, self._cb_cluster_nums, queue_size=1)
         rospy.Subscriber("/ultrasonic_detection", UltraSonicDetect, self._cb_ultrosonic_detect, queue_size=5)
@@ -160,6 +162,28 @@ class App():
             state.main_state = State.PAUSE
         self.state_pub.publish(state)
 
+    def handle_user_cmd(self, msg):
+        if msg.mode != ModeSwitch.CAR_TASK:
+            return
+        if msg.switch_to == ModeSwitch.OFF:
+            rospy.loginfo("[state-machine] Received ModeSwitch Command  --> OFF")
+            self.state.set_state(SensorType.User, RState.FORBID)
+        elif msg.switch_to == ModeSwitch.ON:
+            rospy.loginfo("[state-machine] Received ModeSwitch Command  --> ON")
+        else:
+            rospy.logwarn("[state-machine] Unrecognized ModeSwitch Command ==> switch_to:{}".format(msg.data))
+        
+        state = State()
+        if self.state.is_state_ok() is RState.ALLOW:
+            if msg.switch_to == ModeSwitch.ON:
+                rospy.loginfo("[state-machine] ==> Set Vehicle To Run")
+            state.main_state = State.RUN
+        else:
+            if msg.switch_to == ModeSwitch.ON:
+                rospy.loginfo("[state-machine] ==> Vehicle will run when obstacle removed")
+            state.main_state = State.PAUSE
+        self.state_pub.publish(state)
+            
     def update_state(self):
         state = State()
         now = rospy.Time.now().to_sec()

@@ -1689,7 +1689,7 @@ int main(int argc, char** argv) {
 
     std::string lidar_frame, lidar_topic;
     nh.param("lidar_frame", lidar_frame, std::string("lidar"));
-    nh.param("lidar_topic", lidar_topic, std::string("lidar"));
+    nh.param("lidar_topic", lidar_topic, std::string("points_raw"));
     tf2_ros::Buffer tf_buffer;
     tf2_ros::TransformListener tf_listener(tf_buffer);
     geometry_msgs::TransformStamped tf_baselink2primarylidar;

@@ -40,6 +40,8 @@ public Q_SLOTS:
   void pubRunningAutoSwitch();
   void pubRunningAvoidSwitch();
   void pubBuildGridMap();
+  void pubCarTaskStart();
+  void pubCarTaskPuse();
 
 private:
 
@@ -93,7 +95,7 @@ private:
   QPushButton *task_start_button_;
   QPushButton *task_puse_button_;
   QPushButton *task_end_button_;
-  QString task_state_value_ = "INIT";
+  bool task_state_value_ = 0;
 
   ros::Publisher topic_publisher_;
   // 场景/地图路径配置发布者

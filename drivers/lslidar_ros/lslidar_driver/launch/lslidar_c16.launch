@@ -45,7 +45,7 @@
     <param name="scan_end_angle" value="36000"/>     
     <param name="scan_num" value="8"/>
     <param name="publish_scan" value="true"/>
-    <param name="pointcloud_topic" value="points_raw"/>
+    <param name="pointcloud_topic" value="$(arg pointcloud_topic)"/>
     <param name="coordinate_opt" value="true"/>
     <param name="is_filter" value="false"/>
     <param name="filter_distance_min" value="0.3"/>

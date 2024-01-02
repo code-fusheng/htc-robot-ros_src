@@ -227,19 +227,21 @@ private:
 
 	void publish_pcd(sensor_msgs::PointCloud2 pcd, const int *errp = NULL)
 	{
+
 		if (pcd.width != 0)
 		{
 			pcd.header.frame_id = "map";
 			pcd_pub.publish(pcd);
-			ROS_INFO("[pcd_map_manager] Publish map with &d points", pcd.width);
+			ROS_INFO("[pcd_map_manager] Publish map with %d points", pcd.width);
 			return;
 		}
 
-		ROS_INFO("[pcd_map_manager] No points to publish");
+		ROS_INFO("[pcd_map_manager] No points to publish %d", pcd.width);
 	}
 
 	void publish_current_pcd(const geometry_msgs::PoseStamped &msg)
 	{
+		ROS_INFO("[pcd_map_manager] ==> _dir_dynamic_map:%s", _dir_dynamic_map.c_str());
 		if (_dir_dynamic_map == "") return;
 		static ros::Time last_update_time = ros::Time::now();
 		if ((msg.header.stamp - last_update_time).toSec() * 1000 < UPDATE_INTERVAL)
@@ -283,6 +285,7 @@ private:
 	}
 
 	void handle_map_path_conf(const htcbot_msgs::MapPathConfConstPtr &input) {
+		ROS_INFO("[pcd_map_manager] ==> received map_path_conf map_static_path:%s, map_dynamic_path:%s", input->map_static_path.c_str(), input->map_dynamic_path.c_str());
 		_dir_static_map = input->map_static_path;
 		_dir_dynamic_map = input->map_dynamic_path;
 		default_AreaList = read_arealist(_dir_dynamic_map + "/" + AREALIST_FILENAME);

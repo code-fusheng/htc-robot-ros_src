@@ -40,6 +40,10 @@
 #include <thread>
 #include <mutex>
 
+#include <htcbot_msgs/ModeSwitch.h>
+#include <htcbot_msgs/MapPathConf.h>
+#include <htcbot_msgs/MappingConf.h>
+
 static const double PI = 3.141592654;
 
 struct pose {
@@ -122,6 +126,11 @@ static std_msgs::Bool ndt_stat_msg;
 
 static int initial_scan_loaded = 0;
 
+static std::string map_path;
+
+static bool mode_switch;
+static int mapping_state;
+
 static Eigen::Matrix4f gnss_transform = Eigen::Matrix4f::Identity();
 
 static double min_scan_range = 5.0;
@@ -159,6 +168,9 @@ static float voxel_size_filter_before_add_to_map = 0.3;
 static bool is_on_mapping = false;
 ros::Subscriber points_sub, odom_sub , twist_sub , imu_sub;
 ros::Subscriber output_sub, sub_mapping_req, sub_force_stop;
+ros::Subscriber mapping_conf_sub;
+ros::Subscriber switch_sub;
+ros::Subscriber map_path_conf_sub;
 
 // 对于控制消息，使用单独的call back queue
 ros::CallbackQueue control_queue;
@@ -1250,6 +1262,33 @@ static void cd_force_stop_mapping(const std_msgs::StringConstPtr& input) {
     pub_ndtmapping_res.publish(msg_res); 
 }
 
+static void mapping_conf_callback(const htcbot_msgs::MappingConf::ConstPtr& input) {
+  map_path = input->save_dir.c_str();
+  voxel_leaf_size = input->voxel_size;
+  step_size = input->step_size;
+  if (mapping_state == htcbot_msgs::MappingConf::START_MAPPING) {
+    mapping_state = input->mapping_state;
+    is_on_mapping = true;
+    start_mapping();
+  } else if (mapping_state == htcbot_msgs::MappingConf::END_MAPPING) 
+  {
+    stop_mapping();
+    mapping_state = input->mapping_state;
+    pcl::PointCloud<pcl::PointXYZI>::Ptr map_ptr(new pcl::PointCloud<pcl::PointXYZI>(map));
+    map_ptr->header.frame_id = "map";
+    sensor_msgs::PointCloud2::Ptr map_msg_ptr(new sensor_msgs::PointCloud2);
+    pcl::toROSMsg(*map_ptr, *map_msg_ptr);
+    std::string filename = map_path + "/static.pcd";
+    pcl::io::savePCDFileASCII(filename, *map_ptr);
+  }
+   
+}
+
+static void path_conf_callback(const htcbot_msgs::MapPathConf::ConstPtr& input) {
+  ROS_INFO("[htc_ndt_mapping] ==> map_static_path: %s", input->map_static_path.c_str());
+  map_path = input->map_static_path;
+}
+
 int main(int argc, char **argv) {
     ros::init(argc, argv, "ndt_mapping");
 
@@ -1497,6 +1536,9 @@ int main(int argc, char **argv) {
     current_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/current_pose", 10);
     history_trajectory_pub = nh.advertise<nav_msgs::Path>("/ndt/history_trajectory", 10);
     pub_ndtmapping_res = nh.advertise<automotive_msgs::NDTMappingRes>("/ndtmapping/res", 5);
+
+    mapping_conf_sub = nh.subscribe("/htcbot/mapping_conf", 10, mapping_conf_callback);
+    map_path_conf_sub = nh.subscribe("/htcbot/map_path_conf", 10, path_conf_callback);
 
     ros::SubscribeOptions save_map_ops = ros::SubscribeOptions::create<automotive_msgs::SaveMap>("mapping/save_map", 10, output_callback, ros::VoidPtr(), &control_queue);
     output_sub = nh.subscribe(save_map_ops);

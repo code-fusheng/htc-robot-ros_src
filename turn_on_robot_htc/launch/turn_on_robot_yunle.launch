@@ -20,14 +20,14 @@
 
     <!-- 发布 tf 坐标树 -->
     <!-- 0.37 0 0.275   -1.57 -->
-    <node pkg="tf" type="static_transform_publisher" name="base_2_laser" args="0.37 0 0.275   -1.57 0 0 base_link rslidar 50" />
+    <node pkg="tf" type="static_transform_publisher" name="base_2_laser" args="0.37 0 0.275   0 0 0 base_link rslidar 50" />
     <node pkg="tf" type="static_transform_publisher" name="base_2_imu" args="0 0 0 0 0 0 base_link imu_link 100" />
     <param name="tf_x"     value="0.37" />
     <param name="tf_y"     value="0" />
     <param name="tf_z"     value="0.275" />
     <param name="tf_roll"  value="0" />
     <param name="tf_pitch" value="0" />
-    <param name="tf_yaw"   value="-1.57" />
+    <param name="tf_yaw"   value="0" />
 
     <!-- 激光雷达节点 -->
     <include file="$(find lslidar_driver)/launch/lslidar_c16_autox.launch"></include>

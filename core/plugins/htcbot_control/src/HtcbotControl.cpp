@@ -166,6 +166,22 @@ void HtcbotControl::pubBuildGridMap()
   grid_map_build_pub_.publish(build_msg);
 }
 
+void HtcbotControl::pubCarTaskStart()
+{
+  htcbot_msgs::ModeSwitch switch_msg;
+  switch_msg.mode = htcbot_msgs::ModeSwitch::CAR_TASK;
+  switch_msg.switch_to = htcbot_msgs::ModeSwitch::ON;
+  mode_switch_pub_.publish(switch_msg);
+}
+
+void HtcbotControl::pubCarTaskPuse()
+{
+  htcbot_msgs::ModeSwitch switch_msg;
+  switch_msg.mode = htcbot_msgs::ModeSwitch::CAR_TASK;
+  switch_msg.switch_to = htcbot_msgs::ModeSwitch::OFF;
+  mode_switch_pub_.publish(switch_msg);
+}
+
 void HtcbotControl::switchMappingPanel()
 {
   mapping_panel_ = new QWidget(tab_widget_);
@@ -340,6 +356,10 @@ void HtcbotControl::switchHomePanel()
   task_control_layout->addWidget(task_end_button_);
 
   task_control_box->setLayout(task_control_layout);
+
+  connect(task_start_button_, SIGNAL(clicked()), this, SLOT(pubCarTaskStart()));
+  connect(task_puse_button_, SIGNAL(clicked()), this, SLOT(pubCarTaskPuse()));
+  connect(task_end_button_, SIGNAL(clicked()), this, SLOT(pubCarTaskPuse()));
 
   layout->addWidget(task_control_box);
 }

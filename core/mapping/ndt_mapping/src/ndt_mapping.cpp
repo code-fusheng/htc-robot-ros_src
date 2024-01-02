@@ -180,14 +180,14 @@ void ndt_mapping::init_param() {
 }
 
 void ndt_mapping::swtich_callback(const htcbot_msgs::ModeSwitch::ConstPtr& input) {
-  ROS_INFO("[htc_ndt_mapping] ==> mode: %s switch: %s", input->mode.c_str(), input->switch_to ? "true" : "false");
+  // ROS_INFO("[htc_ndt_mapping] ==> mode: %s switch: %s", input->mode.c_str(), input->switch_to ? "true" : "false");
   if (input->mode == "Mapping") {
     mode_switch = input->switch_to ? true : false;
     if (mode_switch) {
       // sub datasource input
-      ROS_INFO("xxxx");
+      // ROS_INFO("xxxx");
     } else {
-      ROS_INFO("yyyy");
+      // ROS_INFO("yyyy");
       // save map
       pcl::PointCloud<pcl::PointXYZI>::Ptr map_ptr(new pcl::PointCloud<pcl::PointXYZI>(map));
       map_ptr->header.frame_id = "map";
@@ -219,7 +219,7 @@ void ndt_mapping::mapping_conf_callback(const htcbot_msgs::MappingConf::ConstPtr
 }
 
 void ndt_mapping::path_conf_callback(const htcbot_msgs::MapPathConf::ConstPtr& input) {
-  ROS_INFO("[htc_ndt_localizer] ==> map_static_path: %s", input->map_static_path.c_str());
+  ROS_INFO("[htc_ndt_mapping] ==> map_static_path: %s", input->map_static_path.c_str());
   map_path = input->map_static_path;
 }
 
@@ -234,9 +234,9 @@ void ndt_mapping::output_callback(const automotive_msgs::SaveMap::ConstPtr& inpu
 
 void ndt_mapping::points_callback(const sensor_msgs::PointCloud2::ConstPtr& input) 
 {
-  ROS_INFO("[htc_ndt_localizer] ==> mode_switch: %s mapping_state: %d", mode_switch ? "true" : "false", mapping_state);
+  ROS_INFO("[htc_ndt_mapping] ==> mode_switch: %s mapping_state: %d", mode_switch ? "true" : "false", mapping_state);
   if (!mode_switch && mapping_state != htcbot_msgs::MappingConf::START_MAPPING) {
-    ROS_INFO("???");
+    // ROS_INFO("???");
     return;
   }
   // r 表示激光点云到激光雷达的距离

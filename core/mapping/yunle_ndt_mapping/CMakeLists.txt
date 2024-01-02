@@ -29,6 +29,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   std_msgs
   automotive_msgs
+  htcbot_msgs
   geometry_msgs
   # pcl_omp_registration
   # ndt_cpu

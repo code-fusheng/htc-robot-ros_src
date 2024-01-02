@@ -22,6 +22,9 @@ from smartcar_msgs.msg import Lane, Waypoint
 from sensor_msgs.msg import NavSatFix
 from lb_cloud_msgs.srv import lbsrv_set_target, lbsrv_set_targetRequest, lbsrv_set_targetResponse
 from lb_cloud_msgs.msg import lb_error_code
+
+from htcbot_msgs.msg import MapPathConf
+
 import copy
 import math
 # import scipy
@@ -1051,6 +1054,25 @@ def _cb_config_traj_set(msg):
     global _pathes_initialized
     _pathes_initialized = True
 
+def _handle_map_path_conf(msg):
+    dir_trajs = msg.route_path
+    global origin_data, pure_data
+    origin_data.clear()
+    pure_data.clear()
+    ret = True
+    ret = __init_data_base_lidar(dir_trajs)
+
+    if ret == False:
+        rospy.logerr("[global planning] 无法读取路径文件, 当前导航模式为 code = {} (0=Lidar, 1=RTK-GPS)!".format(PILOT_MODE))
+        return
+
+    if not __init_graph():
+        rospy.logerr("[global planning] 创建路网数据失败!")
+        return
+    
+    global _pathes_initialized
+    _pathes_initialized = True
+
 def _cb_service_function_switch(req):
     global _FUNCTION_STATUS
     if ( req.switch_to != _FUNCTION_STATUS ):
@@ -1082,11 +1104,14 @@ def _cb_service_function_switch(req):
 def main():
     # add sub and spin
     global sub_initpose, sub_current_pose, sub_target_pose, sub_showgraph, sub_config
+    global map_path_conf_sub
     sub_initpose = rospy.Subscriber("/initialpose", PoseWithCovarianceStamped, _initial_pose_callback, queue_size=5)
     sub_current_pose = rospy.Subscriber("/current_pose", PoseStamped, _current_pose_callback, queue_size=10)
     sub_target_pose = rospy.Subscriber("/move_base_simple/goal", PoseStamped, _target_pose_callback)
     sub_showgraph = rospy.Subscriber("/show_graph", ShowGraph, _show_graph, queue_size=1)
     sub_config = rospy.Subscriber("/config_traj_path", ConfigTrajSet, _cb_config_traj_set, queue_size=2)
+
+    map_path_conf_sub = rospy.Subscriber("/htcbot/map_path_conf", MapPathConf, _handle_map_path_conf, queue_size=1)
 
     rospy.Service("/function_switch/global_planning", FunctionSwitch, _cb_service_function_switch)
     rospy.Service("/lb_cloud_service/set_target", lbsrv_set_target, _cb_service_set_target)

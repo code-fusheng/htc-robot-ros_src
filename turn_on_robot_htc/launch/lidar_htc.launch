@@ -1,9 +1,9 @@
 <launch>
 
     <arg name="htc_lidar_mode" default="ls_N10P" doc="opt: ls_N10P, ls_N10P_net, ls_C16"/>
-    <arg name="htc_lidar_points_topic" default="/points_raw" />
+    <arg name="htc_lidar_points_topic" default="/rslidar_points" />
     <arg name="htc_lidar_scan_topic" default="/scan" />
-    <arg name="htc_lidar_frame" default="lidar" />
+    <arg name="htc_lidar_frame" default="rslidar" />
 
     <!--所有雷达正前方（小车正前方）为0度角方向，扫描角度顺时针方向增加 -->
     <!--

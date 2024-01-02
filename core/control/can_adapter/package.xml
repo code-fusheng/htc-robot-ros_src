@@ -19,6 +19,7 @@
   <build_depend>pcl_ros</build_depend>
   <build_depend>can_msgs</build_depend>
   <build_depend>rtk_cloud_msgs</build_depend>
+  <build_depend>htcbot_msgs</build_depend>
 
   <exec_depend>roscpp</exec_depend>
   <exec_depend>can_msgs</exec_depend>
@@ -28,6 +29,7 @@
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>pcl_ros</exec_depend>
   <exec_depend>rtk_cloud_msgs</exec_depend>
+  <exec_depend>htcbot_msgs</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

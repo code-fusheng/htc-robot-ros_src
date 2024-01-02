@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
         nav_msgs
         can_msgs
         rtk_cloud_msgs
+        htcbot_msgs
         )
 
 catkin_package(

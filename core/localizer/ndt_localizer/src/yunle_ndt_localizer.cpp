@@ -1327,7 +1327,7 @@ int main(int argc, char** argv) {
 
     std::string lidar_frame, lidar_topic;
     nh.param("lidar_frame", lidar_frame, std::string("lidar"));
-    nh.param("lidar_topic", lidar_topic, std::string("lidar"));
+    nh.param("lidar_topic", lidar_topic, std::string("/points_raw"));
     tf2_ros::Buffer tf_buffer;
     tf2_ros::TransformListener tf_listener(tf_buffer);
     geometry_msgs::TransformStamped tf_baselink2primarylidar;
@@ -1440,13 +1440,6 @@ int main(int argc, char** argv) {
         nh.subscribe(_imu_topic.c_str(), _queue_size * 10, imu_callback);
     ros::Subscriber twist_sub =
         nh.subscribe("vehicle/twist", 10, vehicle_twist_callback);
-
-    // pthread_t thread;
-    // pthread_create(&thread, NULL, thread_func, NULL);
-
-    _enable_sub_init_pose = true;
-
-    _auto_pilot_status = 1;
 
     ros::spin();
 

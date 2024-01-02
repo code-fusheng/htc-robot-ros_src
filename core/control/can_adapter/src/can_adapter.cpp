@@ -274,6 +274,15 @@ namespace can_adapter
         return true;
     }
 
+    void CanAdapterNode::handleRunningAutoSwitch(const htcbot_msgs::ModeSwitchConstPtr &msg) {
+        if (msg->mode != htcbot_msgs::ModeSwitch::RUNNING_AUTO) {
+            return;
+        }
+        if (msg->switch_to == htcbot_msgs::ModeSwitch::ON) {
+            smartcar_run_type = automotive_msgs::SmartcarRunType::Response::RUNTYME_AUTO;
+        }
+    }
+
     void CanAdapterNode::publish_brake_switch_and_reason(bool is_running, int reason) {
         static ros::Publisher pub_can_adapter_status = nh_.advertise<automotive_msgs::CanAdapterStatus>("/can_adapter_status", 3);
 
@@ -326,6 +335,8 @@ namespace can_adapter
 
         request_automotive_type_service = nh_.advertiseService("request_smartcar_type", &CanAdapterNode::onServiceRequestSmartcarType, this);
         set_automotive_type_service = nh_.advertiseService("set_smartcar_type", &CanAdapterNode::onServiceSetSmartcarType, this);
+
+        running_auto_sub = nh_.subscribe("/htcbot/mode_switch", 10, &CanAdapterNode::handleRunningAutoSwitch, this);
 
         sub_ecu = nh_.subscribe(sub_topic, 10, &CanAdapterNode::callbackFromSelfDriving, this);
         sub_remote_control = nh_.subscribe("/remote_control/ecu", 10, &CanAdapterNode::callbackFromRemoteControl, this);

@@ -23,6 +23,8 @@
 #include <rtk_cloud_msgs/RTKTaskControlRequest.h>
 #include <rtk_cloud_msgs/RTKTaskControlResponse.h>
 
+#include <htcbot_msgs/ModeSwitch.h>
+
 #include <mutex>
 
 namespace can_adapter
@@ -38,6 +40,7 @@ namespace can_adapter
         ros::Publisher pub_ctl;
 
         ros::Subscriber sub_ecu, sub_status, sub_remote_control, sub_vehicle_status, sub_simple_obstacle_detection;
+        ros::Subscriber running_auto_sub;
         ros::Subscriber sub_ppt_waypoints_status;
 
         double bias, steer_left_param, steer_right_param;
@@ -97,6 +100,8 @@ namespace can_adapter
         void callbackUserLaserRange(const automotive_msgs::SimpleObstacleDistConstPtr &msg);
 
         void callbackFromPPTWaypointStatus(const automotive_msgs::PPTWayPointStatus &msg);
+
+        void handleRunningAutoSwitch(const htcbot_msgs::ModeSwitchConstPtr &msg);
 
         bool onServiceRequestSmartcarType(automotive_msgs::SmartcarRunType::Request &req, automotive_msgs::SmartcarRunType::Response &res);
 
